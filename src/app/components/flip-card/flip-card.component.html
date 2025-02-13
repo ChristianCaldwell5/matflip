@@ -1,0 +1,16 @@
+<div class="flip-card-container" [class.flipped]="flipped" [ngStyle]="{'border-color': color}">
+    <mat-card 
+        class="flip-card front"
+        [appearance]="'outlined'"
+        [ngClass]="{'flip-card-over': flipped, 'flip-card-back': !flipped}"
+        >
+        <span>FRONT</span>
+    </mat-card>
+    <mat-card 
+        class="flip-card back"
+        [appearance]="'outlined'"
+        [ngClass]="{'flip-card-over': flipped, 'flip-card-back': !flipped, 'matched-card': matched}"
+        >
+        <mat-icon>{{icon}}</mat-icon>
+    </mat-card>
+</div>

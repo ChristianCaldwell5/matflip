@@ -1,0 +1,188 @@
+@use '@angular/material' as mat;
+@include mat.core();
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('./assets/fonts/Poppins-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Chakra';
+    src: url('./assets/fonts/ChakraPetch-Regular.ttf') format('truetype');
+}
+
+$mobile-breakpoint: 600px;
+$small-breakpoint: 400px;
+
+// Define a secondary color palette (e.g., Coral)
+$coral-palette: (
+    50: #ffece6,
+    100: #ffcfbf,
+    200: #ffaf95,
+    300: #ff8f6b,
+    400: #ff7850,
+    500: #ff6136,
+    600: #ff5930,
+    700: #ff4f28,
+    800: #ff4521,
+    900: #ff3314,
+    A100: #ffffff,
+    A200: #ffd6d1,
+    A400: #ff9a8e,
+    A700: #ff816f,
+    contrast: (50: #000000,
+        100: #000000,
+        200: #000000,
+        300: #000000,
+        400: #000000,
+        500: #000000,
+        600: #000000,
+        700: #000000,
+        800: #000000,
+        900: #ffffff,
+        A100: #000000,
+        A200: #000000,
+        A400: #000000,
+        A700: #000000,
+    )
+);
+
+// Define a complementary color palette (e.g., Mint Green)
+$mint-green-palette: (
+    50: #e6f9f0,
+    100: #c0f0db,
+    200: #95e6c4,
+    300: #6adcad,
+    400: #4ad49b,
+    500: #2acc89,
+    600: #25c681,
+    700: #1fbd76,
+    800: #19b56c,
+    900: #0da75a,
+    A100: #eafff2,
+    A200: #b7ffde,
+    A400: #84ffca,
+    A700: #6affc0,
+    contrast: (50: #000000,
+        100: #000000,
+        200: #000000,
+        300: #000000,
+        400: #000000,
+        500: #000000,
+        600: #000000,
+        700: #000000,
+        800: #000000,
+        900: #ffffff,
+        A100: #000000,
+        A200: #000000,
+        A400: #000000,
+        A700: #000000,
+    )
+);
+
+$nardo-grey-palette: (
+    50: #f2f2f2,
+    100: #e6e6e6,
+    200: #cccccc,
+    300: #b3b3b3,
+    400: #999999,
+    500: #808080,
+    600: #666666,
+    700: #4d4d4d,
+    800: #333333,
+    900: #1a1a1a,
+    A100: #ffffff,
+    A200: #e6e6e6,
+    A400: #cccccc,
+    A700: #b3b3b3,
+    contrast: (50: #000000,
+        100: #000000,
+        200: #000000,
+        300: #000000,
+        400: #000000,
+        500: #ffffff,
+        600: #ffffff,
+        700: #ffffff,
+        800: #ffffff,
+        900: #ffffff,
+        A100: #000000,
+        A200: #000000,
+        A400: #000000,
+        A700: #000000,
+    )
+);
+
+$soft-white-palette: (
+    50: #faf9f6,
+    100: #f5f4ef,
+    200: #f0efe8,
+    300: #eaeae1,
+    400: #e5e5da,
+    500: #e0e0d3,
+    600: #dbdbcc,
+    700: #d6d6c5,
+    800: #d1d1be,
+    900: #ccccb7,
+    A100: #ffffff,
+    A200: #faf9f6,
+    A400: #f5f4ef,
+    A700: #f0efe8,
+    contrast: (50: #000000,
+        100: #000000,
+        200: #000000,
+        300: #000000,
+        400: #000000,
+        500: #000000,
+        600: #000000,
+        700: #000000,
+        800: #000000,
+        900: #000000,
+        A100: #000000,
+        A200: #000000,
+        A400: #000000,
+        A700: #000000,
+    )
+);
+
+$portfolio-ui-primary: mat.m2-define-palette($soft-white-palette);
+$portfolio-ui-accent: mat.m2-define-palette($mint-green-palette);
+
+// The warn palette is optional (defaults to red).
+$portfolio-ui-warn: mat.m2-define-palette($coral-palette);
+
+// Define a custom theme using the midnight blue, coral, and mint green palettes
+$custom-theme: mat.m2-define-light-theme((color: (primary: $portfolio-ui-primary,
+                accent: $portfolio-ui-accent,
+                warn: $portfolio-ui-warn,
+            )));
+
+@include mat.all-component-typographies(mat.m2-define-typography-config($font-family: 'Funnel, Roboto, sans-serif',
+    ),
+);
+
+// Include the Angular Material core styles and the custom theme
+@include mat.all-component-themes($custom-theme);
+
+html,
+body {
+    height: 100%;
+}
+
+h1 {
+    font-family: Chakra, Poppins, "Helvetica Neue", sans-serif;
+    font-size: 2.5em;
+    font-weight: 400;
+}
+
+body {
+    margin: 0;
+    font-family: Poppins, Chakra, "Helvetica Neue", sans-serif;
+}
+
+.mr--1 {
+    margin-right: 1rem;
+}
+
+.ml--1 {
+    margin-left: 1rem;
+}
