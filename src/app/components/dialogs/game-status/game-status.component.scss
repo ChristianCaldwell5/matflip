@@ -1,0 +1,35 @@
+@use '@angular/material' as mat;
+@import '../../../../styles.scss';
+@include mat.core();
+
+.game-status {
+    padding: 1rem;
+}
+
+h1 {
+    margin: 0 auto;
+}
+
+.success {
+    color: mat.m2-get-color-from-palette($portfolio-ui-accent, 500);
+}
+
+.fail {
+    color: mat.m2-get-color-from-palette($portfolio-ui-warn, 500);
+}
+
+.tc {
+    text-align: center;
+}
+
+.button-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+
+    // for the first button only
+    button:first-child {
+        margin-right: 1rem;
+    }
+    
+}

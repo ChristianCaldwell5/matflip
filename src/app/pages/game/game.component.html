@@ -1,0 +1,60 @@
+<!-- Game Menu/Settings -->
+<div class="game-menu" *ngIf="!gameStartedSignal()">
+    <h1>Mat Flip</h1>
+    <button mat-stroked-button>new here?</button>
+    <form #form="ngForm">
+        <div class="row">
+            <mat-form-field appearance="outline">
+                <mat-label>Mode:</mat-label>
+                <mat-select name="selectedMode" [(ngModel)]="selectedMode">
+                    <mat-option value="pairs">Pairs</mat-option>
+                    <mat-option value="solution">Solution</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="row">
+            <mat-form-field appearance="outline">
+                <mat-label>Difficulty</mat-label>
+                <mat-select name="selectedDifficulty" [(ngModel)]="selectedDifficulty">
+                    <mat-option value="easy">Easy</mat-option>
+                    <mat-option value="medium">Medium</mat-option>
+                    <mat-option value="hard">Hard</mat-option>
+                    <mat-option value="mastery">Mastery</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </form>
+    <div class="row">
+        <button mat-raised-button color="accent" (click)="startGame()">Start Game</button>
+    </div>
+</div>
+<!-- Game Area -->
+<div class="game-area" *ngIf="gameStartedSignal()">
+    <div class="row">
+        <mat-progress-bar color="accent" mode="determinate" [value]="gameTimeRemainingPercentage"></mat-progress-bar>
+        <div class="timer-row">
+            <mat-icon>timer</mat-icon>
+            <span>{{gameTimeRemaining}}</span>
+        </div>
+    </div>
+    <div class="game-container">
+        @for (card of cards; track $index) {
+        <button class="click-region" [disabled]="card.matched || disableFlip || card.flipped"
+            (click)="flipCard($index)">
+            <app-flip-card [icon]="card.icon" [color]="card.color" [flipped]="card.flipped"
+                [matched]="card.matched"></app-flip-card>
+        </button>
+        }
+    </div>
+    <div class="row">
+        <div>
+            <span>Pairs made: </span>
+            <span>{{ matchesSignal() }}/{{ pairsCount }}</span>
+        </div>
+        <div>
+            <span>Flips: </span>
+            <span>{{ flipSignal() }}</span>
+        </div>
+        <button mat-raised-button color="warn" (click)="quitGame()">Quit Game</button>
+    </div>
+</div>
