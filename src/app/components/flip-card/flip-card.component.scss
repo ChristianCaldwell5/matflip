@@ -18,6 +18,7 @@
         backface-visibility: hidden;
         transform-style: preserve-3d;
         transition: transform 0.6s ease;
+        border-width: 3px;
     
         mat-icon {
             width: 3rem;
@@ -28,6 +29,7 @@
     
         &.front {
             transform: rotateY(0deg);
+            background: linear-gradient(145deg, mat.m2-get-color-from-palette($soft-white-palette, 900) 0%, mat.m2-get-color-from-palette($soft-white-palette, 200));
         }
     
         &.back {

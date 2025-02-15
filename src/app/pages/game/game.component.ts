@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { ChangeDetectorRef, Component, Signal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Signal, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -25,7 +25,8 @@ import { GameDifficulties, GameModes } from '../../model/enum/game.enums';
     MatProgressBarModule, CommonModule, FlipCardComponent, FormsModule, HttpClientModule, RouterModule
   ],
   templateUrl: './game.component.html',
-  styleUrl: './game.component.scss'
+  styleUrl: './game.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameComponent {
 
@@ -129,6 +130,7 @@ export class GameComponent {
     // set game settings to default if not set by player
     this.selectedMode = this.selectedMode ?? GameModes.PAIRS;
     this.selectedDifficulty = this.selectedDifficulty ?? GameDifficulties.MEDIUM;
+    console.log('Starting game with mode: ', this.selectedMode, ' and difficulty: ', this.selectedDifficulty);
     // update game settings to match desired game settings
     this.gameService.setSelectedMode(this.selectedMode as GameModes);
     this.gameService.setDifficulty(this.selectedDifficulty as GameDifficulties);
@@ -214,6 +216,7 @@ export class GameComponent {
         card.flipped = false;
         card.matched = false;
       });
+      this.gameTimeRemaining = this.gameTimeAvailable;
       this.gameTimeRemainingPercentage = 100;
       this.cdr.detectChanges();
       setTimeout(() => {
