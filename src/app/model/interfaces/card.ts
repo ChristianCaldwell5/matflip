@@ -1,7 +1,7 @@
 export interface card {
-    icon: string | null;
+    icon?: string;
     color: string;
     flipped: boolean;
     matched: boolean;
-    displayText: string | null;
+    displayText?: string;
 }

@@ -12,11 +12,11 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class FlipCardComponent implements OnInit {
 
-  @Input() icon: string = '';
+  @Input() icon?: string;
   @Input() color: string = '';
   @Input() flipped: boolean = false;
   @Input() matched: boolean = false;
-  @Input() displayText: string = '';
+  @Input() displayText?: string;
 
   constructor() { }
 

@@ -161,14 +161,12 @@ export class GameComponent {
     for (let i = 0; i < iconCount; i++) {
       this.cards.push({
         icon: selectedIcons[i],
-        displayText: null,
         color: '',
         flipped: false,
         matched: false
       });
       this.cards.push({
         icon: selectedIcons[i],
-        displayText: null,
         color: '',
         flipped: false,
         matched: false
@@ -185,7 +183,6 @@ export class GameComponent {
 
     this.cards.push({
       displayText: problem.display,
-      icon: null,
       color: '',
       flipped: false,
       matched: false
