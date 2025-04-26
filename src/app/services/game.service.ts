@@ -28,8 +28,10 @@ export class GameService {
   private gameStartedSignal = signal(false);
   private cardTotalSignal = signal(8);
   private flipsSignal = signal(0);
-  private failsSignal = signal(0);
   private matchesSignal = signal(0);
+  private solvesSignal = signal(0);
+  private failsLeftSignal = signal(0);
+  
 
   constructor(
     private mathService: MathService,
@@ -96,12 +98,22 @@ export class GameService {
     this.flipsSignal.set(flips);
   }
 
-  getFailsSignal(): Signal<number> {
-    return this.failsSignal;
+  // get solves signal
+  getSolvesSignal(): Signal<number> {
+    return this.solvesSignal;
   }
 
-  updateFailsSignal(fails: number): void {
-    this.failsSignal.set(fails);
+  // update solves signal
+  updateSolvesSignal(solves: number): void {
+    this.solvesSignal.set(solves);
+  }
+
+  getFailsLeftSignal(): Signal<number> {
+    return this.failsLeftSignal;
+  }
+
+  updateFailsLeftSignal(fails: number): void {
+    this.failsLeftSignal.set(fails);
   }
 
   getFirstFlipIndex(): number {
@@ -134,7 +146,7 @@ export class GameService {
   }
 
   decrementFails(): void {
-    this.updateFailsSignal(this.failsSignal() - 1);
+    this.updateFailsLeftSignal(this.failsLeftSignal() - 1);
   }
 
   setGameSettings(mode: GameModes, difficulty: GameDifficulties): void {
@@ -151,7 +163,7 @@ export class GameService {
   }
 
   private setPairGameSettings(difficulty: GameDifficulties): void {
-    this.updateFailsSignal(0);
+    this.updateFailsLeftSignal(0);
     switch (difficulty) {
       case 'easy':
         this.updateCardTotalSignal(10);
@@ -176,22 +188,22 @@ export class GameService {
     switch (difficulty) {
       case 'easy':
         this.updateCardTotalSignal(3);
-        this.updateFailsSignal(4);
+        this.updateFailsLeftSignal(4);
         this.timeToSolve = 20;
         break;
       case 'medium':
         this.updateCardTotalSignal(4);
-        this.updateFailsSignal(4);
+        this.updateFailsLeftSignal(4);
         this.timeToSolve = 20;
         break;
       case 'hard':
         this.updateCardTotalSignal(5);
-        this.updateFailsSignal(3);
+        this.updateFailsLeftSignal(3);
         this.timeToSolve = 15;
         break;
       case 'mastery':
         this.updateCardTotalSignal(6);
-        this.updateFailsSignal(2);
+        this.updateFailsLeftSignal(2);
         this.timeToSolve = 10;
         break;
     }

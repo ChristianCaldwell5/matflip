@@ -53,6 +53,8 @@ export class GameComponent {
   cardTotalSignal: Signal<number> = signal<number>(0);
   flipSignal: Signal<number> = signal<number>(0);
   matchesSignal: Signal<number> = signal<number>(0);
+  solvesSignal: Signal<number> = signal<number>(0);
+  failsLeftSignal: Signal<number> = signal<number>(0);
 
   // element reference
   dialogRef: any;
@@ -70,6 +72,8 @@ export class GameComponent {
     this.cardTotalSignal = this.gameService.getCardTotalSignal();
     this.flipSignal = this.gameService.getFlipsSignal();
     this.matchesSignal = this.gameService.getMatchesSignal();
+    this.solvesSignal = this.gameService.getSolvesSignal();
+    this.failsLeftSignal = this.gameService.getFailsLeftSignal();
 
     this.matchFound$ = this.gameService.getMatchMadeObservable();
     this.mismatch$ = this.gameService.getMismatchObservable();
@@ -133,7 +137,6 @@ export class GameComponent {
     // set game settings to default if not set by player
     this.selectedMode = this.selectedMode == '' ? GameModes.PAIRS : this.selectedMode;
     this.selectedDifficulty = this.selectedDifficulty == '' ? GameDifficulties.MEDIUM : this.selectedDifficulty;
-    console.log('Starting game with mode: ', this.selectedMode, ' and difficulty: ', this.selectedDifficulty);
     // update game settings to match desired game settings
     this.gameService.setSelectedMode(this.selectedMode as GameModes);
     this.gameService.setDifficulty(this.selectedDifficulty as GameDifficulties);
@@ -177,7 +180,7 @@ export class GameComponent {
   }
 
   private generateSolutionCards() {
-    const iconCount = this.cardTotalSignal();
+    const cardCount = this.cardTotalSignal();
 
     let problem: MathProblem = this.mathService.generateMathProblem(this.selectedDifficulty);
 
@@ -187,7 +190,31 @@ export class GameComponent {
       flipped: false,
       matched: false
     });
+    
+    for (let i = 1; i < cardCount; i++) {
+      this.cards.push({
+        displayText: this.generateWrongSolution(problem.display),
+        color: '',
+        flipped: false,
+        matched: false
+      });
+    }
 
+    this.cards = this.cards.sort(() => 0.5 - Math.random());
+  }
+
+  private generateWrongSolution(correctSolution: string): string {
+    let wrongSolution = correctSolution;
+    const randomNumber = Math.floor(Math.random() * 20) + 1; // Random number between 1 and 20
+    const operator = Math.random() < 0.5 ? '+' : '-'; // Randomly choose between addition and subtraction
+
+    if (operator === '+') {
+      wrongSolution = `${correctSolution} + ${randomNumber}`;
+    } else {
+      wrongSolution = `${correctSolution} - ${randomNumber}`;
+    }
+
+    return wrongSolution;
   }
 
   private startGameTimer() {
@@ -205,6 +232,7 @@ export class GameComponent {
           height: 'auto',
           width: '90%',
           maxWidth: '600px',
+          disableClose: true,
           data: {
             success: false,
             difficulty: this.selectedDifficulty as GameDifficulties,

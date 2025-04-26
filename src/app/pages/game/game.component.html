@@ -47,14 +47,26 @@
         }
     </div>
     <div class="row">
-        <div>
-            <span>Pairs made: </span>
-            <span>{{ matchesSignal() }}/{{ pairsCount }}</span>
-        </div>
-        <div>
-            <span>Flips: </span>
-            <span>{{ flipSignal() }}</span>
-        </div>
+        <ng-container *ngIf="selectedMode === 'pairs'">
+            <div>
+                <span>Pairs made: </span>
+                <span>{{ matchesSignal() }}/{{ pairsCount }}</span>
+            </div>
+            <div>
+                <span>Flips: </span>
+                <span>{{ flipSignal() }}</span>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="selectedMode === 'solution'">
+            <div>
+                <span>Solves: </span>
+                <span>{{ solvesSignal() }}</span>
+            </div>
+            <div>
+                <span>Fails Left: </span>
+                <span>{{ failsLeftSignal() }}</span>
+            </div>
+        </ng-container>
         <button mat-raised-button color="warn" (click)="quitGame()">Quit Game</button>
     </div>
 </div>
