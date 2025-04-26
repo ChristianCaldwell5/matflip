@@ -10,6 +10,7 @@
         [appearance]="'outlined'"
         [ngClass]="{'flip-card-over': flipped, 'flip-card-back': !flipped, 'matched-card': matched}"
         >
-        <mat-icon>{{icon}}</mat-icon>
+        <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
+        <span *ngIf="displayText">{{ displayText }}</span>
     </mat-card>
 </div>

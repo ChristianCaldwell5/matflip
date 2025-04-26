@@ -15,7 +15,8 @@ export class FlipCardComponent implements OnInit {
   @Input() icon: string = '';
   @Input() color: string = '';
   @Input() flipped: boolean = false;
-  @Input() matched: boolean = false
+  @Input() matched: boolean = false;
+  @Input() displayText: string = '';
 
   constructor() { }
 

@@ -18,6 +18,8 @@ import { GameService } from '../../services/game.service';
 import { IconService } from '../../services/icon.service';
 import { GameStatusComponent } from '../../components/dialogs/game-status/game-status.component';
 import { GameDifficulties, GameModes } from '../../model/enum/game.enums';
+import { MathService } from '../../services/math.service';
+import { MathProblem } from '../../model/interfaces/mathProblem';
 
 @Component({
   selector: 'app-game',
@@ -60,6 +62,7 @@ export class GameComponent {
   constructor(
     private gameService: GameService,
     private iconService: IconService,
+    private mathService: MathService,
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog
   ) {
@@ -128,16 +131,20 @@ export class GameComponent {
 
   startGame() {
     // set game settings to default if not set by player
-    this.selectedMode = this.selectedMode ?? GameModes.PAIRS;
-    this.selectedDifficulty = this.selectedDifficulty ?? GameDifficulties.MEDIUM;
+    this.selectedMode = this.selectedMode == '' ? GameModes.PAIRS : this.selectedMode;
+    this.selectedDifficulty = this.selectedDifficulty == '' ? GameDifficulties.MEDIUM : this.selectedDifficulty;
     console.log('Starting game with mode: ', this.selectedMode, ' and difficulty: ', this.selectedDifficulty);
     // update game settings to match desired game settings
     this.gameService.setSelectedMode(this.selectedMode as GameModes);
     this.gameService.setDifficulty(this.selectedDifficulty as GameDifficulties);
     // setup the game with settings
     this.gameService.setGameSettings(this.gameService.getSelectedMode(), this.gameService.getDifficulty());
-    // generate cards for the game
-    this.generateCards();
+    // generate cards for the game if game mode is pairs
+    if (this.gameService.getSelectedMode() === GameModes.PAIRS) {
+      this.generateCards();
+    } else {
+      this.generateSolutionCards();
+    }
     // get time to solve based on game settings
     this.gameTimeAvailable = this.gameTimeRemaining = this.gameService.getTimeToSolve();
     // show the game board
@@ -154,12 +161,14 @@ export class GameComponent {
     for (let i = 0; i < iconCount; i++) {
       this.cards.push({
         icon: selectedIcons[i],
+        displayText: null,
         color: '',
         flipped: false,
         matched: false
       });
       this.cards.push({
         icon: selectedIcons[i],
+        displayText: null,
         color: '',
         flipped: false,
         matched: false
@@ -167,6 +176,21 @@ export class GameComponent {
     }
 
     this.cards = this.cards.sort(() => 0.5 - Math.random());
+  }
+
+  private generateSolutionCards() {
+    const iconCount = this.cardTotalSignal();
+
+    let problem: MathProblem = this.mathService.generateMathProblem(this.selectedDifficulty);
+
+    this.cards.push({
+      displayText: problem.display,
+      icon: null,
+      color: '',
+      flipped: false,
+      matched: false
+    });
+
   }
 
   private startGameTimer() {
