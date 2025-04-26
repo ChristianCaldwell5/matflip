@@ -3,6 +3,7 @@ import { Observable, Subject } from 'rxjs';
 import { signal, Signal } from '@angular/core';
 import { FlipsReference } from '../model/interfaces/flipsReference';
 import { GameDifficulties, GameModes } from '../model/enum/game.enums';
+import { MathService } from './math.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,6 @@ export class GameService {
   private secondFlipIndex: number = -1;
   private matches: number = 0;
   private flips: number = 0;
-
   // subjects for game state
   private matchMadeSubject = new Subject<FlipsReference>();
   private mismatchSubject = new Subject<FlipsReference>();
@@ -28,9 +28,12 @@ export class GameService {
   private gameStartedSignal = signal(false);
   private cardTotalSignal = signal(8);
   private flipsSignal = signal(0);
+  private failsSignal = signal(0);
   private matchesSignal = signal(0);
 
-  constructor() { 
+  constructor(
+    private mathService: MathService,
+  ) { 
   }
 
   getSelectedMode(): GameModes {
@@ -93,6 +96,14 @@ export class GameService {
     this.flipsSignal.set(flips);
   }
 
+  getFailsSignal(): Signal<number> {
+    return this.failsSignal;
+  }
+
+  updateFailsSignal(fails: number): void {
+    this.failsSignal.set(fails);
+  }
+
   getFirstFlipIndex(): number {
     return this.firstFlipIndex;
   }
@@ -122,12 +133,17 @@ export class GameService {
     this.flipsSignal.set(this.flips);
   }
 
+  decrementFails(): void {
+    this.updateFailsSignal(this.failsSignal() - 1);
+  }
+
   setGameSettings(mode: GameModes, difficulty: GameDifficulties): void {
     switch (mode) {
       case GameModes.PAIRS:
         this.setPairGameSettings(difficulty);
         break;
       case GameModes.SOLUTION:
+        this.setSolutionGameSettings(difficulty);
         break;
       default:
         this.setPairGameSettings(difficulty);
@@ -135,6 +151,7 @@ export class GameService {
   }
 
   private setPairGameSettings(difficulty: GameDifficulties): void {
+    this.updateFailsSignal(0);
     switch (difficulty) {
       case 'easy':
         this.updateCardTotalSignal(10);
@@ -151,6 +168,31 @@ export class GameService {
       case 'mastery':
         this.updateCardTotalSignal(20);
         this.timeToSolve = 90;
+        break;
+    }
+  }
+
+  private setSolutionGameSettings(difficulty: GameDifficulties): void {
+    switch (difficulty) {
+      case 'easy':
+        this.updateCardTotalSignal(3);
+        this.updateFailsSignal(4);
+        this.timeToSolve = 20;
+        break;
+      case 'medium':
+        this.updateCardTotalSignal(4);
+        this.updateFailsSignal(4);
+        this.timeToSolve = 20;
+        break;
+      case 'hard':
+        this.updateCardTotalSignal(5);
+        this.updateFailsSignal(3);
+        this.timeToSolve = 15;
+        break;
+      case 'mastery':
+        this.updateCardTotalSignal(6);
+        this.updateFailsSignal(2);
+        this.timeToSolve = 10;
         break;
     }
   }
