@@ -250,6 +250,10 @@ export class GameComponent {
     }, 1000);
   }
 
+  private startSolutionRound() {
+    
+  }
+
   quitGame() {
     clearInterval(this.gameIntervalId);
     this.gameTimeRemainingPercentage = 100;

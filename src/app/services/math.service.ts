@@ -94,7 +94,7 @@ export class MathService {
    */
   private generateAdditionSubtractionProblem(num1: number, num2: number): MathProblem {
     const operator = Math.random() < 0.5 ? '+' : '-';
-    let prob!: MathProblem;
+    let prob: MathProblem = { display: '', solution: 0 };
     if (operator === '+') {
       prob.solution = num1 + num2;
     } else {
@@ -112,7 +112,7 @@ export class MathService {
    */
   private generateMultiplicationDivisionProblem(num1: number, num2: number): MathProblem {
     const operator = Math.random() < 0.5 ? '*' : '/';
-    let prob!: MathProblem;
+    let prob: MathProblem = { display: '', solution: 0 };
     if (operator === '*') {
       prob.solution = num1 * num2;
     } else {
