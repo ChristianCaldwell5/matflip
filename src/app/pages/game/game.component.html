@@ -37,12 +37,23 @@
             <span>{{gameTimeRemaining}}</span>
         </div>
     </div>
+    <!-- Show math problem display if solutions mode -->
+    <ng-container *ngIf="selectedMode === 'solution' && shouldSeeProblemDisplay">
+        <div class="math-problem-display">
+            <span>{{ currentMathProblem.display }}</span>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="selectedMode === 'solution' && !shouldSeeProblemDisplay">
+        <div class="math-problem-display">
+            <span>Remember the following answers:</span>
+        </div>
+    </ng-container>
     <div class="game-container">
         @for (card of cards; track $index) {
         <button class="click-region" [disabled]="card.matched || disableFlip || card.flipped"
             (click)="flipCard($index)">
             <app-flip-card [icon]="card?.icon" [color]="card.color" [flipped]="card.flipped"
-                [matched]="card.matched"></app-flip-card>
+                [matched]="card.matched" [displayText]="card.displayText"></app-flip-card>
         </button>
         }
     </div>

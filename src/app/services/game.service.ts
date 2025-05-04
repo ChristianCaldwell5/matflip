@@ -4,6 +4,8 @@ import { signal, Signal } from '@angular/core';
 import { FlipsReference } from '../model/interfaces/flipsReference';
 import { GameDifficulties, GameModes } from '../model/enum/game.enums';
 import { MathService } from './math.service';
+import { MathProblem } from '../model/interfaces/mathProblem';
+import { card } from '../model/interfaces/card';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +25,8 @@ export class GameService {
   // subjects for game state
   private matchMadeSubject = new Subject<FlipsReference>();
   private mismatchSubject = new Subject<FlipsReference>();
+  private solutionFoundSubject = new Subject<number>();
+  private wrongSolutionSubject = new Subject<number>();
 
   // signals for game information
   private gameStartedSignal = signal(false);
@@ -140,6 +144,14 @@ export class GameService {
     return this.mismatchSubject.asObservable();
   }
 
+  getSolutionFoundObservable(): Observable<number> {
+    return this.solutionFoundSubject.asObservable();
+  }
+
+  getWrongSolutionObservable(): Observable<number> {
+    return this.wrongSolutionSubject.asObservable();
+  }
+
   incrementFlips(): void {
     this.flips++;
     this.flipsSignal.set(this.flips);
@@ -226,6 +238,16 @@ export class GameService {
     }
   }
 
+  processSolutionFlip(index: number, cards: card[], promblem: MathProblem): void {
+    if (cards[index]!.displayText === promblem.solution.toString()) {
+      this.matches++;
+      this.updateMatchesSignal(this.matches);
+      this.solutionFoundSubject.next(index);
+    } else {
+      this.wrongSolutionSubject.next(index);
+    }
+  }
+
   checkMatch(cards: any[]): boolean {
     return (cards[this.firstFlipIndex].icon === cards[this.secondFlipIndex].icon) &&
       (this.firstFlipIndex !== this.secondFlipIndex);
@@ -238,6 +260,8 @@ export class GameService {
     this.flips = 0;
     this.updateMatchesSignal(this.matches);
     this.updateFlipsSignal(this.flips);
+    this.updateFailsLeftSignal(0);
+    this.updateSolvesSignal(0);
   }
 
 }

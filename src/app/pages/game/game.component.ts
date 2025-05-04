@@ -41,12 +41,16 @@ export class GameComponent {
   gameTimeAvailable: number = 0;
   gameTimeRemaining: number = 0;
   gameTimeRemainingPercentage: number = 100;
+  currentMathProblem: MathProblem = { display: '', solution: 0 };
+  shouldSeeProblemDisplay: boolean = false;
   pairsCount: number = 0;
   disableFlip: boolean = false;
 
   // observables
   matchFound$!: Observable<FlipsReference>;
   mismatch$!: Observable<FlipsReference>;
+  solutionFound$!: Observable<number>;
+  wrongSolution$!: Observable<number>;
 
   // signal
   gameStartedSignal: Signal<boolean> = signal<boolean>(false);
@@ -77,6 +81,8 @@ export class GameComponent {
 
     this.matchFound$ = this.gameService.getMatchMadeObservable();
     this.mismatch$ = this.gameService.getMismatchObservable();
+    this.solutionFound$ = this.gameService.getSolutionFoundObservable();
+    this.wrongSolution$ = this.gameService.getWrongSolutionObservable();
   }
 
   ngOnInit() {
@@ -121,6 +127,17 @@ export class GameComponent {
       }
     });
 
+    this.solutionFound$.subscribe(() => {
+      clearInterval(this.gameIntervalId);
+      this.cards = [];
+      this.gameService.updateSolvesSignal(this.solvesSignal() + 1);
+      this.prepareNextSolution();
+    });
+
+    this.wrongSolution$.subscribe(() => {
+      this.handleSolutionFailure();
+    });
+
   }
 
   flipCard(index: number) {
@@ -129,7 +146,7 @@ export class GameComponent {
     if (this.gameService.getSelectedMode() === 'pairs') {
       this.gameService.processPairFlip(index, this.cards);
     } else {
-      //this.gameService.processSolutionFlip(index, this.cards);
+      this.gameService.processSolutionFlip(index, this.cards, this.currentMathProblem);
     }
   }
 
@@ -152,8 +169,11 @@ export class GameComponent {
     this.gameTimeAvailable = this.gameTimeRemaining = this.gameService.getTimeToSolve();
     // show the game board
     this.gameService.updateGameStartedSignal(true);
-    // start the game timer
-    this.startGameTimer()
+    if (this.gameService.getSelectedMode() === GameModes.PAIRS) {
+      this.startGameTimer();
+    } else {
+      this.startSolutionRound();
+    }
   }
 
   private generateCards() {
@@ -182,39 +202,41 @@ export class GameComponent {
   private generateSolutionCards() {
     const cardCount = this.cardTotalSignal();
 
-    let problem: MathProblem = this.mathService.generateMathProblem(this.selectedDifficulty);
-
+    this.currentMathProblem = this.mathService.generateMathProblem(this.selectedDifficulty);
+    console.log(this.currentMathProblem);
     this.cards.push({
-      displayText: problem.display,
+      displayText: this.currentMathProblem.solution.toString(),
       color: '',
-      flipped: false,
+      flipped: true,
       matched: false
     });
     
     for (let i = 1; i < cardCount; i++) {
       this.cards.push({
-        displayText: this.generateWrongSolution(problem.display),
+        displayText: this.generateWrongSolution(this.currentMathProblem.solution),
         color: '',
-        flipped: false,
+        flipped: true,
         matched: false
       });
     }
 
+    console.log(this.cards);
+
     this.cards = this.cards.sort(() => 0.5 - Math.random());
   }
 
-  private generateWrongSolution(correctSolution: string): string {
+  private generateWrongSolution(correctSolution: number): string {
     let wrongSolution = correctSolution;
     const randomNumber = Math.floor(Math.random() * 20) + 1; // Random number between 1 and 20
     const operator = Math.random() < 0.5 ? '+' : '-'; // Randomly choose between addition and subtraction
 
     if (operator === '+') {
-      wrongSolution = `${correctSolution} + ${randomNumber}`;
+      wrongSolution = correctSolution + randomNumber;
     } else {
-      wrongSolution = `${correctSolution} - ${randomNumber}`;
+      wrongSolution = correctSolution - randomNumber;
     }
 
-    return wrongSolution;
+    return wrongSolution.toString();
   }
 
   private startGameTimer() {
@@ -251,11 +273,68 @@ export class GameComponent {
   }
 
   private startSolutionRound() {
-    
+    // Provide time to see cards and then flip them back
+    setTimeout(() => {
+      this.cards.forEach(card => {
+        card.flipped = false;
+        card.matched = false;
+      });
+      this.shouldSeeProblemDisplay = true;
+      this.cdr.detectChanges();
+
+      let secondsRemaining = this.gameTimeAvailable;
+      this.gameIntervalId = setInterval(() => {
+        if (secondsRemaining > 0) {
+          secondsRemaining--;
+
+          this.gameTimeRemaining = secondsRemaining;
+          this.gameTimeRemainingPercentage = (secondsRemaining / this.gameService.getTimeToSolve()) * 100;
+          this.cdr.detectChanges();
+        } else {
+          this.handleSolutionFailure();
+        }
+      }, 1000);
+    }, 5000);
+  }
+
+  private handleSolutionFailure() {
+    clearInterval(this.gameIntervalId);
+    this.cards = [];
+    this.gameService.updateFailsLeftSignal(this.failsLeftSignal() - 1);
+    if (this.failsLeftSignal() <= 0) {
+      this.dialogRef = this.dialog.open(GameStatusComponent, {
+        height: 'auto',
+        width: '90%',
+        maxWidth: '600px',
+        disableClose: true,
+        data: {
+          success: false,
+          difficulty: this.selectedDifficulty as GameDifficulties,
+          pairsFound: this.matchesSignal().toString(),
+          totalPairs: this.pairsCount.toString(),
+          flipCount: this.flipSignal().toString(),
+          totalTime: this.gameTimeAvailable,
+          timeRemaining: this.gameTimeRemaining,
+        }
+      });
+      this.dialogRef.afterClosed().subscribe((playAgain: boolean) => {
+        this.handleDialogClose(playAgain);
+      });
+    } else {
+      this.prepareNextSolution();
+    }
+  }
+
+  private prepareNextSolution() {
+    this.shouldSeeProblemDisplay = false;
+    this.gameTimeAvailable = this.gameTimeRemaining = this.gameService.getTimeToSolve();
+    this.generateSolutionCards();
+    this.startSolutionRound();
   }
 
   quitGame() {
     clearInterval(this.gameIntervalId);
+    this.shouldSeeProblemDisplay = false;
     this.gameTimeRemainingPercentage = 100;
     this.cards = [];
     this.gameService.resetGame();
