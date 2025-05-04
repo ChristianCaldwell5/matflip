@@ -45,7 +45,7 @@
     </ng-container>
     <ng-container *ngIf="selectedMode === 'solution' && !shouldSeeProblemDisplay">
         <div class="math-problem-display">
-            <span>Remember the following answers:</span>
+            <span>Potential answers:</span>
         </div>
     </ng-container>
     <div class="game-container">
@@ -79,5 +79,10 @@
             </div>
         </ng-container>
         <button mat-raised-button color="warn" (click)="quitGame()">Quit Game</button>
+    </div>
+    <div *ngIf="selectedMode === 'solution'" class="row mt--2">
+        <div>
+            <span>{{ solutionModeStatusDisplay }}</span>
+        </div>
     </div>
 </div>

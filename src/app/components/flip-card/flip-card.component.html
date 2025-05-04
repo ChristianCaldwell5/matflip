@@ -1,4 +1,4 @@
-<div class="flip-card-container" [class.flipped]="flipped" [ngStyle]="{'border-color': color}">
+<div class="flip-card-container" [class.flipped]="flipped">
     <mat-card 
         class="flip-card front"
         [appearance]="'outlined'"
@@ -9,8 +9,9 @@
         class="flip-card back"
         [appearance]="'outlined'"
         [ngClass]="{'flip-card-over': flipped, 'flip-card-back': !flipped, 'matched-card': matched}"
+        [ngStyle]="{'border-color': color}"
         >
         <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
-        <span *ngIf="displayText">{{ displayText }}</span>
+        <span *ngIf="displayText" [ngStyle]="{'color': color}">{{ displayText }}</span>
     </mat-card>
 </div>

@@ -20,6 +20,7 @@ import { GameStatusComponent } from '../../components/dialogs/game-status/game-s
 import { GameDifficulties, GameModes } from '../../model/enum/game.enums';
 import { MathService } from '../../services/math.service';
 import { MathProblem } from '../../model/interfaces/mathProblem';
+import { SolutionStatus } from '../../model/enum/solution-status.enum';
 
 @Component({
   selector: 'app-game',
@@ -43,6 +44,7 @@ export class GameComponent {
   gameTimeRemainingPercentage: number = 100;
   currentMathProblem: MathProblem = { display: '', solution: 0 };
   shouldSeeProblemDisplay: boolean = false;
+  solutionModeStatusDisplay: SolutionStatus = SolutionStatus.MEMORIZE_PERIOD;
   pairsCount: number = 0;
   disableFlip: boolean = false;
 
@@ -89,9 +91,9 @@ export class GameComponent {
     this.matchFound$.subscribe(match => {
       if (this.gameStartedSignal()) {
         this.cards[match.firstIndex].matched = true;
-        this.cards[match.firstIndex].color = 'green';
+        this.cards[match.firstIndex].color = '#2acc89';
         this.cards[match.secondIndex].matched = true;
-        this.cards[match.secondIndex].color = 'green';
+        this.cards[match.secondIndex].color = '#2acc89';
         if (this.matchesSignal() === this.pairsCount) {
           clearInterval(this.gameIntervalId);
           this.dialogRef = this.dialog.open(GameStatusComponent, {
@@ -127,15 +129,16 @@ export class GameComponent {
       }
     });
 
-    this.solutionFound$.subscribe(() => {
-      clearInterval(this.gameIntervalId);
-      this.cards = [];
+    this.solutionFound$.subscribe((index) => {
+      this.solutionModeStatusDisplay = SolutionStatus.SOLUTION_FOUND;
       this.gameService.updateSolvesSignal(this.solvesSignal() + 1);
-      this.prepareNextSolution();
+      this.handleSolutionRoundEnd(true, index);
     });
 
-    this.wrongSolution$.subscribe(() => {
-      this.handleSolutionFailure();
+    this.wrongSolution$.subscribe((index) => {
+      this.solutionModeStatusDisplay = SolutionStatus.SOLUTION_NOT_FOUND;
+      this.gameService.updateFailsLeftSignal(this.failsLeftSignal() - 1);
+      this.handleSolutionRoundEnd(false, index);
     });
 
   }
@@ -177,6 +180,7 @@ export class GameComponent {
   }
 
   private generateCards() {
+    this.cards = [];
     const iconCount = Math.floor(this.cardTotalSignal() / 2);
     this.pairsCount = iconCount;
     const selectedIcons = this.iconService.getIconListAndCycle(iconCount);
@@ -200,6 +204,7 @@ export class GameComponent {
   }
 
   private generateSolutionCards() {
+    this.cards = [];
     const cardCount = this.cardTotalSignal();
 
     this.currentMathProblem = this.mathService.generateMathProblem(this.selectedDifficulty);
@@ -219,8 +224,6 @@ export class GameComponent {
         matched: false
       });
     }
-
-    console.log(this.cards);
 
     this.cards = this.cards.sort(() => 0.5 - Math.random());
   }
@@ -275,10 +278,12 @@ export class GameComponent {
   private startSolutionRound() {
     // Provide time to see cards and then flip them back
     setTimeout(() => {
+      this.solutionModeStatusDisplay = SolutionStatus.SOLVE_PERIOD;
       this.cards.forEach(card => {
         card.flipped = false;
         card.matched = false;
       });
+      this.disableFlip = false;
       this.shouldSeeProblemDisplay = true;
       this.cdr.detectChanges();
 
@@ -291,16 +296,35 @@ export class GameComponent {
           this.gameTimeRemainingPercentage = (secondsRemaining / this.gameService.getTimeToSolve()) * 100;
           this.cdr.detectChanges();
         } else {
-          this.handleSolutionFailure();
+          this.gameService.updateFailsLeftSignal(this.failsLeftSignal() - 1);
+          this.handleSolutionRoundEnd(false, -1);
         }
       }, 1000);
     }, 5000);
   }
 
-  private handleSolutionFailure() {
+  private handleSolutionRoundEnd(success: boolean, index: number) {
     clearInterval(this.gameIntervalId);
-    this.cards = [];
-    this.gameService.updateFailsLeftSignal(this.failsLeftSignal() - 1);
+    this.checkSolutionGameOver();
+    this.disableFlip = true;
+    for(let i = 0; i < this.cards.length; i++) {
+      this.cards[i].flipped = true;
+      if (this.cards[i].displayText == this.currentMathProblem.solution.toString()) {
+        this.cards[i].color = '#2acc89';
+        this.cards[i].matched = true;
+      }
+    }
+    if (!success && index >= 0) {
+      this.cards[index].color = 'red';
+    }
+    // provide a five second review
+    setTimeout(() => {
+      this.prepareNextSolution();
+      this.cdr.detectChanges();
+    }, 5000);
+  }
+
+  private checkSolutionGameOver() {
     if (this.failsLeftSignal() <= 0) {
       this.dialogRef = this.dialog.open(GameStatusComponent, {
         height: 'auto',
@@ -320,14 +344,13 @@ export class GameComponent {
       this.dialogRef.afterClosed().subscribe((playAgain: boolean) => {
         this.handleDialogClose(playAgain);
       });
-    } else {
-      this.prepareNextSolution();
     }
   }
 
   private prepareNextSolution() {
     this.shouldSeeProblemDisplay = false;
     this.gameTimeAvailable = this.gameTimeRemaining = this.gameService.getTimeToSolve();
+    this.solutionModeStatusDisplay = SolutionStatus.MEMORIZE_PERIOD;
     this.generateSolutionCards();
     this.startSolutionRound();
   }
@@ -336,7 +359,6 @@ export class GameComponent {
     clearInterval(this.gameIntervalId);
     this.shouldSeeProblemDisplay = false;
     this.gameTimeRemainingPercentage = 100;
-    this.cards = [];
     this.gameService.resetGame();
     this.gameService.updateGameStartedSignal(false);
   }
@@ -353,7 +375,6 @@ export class GameComponent {
       this.cdr.detectChanges();
       setTimeout(() => {
         this.disableFlip = false;
-        this.cards = [];
         this.gameService.resetGame();
         this.startGame();
       }, 1000);
