@@ -228,6 +228,7 @@ export class GameComponent {
     this.cards = this.cards.sort(() => 0.5 - Math.random());
   }
 
+  // TODO: no negatives for modes without negatives. Expand random number range based on difficulty
   private generateWrongSolution(correctSolution: number): string {
     let wrongSolution = correctSolution;
     const randomNumber = Math.floor(Math.random() * 20) + 1; // Random number between 1 and 20
@@ -260,6 +261,7 @@ export class GameComponent {
           disableClose: true,
           data: {
             success: false,
+            mode: this.selectedMode as GameModes,
             difficulty: this.selectedDifficulty as GameDifficulties,
             pairsFound: this.matchesSignal().toString(),
             totalPairs: this.pairsCount.toString(),
@@ -276,36 +278,48 @@ export class GameComponent {
   }
 
   private startSolutionRound() {
-    // Provide time to see cards and then flip them back
-    setTimeout(() => {
-      this.solutionModeStatusDisplay = SolutionStatus.SOLVE_PERIOD;
-      this.cards.forEach(card => {
-        card.flipped = false;
-        card.matched = false;
-      });
-      this.disableFlip = false;
-      this.shouldSeeProblemDisplay = true;
-      this.cdr.detectChanges();
+    let intermissionTimeRemaining = 5;
+    this.gameTimeRemaining = intermissionTimeRemaining;
+    this.gameTimeRemainingPercentage = 100;
+    let intermissionIntervalId = setInterval(() => {
+      if (intermissionTimeRemaining > 0) {
+        intermissionTimeRemaining--;
 
-      let secondsRemaining = this.gameTimeAvailable;
-      this.gameIntervalId = setInterval(() => {
-        if (secondsRemaining > 0) {
-          secondsRemaining--;
+        this.gameTimeRemaining = intermissionTimeRemaining;
+        this.gameTimeRemainingPercentage = (intermissionTimeRemaining / 5) * 100;
+        this.cdr.detectChanges();
+      } else {
+        clearInterval(intermissionIntervalId);
+        this.solutionModeStatusDisplay = SolutionStatus.SOLVE_PERIOD;
+        this.cards.forEach(card => {
+          card.flipped = false;
+          card.matched = false;
+        });
+        this.disableFlip = false;
+        this.shouldSeeProblemDisplay = true;
+        let secondsRemaining = this.gameTimeAvailable;
+        this.gameTimeRemaining = secondsRemaining;
+        this.gameTimeRemainingPercentage = 100;
+        this.cdr.detectChanges();
+        this.gameIntervalId = setInterval(() => {
+          if (secondsRemaining > 0) {
+            secondsRemaining--;
 
-          this.gameTimeRemaining = secondsRemaining;
-          this.gameTimeRemainingPercentage = (secondsRemaining / this.gameService.getTimeToSolve()) * 100;
-          this.cdr.detectChanges();
-        } else {
-          this.gameService.updateFailsLeftSignal(this.failsLeftSignal() - 1);
-          this.handleSolutionRoundEnd(false, -1);
-        }
-      }, 1000);
-    }, 5000);
+            this.gameTimeRemaining = secondsRemaining;
+            this.gameTimeRemainingPercentage = (secondsRemaining / this.gameService.getTimeToSolve()) * 100;
+            this.cdr.detectChanges();
+          } else {
+            this.solutionModeStatusDisplay = SolutionStatus.SOLUTION_NOT_SELECTED;
+            this.gameService.updateFailsLeftSignal(this.failsLeftSignal() - 1);
+            this.handleSolutionRoundEnd(false, -1);
+          }
+        }, 1000);
+      }
+    }, 1000);
   }
 
   private handleSolutionRoundEnd(success: boolean, index: number) {
     clearInterval(this.gameIntervalId);
-    this.checkSolutionGameOver();
     this.disableFlip = true;
     for(let i = 0; i < this.cards.length; i++) {
       this.cards[i].flipped = true;
@@ -317,15 +331,30 @@ export class GameComponent {
     if (!success && index >= 0) {
       this.cards[index].color = 'red';
     }
-    // provide a five second review
-    setTimeout(() => {
-      this.prepareNextSolution();
-      this.cdr.detectChanges();
-    }, 5000);
+    if (!this.checkSolutionGameOver()) {
+      // provide a 5 second review period if the game is not over
+      let reviewTimeRemaining = 5;
+      this.gameTimeRemaining = reviewTimeRemaining;
+      this.gameTimeRemainingPercentage = 100;
+      let reviewIntervalId = setInterval(() => {
+        if (reviewTimeRemaining > 0) {
+          reviewTimeRemaining--;
+
+          this.gameTimeRemaining = reviewTimeRemaining;
+          this.gameTimeRemainingPercentage = (reviewTimeRemaining / 5) * 100;
+          this.cdr.detectChanges();
+        } else {
+          clearInterval(reviewIntervalId);
+          this.prepareNextSolution();
+          this.cdr.detectChanges();
+        }
+      }, 1000);
+    }
   }
 
-  private checkSolutionGameOver() {
+  private checkSolutionGameOver(): boolean {
     if (this.failsLeftSignal() <= 0) {
+      clearInterval(this.gameIntervalId);
       this.dialogRef = this.dialog.open(GameStatusComponent, {
         height: 'auto',
         width: '90%',
@@ -333,18 +362,17 @@ export class GameComponent {
         disableClose: true,
         data: {
           success: false,
+          mode: this.selectedMode as GameModes,
           difficulty: this.selectedDifficulty as GameDifficulties,
-          pairsFound: this.matchesSignal().toString(),
-          totalPairs: this.pairsCount.toString(),
-          flipCount: this.flipSignal().toString(),
-          totalTime: this.gameTimeAvailable,
-          timeRemaining: this.gameTimeRemaining,
+          solveCount: this.solvesSignal().toString()
         }
       });
       this.dialogRef.afterClosed().subscribe((playAgain: boolean) => {
         this.handleDialogClose(playAgain);
       });
+      return true;
     }
+    return false;
   }
 
   private prepareNextSolution() {
@@ -355,16 +383,20 @@ export class GameComponent {
     this.startSolutionRound();
   }
 
+  // TODO: make all interval IDs global in case quit is done during review or intermission
   quitGame() {
     clearInterval(this.gameIntervalId);
     this.shouldSeeProblemDisplay = false;
     this.gameTimeRemainingPercentage = 100;
+    this.solutionModeStatusDisplay = SolutionStatus.MEMORIZE_PERIOD;
     this.gameService.resetGame();
     this.gameService.updateGameStartedSignal(false);
   }
 
   private handleDialogClose(playAgain: boolean) {
     if (playAgain) {
+      this.shouldSeeProblemDisplay = false;
+      this.solutionModeStatusDisplay = SolutionStatus.MEMORIZE_PERIOD;
       this.disableFlip = true;
       this.cards.forEach(card => {
         card.flipped = false;

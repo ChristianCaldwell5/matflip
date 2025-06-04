@@ -18,21 +18,21 @@ export class MathService {
   private mediumConfig: MathConfig = {
     minGenNum: 1,
     maxGenNum: 15,
-    problemTypes: [MathProblems.ADDSUB, MathProblems.MULTDIV],
+    problemTypes: [MathProblems.ADDSUB],
     negativesAllowed: true
   };
 
   private hardConfig: MathConfig = {
     minGenNum: 1,
     maxGenNum: 20,
-    problemTypes: [MathProblems.ADDSUB, MathProblems.MULTDIV, MathProblems.ALGEBRA],
+    problemTypes: [MathProblems.ADDSUB, MathProblems.MULTDIV],
     negativesAllowed: true
   };
 
   private masteryConfig: MathConfig = {
     minGenNum: 1,
     maxGenNum: 50,
-    problemTypes: [MathProblems.ADDSUB, MathProblems.MULTDIV, MathProblems.ALGEBRA, MathProblems.CALCULUS],
+    problemTypes: [MathProblems.ADDSUB, MathProblems.MULTDIV],
     negativesAllowed: true
   };
 
@@ -57,12 +57,6 @@ export class MathService {
         break;
       case MathProblems.MULTDIV:
         problem = this.generateMultiplicationDivisionProblem(num1, num2);
-        break;
-      case MathProblems.ALGEBRA:
-        // Implement algebra problems here
-        break;
-      case MathProblems.CALCULUS:
-        // Implement calculus problems here
         break;
       default:
         throw new Error('Invalid math problem type');
@@ -124,28 +118,6 @@ export class MathService {
     }
     prob.display = `${num1} ${operator} ${num2}`;
     return prob;
-  }
-
-  /**
-   * Generate an algebra problem.
-   * @param num1 First number.
-   * @param num2 Second number.
-   * @returns The generated math problem.
-   */
-  private generateAlgebraProblem(num1: number, num2: number): MathProblem {
-    // Implement algebra problem generation logic here
-    return { display: '', solution: 0 }; // Placeholder
-  }
-
-  /**
-   * Generate a calculus problem.
-   * @param num1 First number.
-   * @param num2 Second number.
-   * @returns The generated math problem.
-   */
-  private generateCalculusProblem(num1: number, num2: number): MathProblem {
-    // Implement calculus problem generation logic here
-    return { display: '', solution: 0 }; // Placeholder
   }
 
   /**
