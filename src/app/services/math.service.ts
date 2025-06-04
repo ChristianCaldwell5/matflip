@@ -53,7 +53,7 @@ export class MathService {
     let problem!: MathProblem;
     switch (problemType) {
       case MathProblems.ADDSUB:
-        problem = this.generateAdditionSubtractionProblem(num1, num2);
+        problem = this.generateAdditionSubtractionProblem(num1, num2, negativesAllowed);
         break;
       case MathProblems.MULTDIV:
         problem = this.generateMultiplicationDivisionProblem(num1, num2);
@@ -63,6 +63,27 @@ export class MathService {
     }
 
     return problem;
+  }
+
+  generateWrongSolution(correctSolution: number, difficulty: string): string {
+    let config = this.getMathConfig(difficulty);
+    const { negativesAllowed, maxGenNum } = config;
+    let wrongSolution = correctSolution;
+    const randomNumber = Math.floor(Math.random() * maxGenNum) + 1; // Random number between 1 and MaxGenNum
+    const operator = Math.random() < 0.5 ? '+' : '-'; // Randomly choose between addition and subtraction
+
+    if (operator === '+') {
+      wrongSolution = correctSolution + randomNumber;
+    } else {
+      wrongSolution = correctSolution - randomNumber;
+      // if negatives are not allowed, ensure the result is non-negative
+      if (!negativesAllowed && wrongSolution < 0) {
+        // Swap numbers to ensure a non-negative result
+        wrongSolution = randomNumber - correctSolution
+      }
+    }
+
+    return wrongSolution.toString();
   }
 
   /**
@@ -86,7 +107,7 @@ export class MathService {
    * @param num2 Second number.
    * @returns The generated math problem.
    */
-  private generateAdditionSubtractionProblem(num1: number, num2: number): MathProblem {
+  private generateAdditionSubtractionProblem(num1: number, num2: number, negativesAllowed: boolean): MathProblem {
     const operator = Math.random() < 0.5 ? '+' : '-';
     let prob: MathProblem = { display: '', solution: 0 };
     if (operator === '+') {
@@ -94,6 +115,16 @@ export class MathService {
     } else {
       prob.solution = num1 - num2;
     }
+
+    // if negatives are not allowed, ensure the result is non-negative
+    if (!negativesAllowed && prob.solution < 0) {
+      // Swap numbers to ensure a non-negative result
+      let temp = num1;
+      num1 = num2;
+      num2 = temp;
+      prob.solution = num1 - num2; // Recalculate the solution
+    }
+
     prob.display = `${num1} ${operator} ${num2}`;
     return prob;
   }

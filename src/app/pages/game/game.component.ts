@@ -65,7 +65,10 @@ export class GameComponent {
   // element reference
   dialogRef: any;
 
+  // intervals to manage game timing
   private gameIntervalId: any;
+  private intermissionIntervalId: any;
+  private reviewIntervalId: any;
 
   constructor(
     private gameService: GameService,
@@ -218,7 +221,7 @@ export class GameComponent {
     
     for (let i = 1; i < cardCount; i++) {
       this.cards.push({
-        displayText: this.generateWrongSolution(this.currentMathProblem.solution),
+        displayText: this.mathService.generateWrongSolution(this.currentMathProblem.solution, this.selectedDifficulty),
         color: '',
         flipped: true,
         matched: false
@@ -226,21 +229,6 @@ export class GameComponent {
     }
 
     this.cards = this.cards.sort(() => 0.5 - Math.random());
-  }
-
-  // TODO: no negatives for modes without negatives. Expand random number range based on difficulty
-  private generateWrongSolution(correctSolution: number): string {
-    let wrongSolution = correctSolution;
-    const randomNumber = Math.floor(Math.random() * 20) + 1; // Random number between 1 and 20
-    const operator = Math.random() < 0.5 ? '+' : '-'; // Randomly choose between addition and subtraction
-
-    if (operator === '+') {
-      wrongSolution = correctSolution + randomNumber;
-    } else {
-      wrongSolution = correctSolution - randomNumber;
-    }
-
-    return wrongSolution.toString();
   }
 
   private startGameTimer() {
@@ -281,7 +269,7 @@ export class GameComponent {
     let intermissionTimeRemaining = 5;
     this.gameTimeRemaining = intermissionTimeRemaining;
     this.gameTimeRemainingPercentage = 100;
-    let intermissionIntervalId = setInterval(() => {
+    this.intermissionIntervalId = setInterval(() => {
       if (intermissionTimeRemaining > 0) {
         intermissionTimeRemaining--;
 
@@ -289,7 +277,7 @@ export class GameComponent {
         this.gameTimeRemainingPercentage = (intermissionTimeRemaining / 5) * 100;
         this.cdr.detectChanges();
       } else {
-        clearInterval(intermissionIntervalId);
+        clearInterval(this.intermissionIntervalId);
         this.solutionModeStatusDisplay = SolutionStatus.SOLVE_PERIOD;
         this.cards.forEach(card => {
           card.flipped = false;
@@ -336,7 +324,7 @@ export class GameComponent {
       let reviewTimeRemaining = 5;
       this.gameTimeRemaining = reviewTimeRemaining;
       this.gameTimeRemainingPercentage = 100;
-      let reviewIntervalId = setInterval(() => {
+      this.reviewIntervalId = setInterval(() => {
         if (reviewTimeRemaining > 0) {
           reviewTimeRemaining--;
 
@@ -344,7 +332,7 @@ export class GameComponent {
           this.gameTimeRemainingPercentage = (reviewTimeRemaining / 5) * 100;
           this.cdr.detectChanges();
         } else {
-          clearInterval(reviewIntervalId);
+          clearInterval(this.reviewIntervalId);
           this.prepareNextSolution();
           this.cdr.detectChanges();
         }
@@ -383,9 +371,13 @@ export class GameComponent {
     this.startSolutionRound();
   }
 
-  // TODO: make all interval IDs global in case quit is done during review or intermission
+  /**
+   * Quits the game and resets the game state.
+   */
   quitGame() {
     clearInterval(this.gameIntervalId);
+    clearInterval(this.intermissionIntervalId);
+    clearInterval(this.reviewIntervalId);
     this.shouldSeeProblemDisplay = false;
     this.gameTimeRemainingPercentage = 100;
     this.solutionModeStatusDisplay = SolutionStatus.MEMORIZE_PERIOD;
