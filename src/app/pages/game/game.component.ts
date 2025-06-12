@@ -54,7 +54,7 @@ export class GameComponent {
   solutionFound$!: Observable<number>;
   wrongSolution$!: Observable<number>;
 
-  // signal
+  // signals
   gameStartedSignal: Signal<boolean> = signal<boolean>(false);
   cardTotalSignal: Signal<number> = signal<number>(0);
   flipSignal: Signal<number> = signal<number>(0);
@@ -62,7 +62,7 @@ export class GameComponent {
   solvesSignal: Signal<number> = signal<number>(0);
   failsLeftSignal: Signal<number> = signal<number>(0);
 
-  // element reference
+  // element references
   dialogRef: any;
 
   // intervals to manage game timing
@@ -105,6 +105,7 @@ export class GameComponent {
             maxWidth: '600px',
             data: {
               success: true,
+              mode: this.selectedMode as GameModes,
               difficulty: this.selectedDifficulty as GameDifficulties,
               pairsFound: this.matchesSignal().toString(),
               totalPairs: this.pairsCount.toString(),
@@ -378,6 +379,7 @@ export class GameComponent {
     clearInterval(this.gameIntervalId);
     clearInterval(this.intermissionIntervalId);
     clearInterval(this.reviewIntervalId);
+    this.disableFlip = false;
     this.shouldSeeProblemDisplay = false;
     this.gameTimeRemainingPercentage = 100;
     this.solutionModeStatusDisplay = SolutionStatus.MEMORIZE_PERIOD;

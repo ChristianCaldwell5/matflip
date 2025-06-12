@@ -29,6 +29,7 @@ export class GameStatusComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log('GameStatusComponent initialized with data:', this.data);
   }
 
   playAgain(): void {
