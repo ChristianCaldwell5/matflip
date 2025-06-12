@@ -145,7 +145,7 @@ export class MathService {
       if (num2 === 0) {
         num2 = 1; // Avoid division by zero
       }
-      prob.solution = parseFloat((Math.round((num1 / num2) * 100)/100).toFixed(2)); // Round to two decimal places
+      prob.solution = Number((num1 / num2).toFixed(2)); // Round to two decimal places
     }
     prob.display = `${num1} ${operator} ${num2}`;
     return prob;
