@@ -80,6 +80,39 @@ $mint-green-palette: (
     )
 );
 
+// Define a lavender color palette
+$lavender-palette: (
+    50: #f3e6ff,
+    100: #e0c2ff,
+    200: #cda0ff,
+    300: #ba7dff,
+    400: #a95aff,
+    500: #9858ff,
+    600: #8f4fff,
+    700: #863fff,
+    800: #7d2fff,
+    900: #6b1fff,
+    A100: #ffffff,
+    A200: #f3e6ff,
+    A400: #e0c2ff,
+    A700: #cda0ff,
+    contrast: (50: #000000,
+        100: #000000,
+        200: #000000,
+        300: #000000,
+        400: #000000,
+        500: #ffffff,
+        600: #ffffff,
+        700: #ffffff,
+        800: #ffffff,
+        900: #ffffff,
+        A100: #000000,
+        A200: #000000,
+        A400: #000000,
+        A700: #000000,
+    )
+);
+
 $nardo-grey-palette: (
     50: #f2f2f2,
     100: #e6e6e6,
@@ -144,8 +177,8 @@ $soft-white-palette: (
     )
 );
 
-$portfolio-ui-primary: mat.m2-define-palette($soft-white-palette);
-$portfolio-ui-accent: mat.m2-define-palette($mint-green-palette);
+$portfolio-ui-primary: mat.m2-define-palette($nardo-grey-palette);
+$portfolio-ui-accent: mat.m2-define-palette($lavender-palette);
 
 // The warn palette is optional (defaults to red).
 $portfolio-ui-warn: mat.m2-define-palette($coral-palette);
@@ -166,6 +199,7 @@ $custom-theme: mat.m2-define-light-theme((color: (primary: $portfolio-ui-primary
 html,
 body {
     height: 100%;
+    background-color: #f0efe8;
 }
 
 h1 {

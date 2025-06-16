@@ -29,7 +29,7 @@
     
         &.front {
             transform: rotateY(0deg);
-            background: linear-gradient(145deg, mat.m2-get-color-from-palette($soft-white-palette, 900) 0%, mat.m2-get-color-from-palette($soft-white-palette, 200));
+            background: linear-gradient(145deg, mat.m2-get-color-from-palette($nardo-grey-palette, 900) 0%, mat.m2-get-color-from-palette($nardo-grey-palette, 200));
         }
     
         &.back {
