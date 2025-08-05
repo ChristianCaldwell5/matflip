@@ -82,34 +82,35 @@ $mint-green-palette: (
 
 // Define a lavender color palette
 $lavender-palette: (
-    50: #f3e6ff,
-    100: #e0c2ff,
-    200: #cda0ff,
-    300: #ba7dff,
-    400: #a95aff,
-    500: #9858ff,
-    600: #8f4fff,
-    700: #863fff,
-    800: #7d2fff,
-    900: #6b1fff,
-    A100: #ffffff,
-    A200: #f3e6ff,
-    A400: #e0c2ff,
-    A700: #cda0ff,
-    contrast: (50: #000000,
+    50:  #ede7f6,
+    100: #d1c4e9,
+    200: #b39ddb,
+    300: #9575cd,
+    400: #7e57c2,
+    500: #673ab7,
+    600: #5e35b1,
+    700: #512da8,
+    800: #4527a0,
+    900: #311b92,
+    A100: #b388ff,
+    A200: #7c4dff,
+    A400: #651fff,
+    A700: #6200ea,
+    contrast: (
+        50: #000000,
         100: #000000,
         200: #000000,
-        300: #000000,
-        400: #000000,
+        300: #ffffff,
+        400: #ffffff,
         500: #ffffff,
         600: #ffffff,
         700: #ffffff,
         800: #ffffff,
         900: #ffffff,
         A100: #000000,
-        A200: #000000,
-        A400: #000000,
-        A700: #000000,
+        A200: #ffffff,
+        A400: #ffffff,
+        A700: #ffffff,
     )
 );
 
@@ -227,4 +228,12 @@ body {
 
 .ml--1 {
     margin-left: 1rem;
+}
+
+:root {
+  @include mat.select-overrides((
+    focused-arrow-color: #512da8,
+    enabled-arrow-color: #512da8,
+    enabled-trigger-text-color: #512da8,
+  ));
 }
