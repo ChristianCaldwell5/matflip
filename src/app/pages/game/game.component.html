@@ -1,7 +1,6 @@
 <!-- Game Menu/Settings -->
 <div class="game-menu" *ngIf="!gameStartedSignal()">
     <h1>Mat Flip</h1>
-    <button mat-stroked-button>new here?</button>
     <form #form="ngForm">
         <div class="row">
             <mat-form-field appearance="outline">
@@ -26,6 +25,9 @@
     </form>
     <div class="row">
         <button mat-raised-button color="accent" (click)="startGame()">Start Game</button>
+    </div>
+    <div class="row">
+        <button mat-stroked-button (click)="howToClicked()">new here?</button>
     </div>
 </div>
 <!-- Game Area -->
