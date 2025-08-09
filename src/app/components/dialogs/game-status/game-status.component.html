@@ -1,20 +1,37 @@
 <div class="game-status">
-    <ng-container *ngIf="data?.mode === 'pairs'">
-        <h1 *ngIf="data.success" class="tc success">Great Job!</h1>
-        <p *ngIf="data.success" class="tc">You found all the pairs in time!</p>
-        <h1 *ngIf="!data.success" class="tc fail">Oh No!</h1>
-        <p *ngIf="!data.success" class="tc">Time ran out before all pairs were found!</p>
-        <p *ngIf="data.pairsFound && data.totalPairs">Pairs: {{ data.pairsFound }}/{{ data.totalPairs }}</p>
-        <p *ngIf="data.flipCount">Flips: {{ data.flipCount }}</p>
-        <p *ngIf="data.totalTime && data.timeRemaining">Time taken: {{ data.totalTime - data.timeRemaining }} seconds</p>
-    </ng-container>
-    <ng-container *ngIf="data?.mode === 'solution'">
-        <h1 class="tc fail">All fails exhausted!</h1>
-        <p *ngIf="data.solveCount">Solves: {{ data.solveCount }}</p>
-    </ng-container>
-    <p *ngIf="data.difficulty">Difficulty: {{ data.difficulty | uppercase }}</p>
-    <div class="button-row">
-        <button mat-raised-button color="accent" (click)="playAgain()">Play Again</button>
-        <button mat-raised-button color="primary" (click)="mainMenu()">Main Menu</button>
-    </div>
+  @if (data?.mode === 'pairs') {
+    @if (data.success) {
+      <h1 class="tc success">Great Job!</h1>
+      <p class="tc">You found all the pairs in time!</p>
+    } @else {
+      <h1 class="tc fail">Oh No!</h1>
+      <p class="tc">Time ran out before all pairs were found!</p>
+    }
+
+    @if (data.pairsFound && data.totalPairs) {
+      <p>Pairs: {{ data.pairsFound }}/{{ data.totalPairs }}</p>
+    }
+    @if (data.flipCount) {
+      <p>Flips: {{ data.flipCount }}</p>
+    }
+    @if (data.totalTime && data.timeRemaining) {
+      <p>Time taken: {{ data.totalTime - data.timeRemaining }} seconds</p>
+    }
+  }
+
+  @if (data?.mode === 'solution') {
+    <h1 class="tc fail">All fails exhausted!</h1>
+    @if (data.solveCount) {
+      <p>Solves: {{ data.solveCount }}</p>
+    }
+  }
+
+  @if (data.difficulty) {
+    <p>Difficulty: {{ data.difficulty | uppercase }}</p>
+  }
+
+  <div class="button-row">
+    <button mat-raised-button color="accent" (click)="playAgain()">Play Again</button>
+    <button mat-raised-button color="primary" (click)="mainMenu()">Main Menu</button>
+  </div>
 </div>
