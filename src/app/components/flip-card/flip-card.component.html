@@ -1,18 +1,25 @@
 <div class="flip-card-container" [class.flipped]="flipped">
-    <mat-card 
-        class="flip-card front"
-        [appearance]="'outlined'"
-        [ngClass]="{'flip-card-over': flipped, 'flip-card-back': !flipped}"
-        >
-        <span *ngIf="index !== undefined" [ngStyle]="{'color': 'white'}">{{ index+1 }}</span>
-    </mat-card>
-    <mat-card 
-        class="flip-card back"
-        [appearance]="'outlined'"
-        [ngClass]="{'flip-card-over': flipped, 'flip-card-back': !flipped, 'matched-card': matched}"
-        [ngStyle]="{'border-color': color}"
-        >
-        <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
-        <span *ngIf="displayText" [ngStyle]="{'color': color}">{{ displayText }}</span>
-    </mat-card>
+  <mat-card
+    class="flip-card front"
+    [appearance]="'outlined'"
+    [ngClass]="{ 'flip-card-over': flipped, 'flip-card-back': !flipped }"
+  >
+    @if (index !== undefined) {
+      <span [ngStyle]="{ 'color': 'white' }">{{ index + 1 }}</span>
+    }
+  </mat-card>
+
+  <mat-card
+    class="flip-card back"
+    [appearance]="'outlined'"
+    [ngClass]="{ 'flip-card-over': flipped, 'flip-card-back': !flipped, 'matched-card': matched }"
+    [ngStyle]="{ 'border-color': color }"
+  >
+    @if (icon) {
+      <mat-icon>{{ icon }}</mat-icon>
+    }
+    @if (displayText) {
+      <span [ngStyle]="{ 'color': color }">{{ displayText }}</span>
+    }
+  </mat-card>
 </div>
