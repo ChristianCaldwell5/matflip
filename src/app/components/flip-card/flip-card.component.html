@@ -4,6 +4,7 @@
         [appearance]="'outlined'"
         [ngClass]="{'flip-card-over': flipped, 'flip-card-back': !flipped}"
         >
+        <span *ngIf="index !== undefined" [ngStyle]="{'color': 'white'}">{{ index+1 }}</span>
     </mat-card>
     <mat-card 
         class="flip-card back"
