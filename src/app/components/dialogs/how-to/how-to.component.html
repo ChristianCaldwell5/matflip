@@ -1,0 +1,37 @@
+<div>
+    <h1>Mat Flip</h1>
+    <p>Challenge your memory and/or math skills!</p>
+    <h2>How to Play:</h2>
+    <ol>
+        <li>Select a game mode</li>
+        <li>Select a difficulty level</li>
+        <li>Select <span class="key-purple">Start Game</span> when ready!</li>
+    </ol>
+    <h3>Game Modes:</h3>
+    <ul>
+        <li><span class="key-important">Pairs:</span> select cards to find matching pairs before time runs out!</li>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    This is the expansion title
+                </mat-expansion-panel-header>
+
+                <ng-template matExpansionPanelContent>
+                    Some deferred content
+                </ng-template>
+            </mat-expansion-panel>
+            <ul>
+                <li>Easy: 5 pairs; 25 seconds</li>
+                <li>Medium: 6 pairs; 40 seconds</li>
+                <li>Hard: 8 pairs; 60 seconds</li>
+                <li>Mastery: 10 pairs; 90 seconds</li>
+            </ul>
+        <li><span class="key-important">Solution:</span> memorize displayed answers shown for a brief period before they flip (5 seconds). Once they flip over, you must solve a math problem, recall the location of the correct answer, and select it before time runs out. Get as many solutions as you can before you run out of allowed fails!</li>
+            <ul>
+                <li>Easy: 4 fails allowed; 20 seconds to solve problems; add & sub; no negative digits</li>
+                <li>Medium: 4 fails allowed; 20 seconds to solve problems; add & sub; negative digits enabled</li>
+                <li>Hard: 3 fails allowed; 15 seconds to solve problems; add, sub, mult, div; negative digits enabled</li>
+                <li>Mastery: 2 fails allowed; 10 seconds to solve problems; add, sub, mult, div; negative digits enabled</li>
+            </ul>
+    </ul>
+    <button mat-raised-button color="accent" (click)="closeDialog()">Got it!</button>
+</div>

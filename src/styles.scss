@@ -237,3 +237,10 @@ body {
     enabled-trigger-text-color: #512da8,
   ));
 }
+
+// Customize the entire app. Change :root to your selector if you want to scope the styles.
+:root {
+  @include mat.expansion-overrides((
+    container-shape: 4px
+  ));
+}
