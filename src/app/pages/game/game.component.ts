@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Scroll } from '@angular/router';
 import { FlipCardComponent } from '../../components/flip-card/flip-card.component';
 import { Observable } from 'rxjs';
 import { card } from '../../model/interfaces/card';
@@ -21,6 +21,8 @@ import { GameDifficulties, GameModes } from '../../model/enum/game.enums';
 import { MathService } from '../../services/math.service';
 import { MathProblem } from '../../model/interfaces/mathProblem';
 import { SolutionStatus } from '../../model/enum/solution-status.enum';
+import { HowToComponent } from '../../components/dialogs/how-to/how-to.component';
+import { ScrollStrategyOptions } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-game',
@@ -144,7 +146,16 @@ export class GameComponent {
       this.gameService.updateFailsLeftSignal(this.failsLeftSignal() - 1);
       this.handleSolutionRoundEnd(false, index);
     });
+  }
 
+  howToClicked() {
+    this.dialogRef = this.dialog.open(HowToComponent, {
+      height: 'auto',
+      maxHeight: '90vh',
+      width: '90%',
+      maxWidth: '700px',
+      disableClose: false,
+    });
   }
 
   flipCard(index: number) {

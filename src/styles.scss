@@ -80,6 +80,40 @@ $mint-green-palette: (
     )
 );
 
+// Define a lavender color palette
+$lavender-palette: (
+    50:  #ede7f6,
+    100: #d1c4e9,
+    200: #b39ddb,
+    300: #9575cd,
+    400: #7e57c2,
+    500: #673ab7,
+    600: #5e35b1,
+    700: #512da8,
+    800: #4527a0,
+    900: #311b92,
+    A100: #b388ff,
+    A200: #7c4dff,
+    A400: #651fff,
+    A700: #6200ea,
+    contrast: (
+        50: #000000,
+        100: #000000,
+        200: #000000,
+        300: #ffffff,
+        400: #ffffff,
+        500: #ffffff,
+        600: #ffffff,
+        700: #ffffff,
+        800: #ffffff,
+        900: #ffffff,
+        A100: #000000,
+        A200: #ffffff,
+        A400: #ffffff,
+        A700: #ffffff,
+    )
+);
+
 $nardo-grey-palette: (
     50: #f2f2f2,
     100: #e6e6e6,
@@ -144,8 +178,8 @@ $soft-white-palette: (
     )
 );
 
-$portfolio-ui-primary: mat.m2-define-palette($soft-white-palette);
-$portfolio-ui-accent: mat.m2-define-palette($mint-green-palette);
+$portfolio-ui-primary: mat.m2-define-palette($nardo-grey-palette);
+$portfolio-ui-accent: mat.m2-define-palette($lavender-palette);
 
 // The warn palette is optional (defaults to red).
 $portfolio-ui-warn: mat.m2-define-palette($coral-palette);
@@ -166,6 +200,7 @@ $custom-theme: mat.m2-define-light-theme((color: (primary: $portfolio-ui-primary
 html,
 body {
     height: 100%;
+    background-color: #f0efe8;
 }
 
 h1 {
@@ -193,4 +228,19 @@ body {
 
 .ml--1 {
     margin-left: 1rem;
+}
+
+:root {
+  @include mat.select-overrides((
+    focused-arrow-color: #512da8,
+    enabled-arrow-color: #512da8,
+    enabled-trigger-text-color: #512da8,
+  ));
+}
+
+// Customize the entire app. Change :root to your selector if you want to scope the styles.
+:root {
+  @include mat.expansion-overrides((
+    container-shape: 4px
+  ));
 }

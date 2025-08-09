@@ -179,7 +179,7 @@ export class GameService {
     switch (difficulty) {
       case 'easy':
         this.updateCardTotalSignal(10);
-        this.timeToSolve = 20;
+        this.timeToSolve = 25;
         break;
       case 'medium':
         this.updateCardTotalSignal(12);
