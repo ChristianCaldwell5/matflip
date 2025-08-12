@@ -1,11 +1,11 @@
 <div class="flip-card-container" [class.flipped]="flipped">
   <mat-card
-    class="flip-card front"
+    class="flip-card front front--stripes"
     [appearance]="'outlined'"
     [ngClass]="{ 'flip-card-over': flipped, 'flip-card-back': !flipped }"
   >
     @if (index !== undefined) {
-      <span [ngStyle]="{ 'color': 'white' }">{{ index + 1 }}</span>
+      <span>{{ index + 1 }}</span>
     }
   </mat-card>
 

@@ -1,5 +1,5 @@
 <div class="game-status">
-  @if (data?.mode === 'pairs') {
+  @if (data.mode === 'pairs') {
     @if (data.success) {
       <h1 class="tc success">Great Job!</h1>
       <p class="tc">You found all the pairs in time!</p>
@@ -19,7 +19,7 @@
     }
   }
 
-  @if (data?.mode === 'solution') {
+  @if (data.mode === 'solution') {
     <h1 class="tc fail">All fails exhausted!</h1>
     @if (data.solveCount) {
       <p>Solves: {{ data.solveCount }}</p>

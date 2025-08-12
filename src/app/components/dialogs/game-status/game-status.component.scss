@@ -1,5 +1,5 @@
 @use '@angular/material' as mat;
-@import '../../../../styles.scss';
+@use '../../../../styles.scss' as baseStyles;
 @include mat.core();
 
 .game-status {
@@ -11,11 +11,11 @@ h1 {
 }
 
 .success {
-    color: mat.m2-get-color-from-palette($portfolio-ui-accent, 500);
+    color: mat.m2-get-color-from-palette(baseStyles.$portfolio-ui-accent, 500);
 }
 
 .fail {
-    color: mat.m2-get-color-from-palette($portfolio-ui-warn, 500);
+    color: mat.m2-get-color-from-palette(baseStyles.$portfolio-ui-warn, 500);
 }
 
 .tc {

@@ -1,8 +1,15 @@
 @use '@angular/material' as mat;
 @import '../../../../styles.scss';
 @include mat.core();
-div {
+.how-to-container {
     padding: 50px;
+
+    .header-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: .5rem;
+    }
     h1, h2 {
         margin: 0.5rem 0;
     }

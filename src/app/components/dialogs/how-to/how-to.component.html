@@ -1,5 +1,10 @@
-<div>
-    <h1>Mat Flip</h1>
+<div class="how-to-container">
+    <div class="header-row">
+        <h1>Mat Flip</h1>
+        <button mat-icon-button color="primary" (click)="closeDialog()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
     <p>Challenge your memory and/or math skills!</p>
     <h2>How to Play:</h2>
     <ol>
@@ -9,29 +14,71 @@
     </ol>
     <h3>Game Modes:</h3>
     <ul>
-        <li><span class="key-important">Pairs:</span> select cards to find matching pairs before time runs out!</li>
+        <li><p><span class="key-important">Pairs:</span> select cards to find matching pairs before time runs out!</p></li>
             <mat-expansion-panel>
                 <mat-expansion-panel-header>
-                    This is the expansion title
+                    View difficulty information
                 </mat-expansion-panel-header>
 
                 <ng-template matExpansionPanelContent>
-                    Some deferred content
+                    Easy:
+                    <ul>
+                        <li>5 pairs to match</li>
+                        <li>25 seconds to find all pairs</li>
+                    </ul>
+                    Medium:
+                    <ul>
+                        <li>6 pairs to match</li>
+                        <li>40 seconds to find all pairs</li>
+                    </ul>
+                    Hard:
+                    <ul>
+                        <li>8 pairs to match</li>
+                        <li>60 seconds to find all pairs</li>
+                    </ul>
+                    Mastery:
+                    <ul>
+                        <li>10 pairs to match</li>
+                        <li>90 seconds to find all pairs</li>
+                    </ul>
                 </ng-template>
             </mat-expansion-panel>
-            <ul>
-                <li>Easy: 5 pairs; 25 seconds</li>
-                <li>Medium: 6 pairs; 40 seconds</li>
-                <li>Hard: 8 pairs; 60 seconds</li>
-                <li>Mastery: 10 pairs; 90 seconds</li>
-            </ul>
-        <li><span class="key-important">Solution:</span> memorize displayed answers shown for a brief period before they flip (5 seconds). Once they flip over, you must solve a math problem, recall the location of the correct answer, and select it before time runs out. Get as many solutions as you can before you run out of allowed fails!</li>
-            <ul>
-                <li>Easy: 4 fails allowed; 20 seconds to solve problems; add & sub; no negative digits</li>
-                <li>Medium: 4 fails allowed; 20 seconds to solve problems; add & sub; negative digits enabled</li>
-                <li>Hard: 3 fails allowed; 15 seconds to solve problems; add, sub, mult, div; negative digits enabled</li>
-                <li>Mastery: 2 fails allowed; 10 seconds to solve problems; add, sub, mult, div; negative digits enabled</li>
-            </ul>
+        <li><p><span class="key-important">Solution:</span> memorize displayed answers shown for a brief period before they flip (5 seconds). Once they flip over, you must solve a math problem, recall the location of the correct answer, and select it before time runs out. Get as many solutions as you can before you run out of allowed fails!</p></li>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                View difficulty information
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                Easy:
+                <ul>
+                    <li>4 fails allowed</li>
+                    <li>20 seconds to solve problems</li>
+                    <li>Add & subtraction only</li>
+                    <li>No negative digits</li>
+                </ul>
+                Medium:
+                <ul>
+                    <li>4 fails allowed</li>
+                    <li>20 seconds to solve problems</li>
+                    <li>Add & subtraction only</li>
+                    <li>Negative digits enabled</li>
+                </ul>
+                Hard:
+                <ul>
+                    <li>3 fails allowed</li>
+                    <li>15 seconds to solve problems</li>
+                    <li>Add, subtraction, multiplication, division</li>
+                    <li>Negative digits enabled</li>
+                </ul>
+                Mastery:
+                <ul>
+                    <li>2 fails allowed</li>
+                    <li>10 seconds to solve problems</li>
+                    <li>Add, subtraction, multiplication, division</li>
+                    <li>Negative digits enabled</li>
+                </ul>
+            </ng-template>
+        </mat-expansion-panel>
     </ul>
     <button mat-raised-button color="accent" (click)="closeDialog()">Got it!</button>
 </div>
