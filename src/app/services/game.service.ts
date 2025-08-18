@@ -34,6 +34,8 @@ export class GameService {
   private flipsSignal = signal(0);
   private matchesSignal = signal(0);
   private solvesSignal = signal(0);
+  private currentStreakSignal = signal(0);
+  private bestStreakSignal = signal(0);
   private failsLeftSignal = signal(0);
   
 
@@ -110,6 +112,22 @@ export class GameService {
   // update solves signal
   updateSolvesSignal(solves: number): void {
     this.solvesSignal.set(solves);
+  }
+
+  getCurrentStreakSignal(): Signal<number> {
+    return this.currentStreakSignal;
+  }
+
+  updateCurrentStreakSignal(currentStreak: number): void {
+    this.currentStreakSignal.set(currentStreak);
+  }
+
+  getBestStreakSignal(): Signal<number> {
+    return this.bestStreakSignal;
+  }
+
+  updateBestStreakSignal(bestStreak: number): void {
+    this.bestStreakSignal.set(bestStreak);
   }
 
   getFailsLeftSignal(): Signal<number> {
@@ -191,7 +209,7 @@ export class GameService {
         break;
       case 'mastery':
         this.updateCardTotalSignal(20);
-        this.timeToSolve = 90;
+        this.timeToSolve = 80;
         break;
     }
   }
@@ -209,13 +227,13 @@ export class GameService {
         this.timeToSolve = 20;
         break;
       case 'hard':
-        this.updateCardTotalSignal(5);
+        this.updateCardTotalSignal(4);
         this.updateFailsLeftSignal(3);
         this.timeToSolve = 15;
         break;
       case 'mastery':
-        this.updateCardTotalSignal(6);
-        this.updateFailsLeftSignal(2);
+        this.updateCardTotalSignal(5);
+        this.updateFailsLeftSignal(3);
         this.timeToSolve = 10;
         break;
     }
@@ -238,8 +256,8 @@ export class GameService {
     }
   }
 
-  processSolutionFlip(index: number, cards: card[], promblem: MathProblem): void {
-    if (cards[index]!.displayText === promblem.solution.toString()) {
+  processSolutionFlip(index: number, cards: card[], problem: MathProblem): void {
+    if (Number(cards[index]!.displayText) === problem.solution) {
       this.matches++;
       this.updateMatchesSignal(this.matches);
       this.solutionFoundSubject.next(index);
@@ -262,6 +280,8 @@ export class GameService {
     this.updateFlipsSignal(this.flips);
     this.updateFailsLeftSignal(0);
     this.updateSolvesSignal(0);
+    this.updateCurrentStreakSignal(0);
+    this.updateBestStreakSignal(0);
   }
 
 }

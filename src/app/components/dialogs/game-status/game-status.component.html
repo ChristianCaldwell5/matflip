@@ -24,6 +24,9 @@
     @if (data.solveCount) {
       <p>Solves: {{ data.solveCount }}</p>
     }
+    @if (data.bestStreak) {
+      <p>Longest streak: {{ data.bestStreak }}</p>
+    }
   }
 
   @if (data.difficulty) {

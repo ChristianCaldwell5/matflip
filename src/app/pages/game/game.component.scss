@@ -67,6 +67,15 @@
         ));
     }
 
+    .game-controls {
+        @media screen and (max-width: $mobile-breakpoint) {
+            position: fixed;
+            bottom: 0;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+    }
+
     @media screen and (max-width: $mobile-breakpoint) {
         .row {
             margin: 0 2rem;

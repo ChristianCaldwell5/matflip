@@ -2,8 +2,9 @@
 <mat-toolbar color="primary">
   <button mat-button aria-label="go to top of page">Mat Flip</button>
   <span class="spacer"></span>
-  <button mat-icon-button aria-label="Shop icon">
-    <mat-icon>info</mat-icon>
+  <button mat-fab extended aria-label="news" (click)="openNewsDialog()">
+    news
+    <mat-icon>newspaper</mat-icon>
   </button>
 </mat-toolbar>
 <router-outlet></router-outlet>

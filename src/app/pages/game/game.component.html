@@ -34,7 +34,7 @@
 } @else {
   <!-- Game Area -->
   <div class="game-area">
-    <div class="row">
+    <div class="row mt--2">
       <mat-progress-bar color="accent" mode="determinate" [value]="gameTimeRemainingPercentage"></mat-progress-bar>
       <div class="timer-row">
         <mat-icon>timer</mat-icon>
@@ -89,12 +89,14 @@
           <span>{{ solvesSignal() }}</span>
         </div>
         <div>
+          <span>Streak: </span>
+          <span>{{ currentStreakSignal() }}</span>
+        </div>
+        <div>
           <span>Fails Left: </span>
           <span>{{ failsLeftSignal() }}</span>
         </div>
       }
-
-      <button mat-raised-button color="warn" (click)="quitGame()">Quit Game</button>
     </div>
 
     @if (selectedMode === 'solution') {
@@ -104,5 +106,9 @@
         </div>
       </div>
     }
+
+    <div class="row mt--2 game-controls">
+      <button mat-raised-button color="warn" (click)="openQuitDialog()">Quit Game</button>
+    </div>
   </div>
 }

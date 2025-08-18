@@ -8,6 +8,6 @@
 
 /* Add black bottom border to mat-toolbar */
 :host ::ng-deep mat-toolbar {
-    border: 0.5px solid #000;
+    border-bottom: 1px solid #000;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }

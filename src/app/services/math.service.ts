@@ -65,25 +65,35 @@ export class MathService {
     return problem;
   }
 
-  generateWrongSolution(correctSolution: number, difficulty: string): string {
-    let config = this.getMathConfig(difficulty);
+  generateWrongSolutions(correctSolution: number, difficulty: string, count: number): string[] {
+    const config = this.getMathConfig(difficulty);
     const { negativesAllowed, maxGenNum } = config;
-    let wrongSolution = correctSolution;
-    const randomNumber = Math.floor(Math.random() * maxGenNum) + 1; // Random number between 1 and MaxGenNum
-    const operator = Math.random() < 0.5 ? '+' : '-'; // Randomly choose between addition and subtraction
 
-    if (operator === '+') {
-      wrongSolution = correctSolution + randomNumber;
-    } else {
-      wrongSolution = correctSolution - randomNumber;
-      // if negatives are not allowed, ensure the result is non-negative
-      if (!negativesAllowed && wrongSolution < 0) {
-        // Swap numbers to ensure a non-negative result
-        wrongSolution = randomNumber - correctSolution
+    const isDecimal = !Number.isInteger(correctSolution);
+
+    const candidates: number[] = [];
+    const addCandidate = (n: number) => {
+      if (n !== correctSolution && !candidates.includes(n)) {
+        candidates.push(n);
       }
+    }; 
+
+    while (candidates.length < count) {
+      let randomNumber = (Math.floor(Math.random() * maxGenNum) + 1) * (Math.random() < 0.5 ? -1 : 1);
+      let newCandidate = Math.random() < 0.5 ? correctSolution + randomNumber : correctSolution - randomNumber;
+      if (isDecimal) {
+        const jitter = Math.random() < 0.3 ? 0 : Math.round(Math.random() * 9) / 100;
+        newCandidate = newCandidate + (newCandidate > 0 ? jitter : -jitter);
+      }
+      if (correctSolution > maxGenNum * 2) {
+        const intensifier = Math.random() < 0.4 ? 1 : 2;
+        newCandidate = newCandidate * intensifier;
+      }
+      !negativesAllowed && newCandidate < 0 ?
+        addCandidate(Math.abs(newCandidate)) : addCandidate(newCandidate);
     }
 
-    return wrongSolution.toString();
+    return candidates.map(n => isDecimal ? n.toFixed(2) : String(n));
   }
 
   /**

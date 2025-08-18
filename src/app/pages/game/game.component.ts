@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Signal, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,9 +8,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterModule, Scroll } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { FlipCardComponent } from '../../components/flip-card/flip-card.component';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { card } from '../../model/interfaces/card';
 import { FlipsReference } from '../../model/interfaces/flipsReference';
 import { GameService } from '../../services/game.service';
@@ -22,12 +21,12 @@ import { MathService } from '../../services/math.service';
 import { MathProblem } from '../../model/interfaces/mathProblem';
 import { SolutionStatus } from '../../model/enum/solution-status.enum';
 import { HowToComponent } from '../../components/dialogs/how-to/how-to.component';
-import { ScrollStrategyOptions } from '@angular/cdk/overlay';
+import { QuiteGameComponent } from '../../components/dialogs/quite-game/quite-game.component';
 
 @Component({
   selector: 'app-game',
   imports: [MatIconModule, MatButtonModule, MatDialogModule, MatToolbarModule, MatFormFieldModule, MatSelectModule,
-    MatProgressBarModule, CommonModule, FlipCardComponent, FormsModule, HttpClientModule, RouterModule
+    MatProgressBarModule, CommonModule, FlipCardComponent, FormsModule, RouterModule
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss',
@@ -62,6 +61,8 @@ export class GameComponent {
   flipSignal: Signal<number> = signal<number>(0);
   matchesSignal: Signal<number> = signal<number>(0);
   solvesSignal: Signal<number> = signal<number>(0);
+  currentStreakSignal: Signal<number> = signal<number>(0);
+  bestStreakSignal: Signal<number> = signal<number>(0);
   failsLeftSignal: Signal<number> = signal<number>(0);
 
   // element references
@@ -84,6 +85,8 @@ export class GameComponent {
     this.flipSignal = this.gameService.getFlipsSignal();
     this.matchesSignal = this.gameService.getMatchesSignal();
     this.solvesSignal = this.gameService.getSolvesSignal();
+    this.currentStreakSignal = this.gameService.getCurrentStreakSignal();
+    this.bestStreakSignal = this.gameService.getBestStreakSignal();
     this.failsLeftSignal = this.gameService.getFailsLeftSignal();
 
     this.matchFound$ = this.gameService.getMatchMadeObservable();
@@ -138,12 +141,17 @@ export class GameComponent {
     this.solutionFound$.subscribe((index) => {
       this.solutionModeStatusDisplay = SolutionStatus.SOLUTION_FOUND;
       this.gameService.updateSolvesSignal(this.solvesSignal() + 1);
+      this.gameService.updateCurrentStreakSignal(this.currentStreakSignal() + 1);
+      if (this.currentStreakSignal() > this.bestStreakSignal()) {
+        this.gameService.updateBestStreakSignal(this.currentStreakSignal());
+      }
       this.handleSolutionRoundEnd(true, index);
     });
 
     this.wrongSolution$.subscribe((index) => {
       this.solutionModeStatusDisplay = SolutionStatus.SOLUTION_NOT_FOUND;
       this.gameService.updateFailsLeftSignal(this.failsLeftSignal() - 1);
+      this.gameService.updateCurrentStreakSignal(0);
       this.handleSolutionRoundEnd(false, index);
     });
   }
@@ -223,17 +231,20 @@ export class GameComponent {
     const cardCount = this.cardTotalSignal();
 
     this.currentMathProblem = this.mathService.generateMathProblem(this.selectedDifficulty);
+    const isDecimal = this.currentMathProblem.solution % 1 !== 0;
     console.log(this.currentMathProblem);
     this.cards.push({
-      displayText: this.currentMathProblem.solution.toString(),
+      displayText: isDecimal ? this.currentMathProblem.solution.toFixed(2) : this.currentMathProblem.solution.toString(),
       color: '',
       flipped: true,
       matched: false
     });
+
+    let wrongAnswers = this.mathService.generateWrongSolutions(this.currentMathProblem.solution, this.selectedDifficulty, cardCount - 1);
     
-    for (let i = 1; i < cardCount; i++) {
+    for (let i = 0; i < wrongAnswers.length; i++) {
       this.cards.push({
-        displayText: this.mathService.generateWrongSolution(this.currentMathProblem.solution, this.selectedDifficulty),
+        displayText: wrongAnswers[i],
         color: '',
         flipped: true,
         matched: false
@@ -323,8 +334,7 @@ export class GameComponent {
     this.disableFlip = true;
     for(let i = 0; i < this.cards.length; i++) {
       this.cards[i].flipped = true;
-      if (this.cards[i].displayText == this.currentMathProblem.solution.toString()) {
-        this.cards[i].color = '#2acc89';
+      if (Number(this.cards[i].displayText) == this.currentMathProblem.solution) {
         this.cards[i].matched = true;
       }
     }
@@ -364,7 +374,8 @@ export class GameComponent {
           success: false,
           mode: this.selectedMode as GameModes,
           difficulty: this.selectedDifficulty as GameDifficulties,
-          solveCount: this.solvesSignal().toString()
+          solveCount: this.solvesSignal().toString(),
+          bestStreak: this.bestStreakSignal().toString(),
         }
       });
       this.dialogRef.afterClosed().subscribe((playAgain: boolean) => {
@@ -381,6 +392,20 @@ export class GameComponent {
     this.solutionModeStatusDisplay = SolutionStatus.MEMORIZE_PERIOD;
     this.generateSolutionCards();
     this.startSolutionRound();
+  }
+
+  openQuitDialog() {
+    const dialogRef = this.dialog.open(QuiteGameComponent, {
+      height: 'auto',
+      width: '90%',
+      maxWidth: '600px',
+      disableClose: false
+    });
+
+    dialogRef.componentInstance.confirmQuit.pipe(take(1)).subscribe(() => {
+      this.quitGame();
+      dialogRef.close();
+    });
   }
 
   /**
@@ -420,4 +445,3 @@ export class GameComponent {
     }
   }
 }
-

@@ -1,0 +1,27 @@
+@use '@angular/material' as mat;
+@import '../../../../styles.scss';
+@include mat.core();
+
+.news-container {
+    padding: 50px;
+
+    .header-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: .5rem;
+    }
+    h1, h2 {
+        margin: 0.5rem 0;
+    }
+    .key-important {
+        color: mat.m2-get-color-from-palette($nardo-grey-palette, 900);
+        font-weight: 800;
+        text-transform: uppercase;
+        text-decoration: underline;
+    }
+    .key-purple {
+        color: mat.m2-get-color-from-palette($lavender-palette, 600);
+        font-weight: 600;
+    }
+}

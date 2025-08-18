@@ -1,0 +1,14 @@
+<div class="quit-container">
+    <div class="header-row">
+        <h1>Quit Game</h1>
+        <button mat-icon-button color="primary" (click)="closeDialog()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <h2 class="key-purple">Are you sure you want to quit?</h2>
+    <p>Game is not paused! Progress will be lost.</p>
+    <div class="button-row">
+        <button mat-raised-button color="warn" (click)="confirmQuitClicked()" class="btn-space">Quit</button>
+        <button mat-button (click)="closeDialog()">Cancel</button>
+    </div>
+</div>
