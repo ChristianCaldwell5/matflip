@@ -16,7 +16,7 @@ import { FlipsReference } from '../../model/interfaces/flipsReference';
 import { GameService } from '../../services/game.service';
 import { IconService } from '../../services/icon.service';
 import { GameStatusComponent } from '../../components/dialogs/game-status/game-status.component';
-import { GameDifficulties, GameModes } from '../../model/enum/game.enums';
+import { EndGameDirectives, GameDifficulties, GameModes } from '../../model/enum/game.enums';
 import { MathService } from '../../services/math.service';
 import { MathProblem } from '../../model/interfaces/mathProblem';
 import { SolutionStatus } from '../../model/enum/solution-status.enum';
@@ -48,6 +48,8 @@ export class GameComponent {
   solutionModeStatusDisplay: SolutionStatus = SolutionStatus.MEMORIZE_PERIOD;
   pairsCount: number = 0;
   disableFlip: boolean = false;
+  viewBoardMode: boolean = false;
+  roundSuccess: boolean = false;
 
   // observables
   matchFound$!: Observable<FlipsReference>;
@@ -64,6 +66,7 @@ export class GameComponent {
   currentStreakSignal: Signal<number> = signal<number>(0);
   bestStreakSignal: Signal<number> = signal<number>(0);
   failsLeftSignal: Signal<number> = signal<number>(0);
+  viewingBoard: Signal<boolean> = signal<boolean>(false);
 
   // element references
   dialogRef: any;
@@ -103,13 +106,14 @@ export class GameComponent {
         this.cards[match.secondIndex].matched = true;
         this.cards[match.secondIndex].color = '#2acc89';
         if (this.matchesSignal() === this.pairsCount) {
+          this.roundSuccess = true;
           clearInterval(this.gameIntervalId);
           this.dialogRef = this.dialog.open(GameStatusComponent, {
             height: 'auto',
             width: '90%',
             maxWidth: '600px',
             data: {
-              success: true,
+              success: this.roundSuccess,
               mode: this.selectedMode as GameModes,
               difficulty: this.selectedDifficulty as GameDifficulties,
               pairsFound: this.matchesSignal().toString(),
@@ -119,8 +123,8 @@ export class GameComponent {
               timeRemaining: this.gameTimeRemaining,
             }
           });
-          this.dialogRef.afterClosed().subscribe((playAgain: boolean) => {
-            this.handleDialogClose(playAgain);
+          this.dialogRef.afterClosed().subscribe((directive: EndGameDirectives) => {
+            this.handleDialogClose(directive);
           });
         }
       }
@@ -265,13 +269,14 @@ export class GameComponent {
         this.cdr.detectChanges();
       } else {
         clearInterval(this.gameIntervalId);
+        this.roundSuccess = false;
         this.dialogRef = this.dialog.open(GameStatusComponent, {
           height: 'auto',
           width: '90%',
           maxWidth: '600px',
           disableClose: true,
           data: {
-            success: false,
+            success: this.roundSuccess,
             mode: this.selectedMode as GameModes,
             difficulty: this.selectedDifficulty as GameDifficulties,
             pairsFound: this.matchesSignal().toString(),
@@ -281,8 +286,8 @@ export class GameComponent {
             timeRemaining: this.gameTimeRemaining,
           }
         });
-        this.dialogRef.afterClosed().subscribe((playAgain: boolean) => {
-          this.handleDialogClose(playAgain);
+        this.dialogRef.afterClosed().subscribe((directive: EndGameDirectives) => {
+          this.handleDialogClose(directive);
         });
       }
     }, 1000);
@@ -365,21 +370,22 @@ export class GameComponent {
   private checkSolutionGameOver(): boolean {
     if (this.failsLeftSignal() <= 0) {
       clearInterval(this.gameIntervalId);
+      this.roundSuccess = false;
       this.dialogRef = this.dialog.open(GameStatusComponent, {
         height: 'auto',
         width: '90%',
         maxWidth: '600px',
         disableClose: true,
         data: {
-          success: false,
+          success: this.roundSuccess,
           mode: this.selectedMode as GameModes,
           difficulty: this.selectedDifficulty as GameDifficulties,
           solveCount: this.solvesSignal().toString(),
           bestStreak: this.bestStreakSignal().toString(),
         }
       });
-      this.dialogRef.afterClosed().subscribe((playAgain: boolean) => {
-        this.handleDialogClose(playAgain);
+      this.dialogRef.afterClosed().subscribe((directive: EndGameDirectives) => {
+        this.handleDialogClose(directive);
       });
       return true;
     }
@@ -416,6 +422,7 @@ export class GameComponent {
     clearInterval(this.intermissionIntervalId);
     clearInterval(this.reviewIntervalId);
     this.disableFlip = false;
+    this.viewBoardMode = false;
     this.shouldSeeProblemDisplay = false;
     this.gameTimeRemainingPercentage = 100;
     this.solutionModeStatusDisplay = SolutionStatus.MEMORIZE_PERIOD;
@@ -423,25 +430,61 @@ export class GameComponent {
     this.gameService.updateGameStartedSignal(false);
   }
 
-  private handleDialogClose(playAgain: boolean) {
-    if (playAgain) {
-      this.shouldSeeProblemDisplay = false;
-      this.solutionModeStatusDisplay = SolutionStatus.MEMORIZE_PERIOD;
-      this.disableFlip = true;
-      this.cards.forEach(card => {
-        card.flipped = false;
-        card.matched = false;
-      });
-      this.gameTimeRemaining = this.gameTimeAvailable;
-      this.gameTimeRemainingPercentage = 100;
-      this.cdr.detectChanges();
-      setTimeout(() => {
-        this.disableFlip = false;
-        this.gameService.resetGame();
-        this.startGame();
-      }, 1000);
-    } else {
+  private handleDialogClose(directive: EndGameDirectives) {
+    if (directive === EndGameDirectives.PLAY_AGAIN) {
+      this.startNewGame();
+    } else if (directive === EndGameDirectives.MAIN_MENU) {
       this.quitGame();
+    } else if (directive === EndGameDirectives.VIEW_BOARD) {
+      this.viewBoardMode = true;
+      this.disableFlip = true;
+      for (let card of this.cards) {
+        card.flipped = true;
+      }
+      this.cdr.detectChanges();
     }
+  }
+
+  startNewGame() {
+    this.viewBoardMode = false;
+    this.shouldSeeProblemDisplay = false;
+    this.roundSuccess = false;
+    this.solutionModeStatusDisplay = SolutionStatus.MEMORIZE_PERIOD;
+    this.disableFlip = true;
+    this.cards.forEach(card => {
+      card.flipped = false;
+      card.matched = false;
+    });
+    this.gameTimeRemaining = this.gameTimeAvailable;
+    this.gameTimeRemainingPercentage = 100;
+    this.cdr.detectChanges();
+    setTimeout(() => {
+      this.disableFlip = false;
+      this.gameService.resetGame();
+      this.startGame();
+    }, 1000);
+  }
+
+  openStatusDialog() {
+    this.viewBoardMode = false;
+    this.dialogRef = this.dialog.open(GameStatusComponent, {
+      height: 'auto',
+      width: '90%',
+      maxWidth: '600px',
+      disableClose: true,
+      data: {
+        success: this.roundSuccess,
+        mode: this.selectedMode as GameModes,
+        difficulty: this.selectedDifficulty as GameDifficulties,
+        pairsFound: this.matchesSignal().toString(),
+        totalPairs: this.pairsCount.toString(),
+        flipCount: this.flipSignal().toString(),
+        totalTime: this.gameTimeAvailable,
+        timeRemaining: this.gameTimeRemaining,
+      }
+    });
+    this.dialogRef.afterClosed().subscribe((directive: EndGameDirectives) => {
+      this.handleDialogClose(directive);
+    });
   }
 }

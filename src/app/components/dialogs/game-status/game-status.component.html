@@ -37,4 +37,10 @@
     <button mat-raised-button color="accent" (click)="playAgain()">Play Again</button>
     <button mat-raised-button color="primary" (click)="mainMenu()">Main Menu</button>
   </div>
+
+  @if (data.mode === 'pairs') {
+    <div class="button-row">
+      <button mat-button (click)="viewBoard()">view board</button>
+    </div>
+  }
 </div>
