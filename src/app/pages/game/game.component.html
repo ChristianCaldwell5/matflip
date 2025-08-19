@@ -107,8 +107,18 @@
       </div>
     }
 
-    <div class="row mt--2 game-controls">
-      <button mat-raised-button color="warn" (click)="openQuitDialog()">Quit Game</button>
-    </div>
+    @if (!viewBoardMode) {
+      <div class="row mt--2 game-controls">
+        <button mat-raised-button color="warn" (click)="openQuitDialog()">Quit Game</button>
+      </div>
+    }
+
+    @if (viewBoardMode) {
+      <div class="row mt--2">
+        <button mat-raised-button color="accent" (click)="startNewGame()">Play Again</button>
+        <button mat-raised-button color="primary" (click)="quitGame()">Main Menu</button>
+        <button mat-button (click)="openStatusDialog()">view round summary</button>
+      </div>
+    }
   </div>
 }

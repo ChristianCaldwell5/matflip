@@ -9,3 +9,9 @@ export enum GameDifficulties {
     HARD = 'hard',
     MASTERY = 'mastery'
 }
+
+export enum EndGameDirectives {
+    PLAY_AGAIN = 'playAgain',
+    MAIN_MENU = 'mainMenu',
+    VIEW_BOARD = 'viewBoard',
+}

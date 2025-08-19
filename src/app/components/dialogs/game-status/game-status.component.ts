@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { GameDifficulties, GameModes } from '../../../model/enum/game.enums';
+import { EndGameDirectives, GameDifficulties, GameModes } from '../../../model/enum/game.enums';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -33,11 +33,15 @@ export class GameStatusComponent implements OnInit {
   }
 
   playAgain(): void {
-    this.dialogRef.close(true);
+    this.dialogRef.close(EndGameDirectives.PLAY_AGAIN);
   }
 
   mainMenu(): void {
-    this.dialogRef.close(false);
+    this.dialogRef.close(EndGameDirectives.MAIN_MENU);
+  }
+
+  viewBoard(): void {
+    this.dialogRef.close(EndGameDirectives.VIEW_BOARD);
   }
 
 }
