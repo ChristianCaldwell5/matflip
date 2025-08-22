@@ -5,7 +5,7 @@
     [ngClass]="{ 'flip-card-over': flipped, 'flip-card-back': !flipped }"
   >
     @if (index !== undefined) {
-      <span>{{ index + 1 }}</span>
+      <span>{{ getLetter(index) }}</span>
     }
   </mat-card>
 

@@ -24,4 +24,9 @@ export class FlipCardComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  getLetter(index: number): string {
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    return letters[index % letters.length];
+  }
+
 }
