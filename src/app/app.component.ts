@@ -23,7 +23,6 @@ export class AppComponent {
   ) { }
 
   openNewsDialog(): void {
-    console.log('Opening news dialog');
     this.dialogRef = this.dialog.open(NewsComponent, {
       height: 'auto',
       maxHeight: '90vh',

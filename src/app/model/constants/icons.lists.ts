@@ -82,3 +82,34 @@ export const RANDOM_MAT_ICONS = [
     'casino',
     'rocket_launch'
 ];
+
+export const RANDOM_MAT_ICONS_2 = [
+    'hotel_class',
+    'anchor',
+    'theater_comedy',
+    'history_edu',
+    'microwave',
+    'sailing',
+    'fingerprint',
+    'pages',
+    'verified',
+    'emoji_emotions',
+    'emoji_food_beverage',
+    'emoji_events',
+    'nights_stay'
+]
+
+export const RANDOM_MAT_ICONS_3 = [
+    'heart_broken',
+    'cookie',
+    'deck',
+    'fireplace',
+    'volcano',
+    'paragliding',
+    'wallet',
+    'interests',
+    'flare',
+    'celebration',
+    'local_post_office',
+    'fort'
+]

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { EndGameDirectives, GameDifficulties, GameModes } from '../../../model/enum/game.enums';
 import { CommonModule } from '@angular/common';
@@ -10,7 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './game-status.component.html',
   styleUrls: ['./game-status.component.scss']
 })
-export class GameStatusComponent implements OnInit {
+export class GameStatusComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {
@@ -27,10 +27,6 @@ export class GameStatusComponent implements OnInit {
     },
     public dialogRef: MatDialogRef<GameStatusComponent>
   ) { }
-
-  ngOnInit(): void {
-    console.log('GameStatusComponent initialized with data:', this.data);
-  }
 
   playAgain(): void {
     this.dialogRef.close(EndGameDirectives.PLAY_AGAIN);

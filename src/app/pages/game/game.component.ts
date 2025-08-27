@@ -237,7 +237,6 @@ export class GameComponent {
 
     this.currentMathProblem = this.mathService.generateMathProblem(this.selectedDifficulty);
     const isDecimal = this.currentMathProblem.solution % 1 !== 0;
-    console.log(this.currentMathProblem);
     this.cards.push({
       displayText: isDecimal ? this.currentMathProblem.solution.toFixed(2) : this.currentMathProblem.solution.toString(),
       color: '',
