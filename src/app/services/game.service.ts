@@ -207,8 +207,12 @@ export class GameService {
         this.updateCardTotalSignal(16);
         this.timeToSolve = 60;
         break;
-      case 'mastery':
+      case 'expert':
         this.updateCardTotalSignal(20);
+        this.timeToSolve = 80;
+        break;
+      case 'master':
+        this.updateCardTotalSignal(24);
         this.timeToSolve = 80;
         break;
     }
@@ -231,7 +235,7 @@ export class GameService {
         this.updateFailsLeftSignal(3);
         this.timeToSolve = 15;
         break;
-      case 'mastery':
+      case 'expert':
         this.updateCardTotalSignal(5);
         this.updateFailsLeftSignal(3);
         this.timeToSolve = 10;

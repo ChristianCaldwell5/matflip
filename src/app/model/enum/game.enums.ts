@@ -7,7 +7,8 @@ export enum GameDifficulties {
     EASY = 'easy',
     MEDIUM = 'medium',
     HARD = 'hard',
-    MASTERY = 'mastery'
+    EXPERT = 'expert',
+    MASTER = 'master',
 }
 
 export enum EndGameDirectives {
