@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Signal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, Signal, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -50,6 +50,7 @@ export class GameComponent {
   disableFlip: boolean = false;
   viewBoardMode: boolean = false;
   roundSuccess: boolean = false;
+  isInReview: boolean = false;
 
   // observables
   matchFound$!: Observable<FlipsReference>;
@@ -351,6 +352,7 @@ export class GameComponent {
       let reviewTimeRemaining = 5;
       this.gameTimeRemaining = reviewTimeRemaining;
       this.gameTimeRemainingPercentage = 100;
+      this.isInReview = true;
       this.reviewIntervalId = setInterval(() => {
         if (reviewTimeRemaining > 0) {
           reviewTimeRemaining--;
@@ -359,6 +361,7 @@ export class GameComponent {
           this.gameTimeRemainingPercentage = (reviewTimeRemaining / 5) * 100;
           this.cdr.detectChanges();
         } else {
+          this.isInReview = false;
           clearInterval(this.reviewIntervalId);
           this.prepareNextSolution();
           this.cdr.detectChanges();
@@ -487,4 +490,20 @@ export class GameComponent {
       this.handleDialogClose(directive);
     });
   }
+
+  skipStep() {
+    clearInterval(this.reviewIntervalId);
+    this.isInReview = false;
+    this.prepareNextSolution();
+    this.cdr.detectChanges();
+  }
+
+  streakLevelClass = computed(() => {
+    const v = this.currentStreakSignal();
+    if (v >= 20) return 'streak--legend';
+    if (v >= 15) return 'streak--onfire';
+    if (v >= 10)  return 'streak--hot';
+    if (v >= 5)  return 'streak--warm';
+    return ''; // no special styling
+  });
 }

@@ -89,12 +89,10 @@
           <span>{{ solvesSignal() }}</span>
         </div>
         <div>
-          <span>Streak: </span>
-          <span>{{ currentStreakSignal() }}</span>
+          <span class="streak-badge" [ngClass]="streakLevelClass()">Streak: {{ currentStreakSignal() }}</span>
         </div>
         <div>
-          <span>Fails Left: </span>
-          <span>{{ failsLeftSignal() }}</span>
+          <span [ngClass]="failsLeftSignal() <= 1 ? 'alert-text' : ''">Fails Left: {{ failsLeftSignal() }}</span>
         </div>
       }
     </div>
@@ -110,6 +108,9 @@
     @if (!viewBoardMode) {
       <div class="row mt--2 game-controls">
         <button mat-raised-button color="warn" (click)="openQuitDialog()">Quit Game</button>
+        @if (selectedMode === 'solution' && isInReview) {
+          <button mat-raised-button color="primary" (click)="skipStep()">Skip</button>
+        }
       </div>
     }
 
