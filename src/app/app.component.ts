@@ -7,13 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 import { NewsComponent } from './components/dialogs/news/news.component';
-
-declare global {
-  interface Window {
-    dataLayer: any[];
-    gtag: (...args: any[]) => void;
-  }
-}
+import { AnalyticsService } from './services/analytics.service';
 
 @Component({
   selector: 'app-root',
@@ -29,42 +23,22 @@ export class AppComponent implements OnInit {
   private platformId = inject(PLATFORM_ID);
 
   constructor(
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private analyticsService: AnalyticsService
   ) {
+    this.analyticsService.generateSessionId();
     // Runs on both server and client; guard to browser to inject after hydration
     afterRender(() => {
       if (!environment.production || !environment.gaMeasurementId) return;
       if (!isPlatformBrowser(this.platformId)) return;
-      this.injectGAScript(environment.gaMeasurementId);
+      this.analyticsService.injectGAScript();
     });
   }
 
   ngOnInit(): void {
     if (environment.production && environment.gaMeasurementId) {
-      this.injectGAScript(environment.gaMeasurementId);
+      this.analyticsService.injectGAScript();
     }
-  }
-
-  private injectGAScript(measurementId: string): void {
-    if (typeof window === 'undefined' || typeof document === 'undefined') return;
-
-    // Avoid duplicate injection
-    if (document.getElementById('gtag-js') || typeof window.gtag === 'function') return;
-
-    // Initialize dataLayer and gtag queue
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function () { window.dataLayer.push(arguments); } as any;
-
-    // Queue initial commands
-    window.gtag('js', new Date());
-    window.gtag('config', measurementId);
-
-    // Load the gtag script
-    const script = document.createElement('script');
-    script.id = 'gtag-js';
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`;
-    document.head.appendChild(script);
   }
 
   openNewsDialog(): void {
@@ -75,5 +49,6 @@ export class AppComponent implements OnInit {
       maxWidth: '700px',
       disableClose: false,
     });
+    this.analyticsService.newsEvent();
   }
 }

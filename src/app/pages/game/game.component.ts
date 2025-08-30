@@ -22,6 +22,7 @@ import { MathProblem } from '../../model/interfaces/mathProblem';
 import { SolutionStatus } from '../../model/enum/solution-status.enum';
 import { HowToComponent } from '../../components/dialogs/how-to/how-to.component';
 import { QuiteGameComponent } from '../../components/dialogs/quite-game/quite-game.component';
+import { AnalyticsService } from '../../services/analytics.service';
 
 @Component({
   selector: 'app-game',
@@ -81,6 +82,7 @@ export class GameComponent {
     private gameService: GameService,
     private iconService: IconService,
     private mathService: MathService,
+    private analyticsService: AnalyticsService,
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog
   ) {
@@ -127,6 +129,11 @@ export class GameComponent {
           this.dialogRef.afterClosed().subscribe((directive: EndGameDirectives) => {
             this.handleDialogClose(directive);
           });
+          this.analyticsService.trackGameModeEnd(GameModes.PAIRS, {
+            difficulty: this.selectedDifficulty as GameDifficulties,
+            success: true,
+            time_taken: this.gameTimeAvailable - this.gameTimeRemaining
+          });
         }
       }
     });
@@ -169,6 +176,7 @@ export class GameComponent {
       maxWidth: '700px',
       disableClose: false,
     });
+    this.analyticsService.howToPayEvent();
   }
 
   flipCard(index: number) {
@@ -200,6 +208,9 @@ export class GameComponent {
     this.gameTimeAvailable = this.gameTimeRemaining = this.gameService.getTimeToSolve();
     // show the game board
     this.gameService.updateGameStartedSignal(true);
+
+    this.analyticsService.trackGameModeStart(this.gameService.getSelectedMode(), { difficulty: this.selectedDifficulty as GameDifficulties });
+
     if (this.gameService.getSelectedMode() === GameModes.PAIRS) {
       this.startGameTimer();
     } else {
@@ -288,6 +299,11 @@ export class GameComponent {
         });
         this.dialogRef.afterClosed().subscribe((directive: EndGameDirectives) => {
           this.handleDialogClose(directive);
+        });
+        this.analyticsService.trackGameModeEnd(GameModes.PAIRS, {
+          difficulty: this.selectedDifficulty as GameDifficulties,
+          success: false,
+          time_taken: this.gameTimeAvailable
         });
       }
     }, 1000);
@@ -389,6 +405,13 @@ export class GameComponent {
       this.dialogRef.afterClosed().subscribe((directive: EndGameDirectives) => {
         this.handleDialogClose(directive);
       });
+      this.analyticsService.trackGameModeEnd(this.selectedMode as GameModes, {
+        difficulty: this.selectedDifficulty as GameDifficulties,
+        success: this.roundSuccess,
+        solves: this.solvesSignal(),
+        streak: this.bestStreakSignal(),
+        time_taken: this.gameTimeAvailable
+      });
       return true;
     }
     return false;
@@ -430,6 +453,9 @@ export class GameComponent {
     this.solutionModeStatusDisplay = SolutionStatus.MEMORIZE_PERIOD;
     this.gameService.resetGame();
     this.gameService.updateGameStartedSignal(false);
+    this.analyticsService.quitGameEvent(this.selectedMode as GameModes, {
+      difficulty: this.selectedDifficulty as GameDifficulties
+    });
   }
 
   private handleDialogClose(directive: EndGameDirectives) {
