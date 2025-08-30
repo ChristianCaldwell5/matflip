@@ -1,6 +1,6 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { environment } from '../environments/environment';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { afterRender, ChangeDetectionStrategy, Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -26,9 +26,18 @@ export class AppComponent implements OnInit {
   title = 'matflip';
   dialogRef: any;
 
+  private platformId = inject(PLATFORM_ID);
+
   constructor(
     private dialog: MatDialog
-  ) { }
+  ) {
+    // Runs on both server and client; guard to browser to inject after hydration
+    afterRender(() => {
+      if (!environment.production || !environment.gaMeasurementId) return;
+      if (!isPlatformBrowser(this.platformId)) return;
+      this.injectGAScript(environment.gaMeasurementId);
+    });
+  }
 
   ngOnInit(): void {
     if (environment.production && environment.gaMeasurementId) {
