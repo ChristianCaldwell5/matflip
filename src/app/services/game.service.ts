@@ -197,7 +197,7 @@ export class GameService {
     switch (difficulty) {
       case 'easy':
         this.updateCardTotalSignal(10);
-        this.timeToSolve = 25;
+        this.timeToSolve = 30;
         break;
       case 'medium':
         this.updateCardTotalSignal(12);
@@ -205,15 +205,15 @@ export class GameService {
         break;
       case 'hard':
         this.updateCardTotalSignal(16);
-        this.timeToSolve = 60;
+        this.timeToSolve = 50;
         break;
       case 'expert':
         this.updateCardTotalSignal(20);
-        this.timeToSolve = 80;
+        this.timeToSolve = 60;
         break;
       case 'master':
         this.updateCardTotalSignal(24);
-        this.timeToSolve = 80;
+        this.timeToSolve = 60;
         break;
     }
   }

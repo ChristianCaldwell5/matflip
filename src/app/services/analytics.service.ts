@@ -42,7 +42,7 @@ export class AnalyticsService {
   }
 
   private send(eventName: string, params?: Record<string, any>): void {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined' || !this.measurementId) return;
 
     if (typeof window.gtag !== 'function') {
       this.injectGAScript();
@@ -51,7 +51,7 @@ export class AnalyticsService {
     try {
       window.gtag('event', eventName, params || {});
     } catch {
-      throw new Error('Failed to send GA event');
+      // Fail silently
     }
   }
 
@@ -89,8 +89,8 @@ export class AnalyticsService {
     });
   }
 
-  howToPayEvent(): void {
-    this.send('how_to_pay', {
+  howToPlayEvent(): void {
+    this.send('how_to_play', {
       session_id: this.sessionId
     });
   }

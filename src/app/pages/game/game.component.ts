@@ -176,7 +176,7 @@ export class GameComponent {
       maxWidth: '700px',
       disableClose: false,
     });
-    this.analyticsService.howToPayEvent();
+    this.analyticsService.howToPlayEvent();
   }
 
   flipCard(index: number) {
