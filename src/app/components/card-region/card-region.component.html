@@ -1,0 +1,18 @@
+<div class="card-region">
+    @for (card of cards; track $index) {
+    <button
+        class="click-region"
+        [disabled]="card.matched || disableFlip || card.flipped"
+        (click)="flipCard($index)"
+    >
+        <app-flip-card
+        [icon]="card?.icon"
+        [color]="card.color"
+        [flipped]="card.flipped"
+        [matched]="card.matched"
+        [displayText]="card.displayText"
+        [index]="$index"
+        ></app-flip-card>
+    </button>
+    }
+</div>
