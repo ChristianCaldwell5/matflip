@@ -1,1 +1,43 @@
-<p>solution works!</p>
+<div class="game-area">
+    <!-- timer area -->
+    <div class="row mt--2">
+      <mat-progress-bar color="accent" mode="determinate" [value]="gameTimeRemainingPercentage"></mat-progress-bar>
+      <div class="timer-row">
+        <mat-icon>timer</mat-icon>
+        <span>{{ gameTimeRemaining }}</span>
+      </div>
+    </div>
+    @if (shouldSeeProblemDisplay) {
+        <div class="math-problem-display">
+          <span>{{ currentMathProblem.display }}</span>
+        </div>
+    } @else {
+        <div class="math-problem-display">
+            <span>Potential answers:</span>
+        </div> 
+    }
+    <!-- card display area -->
+    <app-card-region 
+    [cards]="cards" 
+    [disableFlip]="disableFlip" 
+    (cardFlipped)="onCardFlipped($event)">
+    </app-card-region>
+    <!-- stats area -->
+    <div class="row">
+        <div><span>Solves: {{ solvesSignal() }}</span></div>
+        <div><span class="streak-badge" [ngClass]="streakLevelClass()">Streak: {{ currentStreakSignal() }}</span></div>
+        <div><span [ngClass]="failsLeftSignal() <= 1 ? 'alert-text' : ''">Fails Left: {{ failsLeftSignal() }}</span></div>
+    </div>
+    <div class="row mt--2">
+        <div>
+          <span>{{ solutionModeStatusDisplay }}</span>
+        </div>
+    </div>
+    <!-- game controls -->
+    <div class="row mt--2 game-controls">
+        <button mat-raised-button color="warn" (click)="openQuitDialog()">Quit Game</button>
+        @if (selectedMode === 'solution' && isInReview) {
+            <button mat-raised-button color="primary" (click)="skipStep()">Skip</button>
+        }
+    </div>
+</div>
