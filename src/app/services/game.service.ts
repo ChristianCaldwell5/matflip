@@ -37,11 +37,22 @@ export class GameService {
   private currentStreakSignal = signal(0);
   private bestStreakSignal = signal(0);
   private failsLeftSignal = signal(0);
+  // transient flag set when menu applies configuration; used by route guards
+  private configured = false;
   
 
   constructor(
     private mathService: MathService,
   ) { 
+  }
+
+  // indicate if the user has configured the game via menu in this runtime
+  isConfigured(): boolean {
+    return this.configured;
+  }
+
+  setConfigured(value: boolean): void {
+    this.configured = value;
   }
 
   getSelectedMode(): GameModes {
@@ -246,13 +257,17 @@ export class GameService {
   processPairFlip(index: number, cards: any[]): void {
     if (this.firstFlipIndex === -1) {
       this.firstFlipIndex = index;
+      console.log('First flip index set to:', this.firstFlipIndex);
     } else {
       this.secondFlipIndex = index;
+      console.log('Second flip index set to:', this.secondFlipIndex);
       if (this.checkMatch(cards)) {
+        console.log('Match found!');
         this.matches++;
         this.updateMatchesSignal(this.matches);
         this.matchMadeSubject.next({firstIndex: this.firstFlipIndex, secondIndex: this.secondFlipIndex});
       } else {
+        console.log('No match.', this.firstFlipIndex, this.secondFlipIndex);
         this.mismatchSubject.next({firstIndex: this.firstFlipIndex, secondIndex: this.secondFlipIndex});
       }
       this.firstFlipIndex = -1;
@@ -288,4 +303,13 @@ export class GameService {
     this.updateBestStreakSignal(0);
   }
 
+  resetPairsGame(): void {
+    this.firstFlipIndex = -1;
+    this.secondFlipIndex = -1;
+    this.matches = 0;
+    this.flips = 0;
+    this.updateMatchesSignal(this.matches);
+    this.updateFlipsSignal(this.flips);
+    this.setConfigured(false);
+  }
 }

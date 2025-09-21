@@ -1,3 +1,5 @@
+@import '../../../styles.scss';
+
 .card-region {
     display: flex;
     flex-wrap: wrap;
@@ -5,4 +7,24 @@
     align-items: center;
     justify-content: center;
     margin: 2rem auto;
+}
+
+.click-region {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 1rem;
+    border: 1px solid transparent;
+
+    @media screen and (max-width: $mobile-breakpoint) {
+        margin: 0.5rem;
+    }
+    
+}
+
+// remove disabled styles from click region
+.click-region[disabled] {
+    cursor: not-allowed;
+    color: unset;
 }

@@ -45,6 +45,8 @@ export class MenuComponent {
     this.gameService.setDifficulty(this.selectedDifficulty as GameDifficulties);
     // setup the game with settings
     this.gameService.setGameSettings(this.gameService.getSelectedMode(), this.gameService.getDifficulty());
+    // mark configuration done for this runtime
+    this.gameService.setConfigured(true);
     // track game start event with selected settings
     this.analyticsService.trackGameModeStart(this.gameService.getSelectedMode(), { difficulty: this.selectedDifficulty as GameDifficulties });
     // route to the selected game
