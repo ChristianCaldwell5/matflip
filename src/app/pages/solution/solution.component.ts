@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, Signal, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, OnDestroy, OnInit, Signal, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CardRegionComponent } from '../../components/card-region/card-region.component';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, take, takeUntil } from 'rxjs';
 import { card } from '../../model/interfaces/card';
 import { SolutionStatus } from '../../model/enum/solution-status.enum';
 import { MathProblem } from '../../model/interfaces/mathProblem';
@@ -16,6 +16,7 @@ import { MathService } from '../../services/math.service';
 import { EndGameDirectives, GameDifficulties, GameModes } from '../../model/enum/game.enums';
 import { GameStatusComponent } from '../../components/dialogs/game-status/game-status.component';
 import { Router } from '@angular/router';
+import { QuiteGameComponent } from '../../components/dialogs/quite-game/quite-game.component';
 
 @Component({
   selector: 'app-solution',
@@ -63,20 +64,62 @@ export class SolutionComponent implements OnInit, OnDestroy {
 
   constructor(
     private gameService: GameService,
-    private iconService: IconService,
     private mathService: MathService,
     private analyticsService: AnalyticsService,
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
     private router: Router
-  ) { }
+  ) {
+    this.solvesSignal = this.gameService.getSolvesSignal();
+    this.currentStreakSignal = this.gameService.getCurrentStreakSignal();
+    this.bestStreakSignal = this.gameService.getBestStreakSignal();
+    this.failsLeftSignal = this.gameService.getFailsLeftSignal();
+
+    this.solutionFound$ = this.gameService.getSolutionFoundObservable();
+    this.wrongSolution$ = this.gameService.getWrongSolutionObservable();
+  }
 
   ngOnInit(): void {
     this.selectedDifficulty = this.gameService.getDifficulty();
     this.startNewGame();
+
+    this.solutionFound$.pipe(takeUntil(this.destroyed$)).subscribe((index) => {
+      this.solutionModeStatusDisplay = SolutionStatus.SOLUTION_FOUND;
+      this.gameService.updateSolvesSignal(this.solvesSignal() + 1);
+      this.gameService.updateCurrentStreakSignal(this.currentStreakSignal() + 1);
+      if (this.currentStreakSignal() > this.bestStreakSignal()) {
+        this.gameService.updateBestStreakSignal(this.currentStreakSignal());
+      }
+      this.handleSolutionRoundEnd(true, index);
+    });
+
+    this.wrongSolution$.pipe(takeUntil(this.destroyed$)).subscribe((index) => {
+      this.solutionModeStatusDisplay = SolutionStatus.SOLUTION_NOT_FOUND;
+      this.gameService.updateFailsLeftSignal(this.failsLeftSignal() - 1);
+      this.gameService.updateCurrentStreakSignal(0);
+      this.handleSolutionRoundEnd(false, index);
+    });
   }
 
   ngOnDestroy(): void {
+    // stop game interval timer if running
+    if (this.gameIntervalId) {
+      clearInterval(this.gameIntervalId);
+      this.gameIntervalId = null;
+    }
+    // stop intermission timer if running
+    if (this.intermissionIntervalId) {
+      clearInterval(this.intermissionIntervalId);
+      this.intermissionIntervalId = null;
+    }
+    // stop review timer if running
+    if (this.reviewIntervalId) {
+      clearInterval(this.reviewIntervalId);
+      this.reviewIntervalId = null;
+    }
+    // notify and complete all subscriptions
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   /** GAME LOGIC RELATED OPERATIONS - START */
@@ -91,6 +134,36 @@ export class SolutionComponent implements OnInit, OnDestroy {
     this.gameService.updateGameStartedSignal(true);
     // start game interval timer
     this.startSolutionRound();
+  }
+
+  playAgain() {
+    this.disableFlip = true;
+    this.shouldSeeProblemDisplay = false;
+    this.solutionModeStatusDisplay = SolutionStatus.MEMORIZE_PERIOD;
+    this.cards.forEach(card => {
+      card.flipped = false;
+      card.matched = false;
+    });
+    this.gameTimeRemaining = this.gameTimeAvailable;
+    this.gameTimeRemainingPercentage = 100;
+    this.cdr.detectChanges();
+    setTimeout(() => {
+      this.disableFlip = false;
+      this.gameService.resetSolutionGame();
+      this.startNewGame();
+    }, 1000);
+  }
+
+  onCardFlipped(index: number) {
+    this.cards[index].flipped = !this.cards[index].flipped;
+    this.gameService.processSolutionFlip(index, this.cards, this.currentMathProblem);
+  }
+
+  skipStep() {
+    clearInterval(this.reviewIntervalId);
+    this.isInReview = false;
+    this.prepareNextSolution();
+    this.cdr.detectChanges();
   }
 
   quitGame() {
@@ -112,6 +185,15 @@ export class SolutionComponent implements OnInit, OnDestroy {
     this.router.navigate(['']);
   }
 
+  streakLevelClass = computed(() => {
+    const v = this.currentStreakSignal();
+    if (v >= 20) return 'streak--legend';
+    if (v >= 15) return 'streak--onfire';
+    if (v >= 10)  return 'streak--hot';
+    if (v >= 5)  return 'streak--warm';
+    return ''; // no special styling
+  });
+
   private generateSolutionCards() {
     this.cards = [];
     const cardCount = this.cardTotalSignal();
@@ -126,7 +208,8 @@ export class SolutionComponent implements OnInit, OnDestroy {
     });
 
     let wrongAnswers = this.mathService.generateWrongSolutions(this.currentMathProblem.solution, this.selectedDifficulty, cardCount - 1);
-    
+    console.log('Wrong answers generated:', wrongAnswers);
+
     for (let i = 0; i < wrongAnswers.length; i++) {
       this.cards.push({
         displayText: wrongAnswers[i],
@@ -263,5 +346,19 @@ export class SolutionComponent implements OnInit, OnDestroy {
     } else if (directive === EndGameDirectives.MAIN_MENU) {
       this.quitGame();
     }
+  }
+
+  openQuitDialog() {
+    const dialogRef = this.dialog.open(QuiteGameComponent, {
+      height: 'auto',
+      width: '90%',
+      maxWidth: '600px',
+      disableClose: false
+    });
+
+    dialogRef.componentInstance.confirmQuit.pipe(takeUntil(this.destroyed$), take(1)).subscribe(() => {
+      this.quitGame();
+      dialogRef.close();
+    });
   }
 }

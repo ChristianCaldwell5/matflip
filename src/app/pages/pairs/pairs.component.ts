@@ -187,6 +187,7 @@ export class PairsComponent implements OnInit, OnDestroy {
     this.viewBoardMode = false;
     this.gameTimeRemainingPercentage = 100;
     this.gameService.resetPairsGame();
+    this.gameService.setConfigured(false);
     this.gameService.updateGameStartedSignal(false);
     this.router.navigate(['']);
   }

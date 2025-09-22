@@ -36,7 +36,7 @@
     <!-- game controls -->
     <div class="row mt--2 game-controls">
         <button mat-raised-button color="warn" (click)="openQuitDialog()">Quit Game</button>
-        @if (selectedMode === 'solution' && isInReview) {
+        @if (isInReview) {
             <button mat-raised-button color="primary" (click)="skipStep()">Skip</button>
         }
     </div>

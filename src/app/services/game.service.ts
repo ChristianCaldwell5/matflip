@@ -310,6 +310,12 @@ export class GameService {
     this.flips = 0;
     this.updateMatchesSignal(this.matches);
     this.updateFlipsSignal(this.flips);
-    this.setConfigured(false);
+  }
+
+  resetSolutionGame(): void {
+    this.updateFailsLeftSignal(0);
+    this.updateSolvesSignal(0);
+    this.updateCurrentStreakSignal(0);
+    this.updateBestStreakSignal(0);
   }
 }
