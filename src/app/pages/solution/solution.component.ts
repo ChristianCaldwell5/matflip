@@ -74,6 +74,7 @@ export class SolutionComponent implements OnInit, OnDestroy {
     this.currentStreakSignal = this.gameService.getCurrentStreakSignal();
     this.bestStreakSignal = this.gameService.getBestStreakSignal();
     this.failsLeftSignal = this.gameService.getFailsLeftSignal();
+    this.cardTotalSignal = this.gameService.getCardTotalSignal();
 
     this.solutionFound$ = this.gameService.getSolutionFoundObservable();
     this.wrongSolution$ = this.gameService.getWrongSolutionObservable();
