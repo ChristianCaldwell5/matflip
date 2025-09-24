@@ -209,7 +209,6 @@ export class SolutionComponent implements OnInit, OnDestroy {
     });
 
     let wrongAnswers = this.mathService.generateWrongSolutions(this.currentMathProblem.solution, this.selectedDifficulty, cardCount - 1);
-    console.log('Wrong answers generated:', wrongAnswers);
 
     for (let i = 0; i < wrongAnswers.length; i++) {
       this.cards.push({
