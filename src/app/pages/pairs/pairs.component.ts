@@ -12,6 +12,7 @@ import { QuiteGameComponent } from '../../components/dialogs/quite-game/quite-ga
 import { Observable, Subject, take, takeUntil } from 'rxjs';
 import { AnalyticsService } from '../../services/analytics.service';
 import { IconService } from '../../services/icon.service';
+import { GameIcon } from '../../model/interfaces/game-icon';
 import { FlipsReference } from '../../model/interfaces/flipsReference';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
@@ -196,7 +197,7 @@ export class PairsComponent implements OnInit, OnDestroy {
     this.cards = [];
     const iconCount = Math.floor(this.cardTotalSignal() / 2);
     this.pairsCount = iconCount;
-    const selectedIcons = this.iconService.getIconListAndCycle(iconCount);
+  const selectedIcons: GameIcon[] = this.iconService.getIconListAndCycle(iconCount);
 
     for (let i = 0; i < iconCount; i++) {
       this.cards.push({
