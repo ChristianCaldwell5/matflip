@@ -39,6 +39,7 @@ export class SolutionComponent implements OnInit, OnDestroy {
   selectedDifficulty: string = '';
   roundSuccess: boolean = false;
   isInReview: boolean = false;
+  roundTimer: number = 0;
 
   // observables
   solutionFound$!: Observable<number>;
@@ -126,7 +127,7 @@ export class SolutionComponent implements OnInit, OnDestroy {
   /** GAME LOGIC RELATED OPERATIONS - START */
   startNewGame() {
     // get time to solve based on game settings
-    this.gameTimeAvailable = this.gameTimeRemaining = this.gameService.getTimeToSolve();
+    this.roundTimer = this.gameService.getTimeToSolve();
     this.gameTimeRemainingPercentage = 100;
     this.cdr.detectChanges();
     // generate cards for this round
@@ -141,11 +142,8 @@ export class SolutionComponent implements OnInit, OnDestroy {
     this.disableFlip = true;
     this.shouldSeeProblemDisplay = false;
     this.solutionModeStatusDisplay = SolutionStatus.MEMORIZE_PERIOD;
-    this.cards.forEach(card => {
-      card.flipped = false;
-      card.matched = false;
-    });
-    this.gameTimeRemaining = this.gameTimeAvailable;
+    let intermissionTimeRemaining = 5;
+    this.gameTimeRemaining = intermissionTimeRemaining;
     this.gameTimeRemainingPercentage = 100;
     this.cdr.detectChanges();
     setTimeout(() => {
@@ -242,16 +240,15 @@ export class SolutionComponent implements OnInit, OnDestroy {
         });
         this.disableFlip = false;
         this.shouldSeeProblemDisplay = true;
-        let secondsRemaining = this.gameTimeAvailable;
+        let secondsRemaining = this.roundTimer;
         this.gameTimeRemaining = secondsRemaining;
         this.gameTimeRemainingPercentage = 100;
         this.cdr.detectChanges();
         this.gameIntervalId = setInterval(() => {
           if (secondsRemaining > 0) {
             secondsRemaining--;
-
             this.gameTimeRemaining = secondsRemaining;
-            this.gameTimeRemainingPercentage = (secondsRemaining / this.gameService.getTimeToSolve()) * 100;
+            this.gameTimeRemainingPercentage = (secondsRemaining / this.roundTimer) * 100;
             this.cdr.detectChanges();
           } else {
             this.solutionModeStatusDisplay = SolutionStatus.SOLUTION_NOT_SELECTED;
@@ -301,6 +298,7 @@ export class SolutionComponent implements OnInit, OnDestroy {
   private checkSolutionGameOver(): boolean {
     if (this.failsLeftSignal() <= 0) {
       clearInterval(this.gameIntervalId);
+      this.gameService.updateGameStartedSignal(false);
       this.roundSuccess = false;
       this.dialogRef = this.dialog.open(GameStatusComponent, {
         height: 'auto',
@@ -322,8 +320,7 @@ export class SolutionComponent implements OnInit, OnDestroy {
         difficulty: this.selectedDifficulty as GameDifficulties,
         success: this.roundSuccess,
         solves: this.solvesSignal(),
-        streak: this.bestStreakSignal(),
-        time_taken: this.gameTimeAvailable
+        streak: this.bestStreakSignal()
       });
       return true;
     }
@@ -332,7 +329,7 @@ export class SolutionComponent implements OnInit, OnDestroy {
 
   private prepareNextSolution() {
     this.shouldSeeProblemDisplay = false;
-    this.gameTimeAvailable = this.gameTimeRemaining = this.gameService.getTimeToSolve();
+    this.roundTimer = this.gameTimeRemaining = this.gameService.getTimeToSolve();
     this.solutionModeStatusDisplay = SolutionStatus.MEMORIZE_PERIOD;
     this.generateSolutionCards();
     this.startSolutionRound();
@@ -361,4 +358,5 @@ export class SolutionComponent implements OnInit, OnDestroy {
       dialogRef.close();
     });
   }
+  /** DIALOG RELATED OPERATIONS - END */
 }

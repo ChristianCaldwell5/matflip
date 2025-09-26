@@ -11,6 +11,14 @@
     src: url('./assets/fonts/ChakraPetch-Regular.ttf') format('truetype');
 }
 
+@font-face {
+    font-family: 'Flippin';
+    src: url('./assets/fonts/Sriracha-Regular.ttf') format('truetype');
+}
+
+$largest-breakpoint: 1500px;
+$larger-breakpoint: 1200px;
+$large-breakpoint: 1000px;
 $mobile-breakpoint: 600px;
 $small-breakpoint: 400px;
 
@@ -197,13 +205,17 @@ $custom-theme: mat.m2-define-light-theme((color: (primary: $portfolio-ui-primary
 html,
 body {
     height: 100%;
-    background-color: #f0efe8;
+    background-color: #e0dfd8;
 }
 
 h1 {
     font-family: Chakra, Poppins, "Helvetica Neue", sans-serif;
     font-size: 2.5em;
     font-weight: 400;
+}
+
+.flippin {
+    font-family: Flippin, Poppins, "Helvetica Neue", sans-serif;
 }
 
 body {
@@ -277,6 +289,12 @@ body {
         .timer-row {
             min-width: 20%;
         }
+    }
+}
+
+@media screen and (min-width: $large-breakpoint) {
+    body {
+        font-size: 1.25em;
     }
 }
 

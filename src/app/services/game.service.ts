@@ -233,22 +233,22 @@ export class GameService {
     switch (difficulty) {
       case 'easy':
         this.updateCardTotalSignal(3);
-        this.updateFailsLeftSignal(4);
+        this.updateFailsLeftSignal(1);
         this.timeToSolve = 20;
         break;
       case 'medium':
         this.updateCardTotalSignal(4);
-        this.updateFailsLeftSignal(4);
+        this.updateFailsLeftSignal(1);
         this.timeToSolve = 20;
         break;
       case 'hard':
         this.updateCardTotalSignal(4);
-        this.updateFailsLeftSignal(3);
+        this.updateFailsLeftSignal(1);
         this.timeToSolve = 15;
         break;
       case 'expert':
         this.updateCardTotalSignal(5);
-        this.updateFailsLeftSignal(3);
+        this.updateFailsLeftSignal(1);
         this.timeToSolve = 10;
         break;
     }
@@ -313,7 +313,7 @@ export class GameService {
   }
 
   resetSolutionGame(): void {
-    this.updateFailsLeftSignal(0);
+    this.setGameSettings(GameModes.SOLUTION, this.difficulty);
     this.updateSolvesSignal(0);
     this.updateCurrentStreakSignal(0);
     this.updateBestStreakSignal(0);

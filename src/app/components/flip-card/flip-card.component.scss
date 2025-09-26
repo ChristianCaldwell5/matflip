@@ -6,25 +6,30 @@
     position: relative;
     perspective: 1000px;
     width: 8em;
-    height: 8em;
+    aspect-ratio: 1 / 1;
 
     .flip-card {
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 8em;
-        aspect-ratio: 1 / 1;
         position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
         backface-visibility: hidden;
         transform-style: preserve-3d;
         transition: transform 0.6s ease;
         border-width: 3px;
     
         mat-icon {
-            width: 3rem;
-            height: 3rem;
-            font-size: 3rem;
+            width: auto;
+            height: auto;
+            font-size: 3em;
             opacity: 0.8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     
         &.front {
@@ -34,6 +39,7 @@
     
         &.back {
             transform: rotateY(180deg);
+            border-color: mat.m2-get-color-from-palette($nardo-grey-palette, 600);
         }
 
         &.front--stripes {
@@ -65,13 +71,59 @@
         }
     }
 
-    @media screen and (max-width: $mobile-breakpoint) {
-        width: 5rem;
-        height: 5rem;
+    @media screen and (min-width: $large-breakpoint) {
+        width: 9em;
 
         .flip-card {
-            width: 5rem;
-            aspect-ratio: 1 / 1;
+            // fills container
+    
+            mat-icon {
+                font-size: 4em;
+            }
+
+            span {
+                font-size: 1.25em;
+            }
+        }
+    }
+
+    @media screen and (min-width: $larger-breakpoint) {
+        width: 10em;
+
+        .flip-card {
+            // fills container
+    
+            mat-icon {
+                font-size: 5em;
+            }
+
+            span {
+                font-size: 1.50em;
+            }
+        }
+    }
+
+    @media screen and (min-width: $largest-breakpoint) {
+        width: 11em;
+
+        .flip-card {
+            // fills container
+    
+            mat-icon {
+                font-size: 6em;
+            }
+
+            span {
+                font-size: 1.75em;
+            }
+        }
+    }
+
+    @media screen and (max-width: $mobile-breakpoint) {
+        width: 5rem;
+
+        .flip-card {
+            // fills container
     
             mat-icon {
                 width: 2rem;
@@ -83,11 +135,9 @@
 
     @media screen and (max-width: $small-breakpoint) {
         width: 4rem;
-        height: 4rem;
 
         .flip-card {
-            width: 4rem;
-            aspect-ratio: 1 / 1;
+            // fills container
     
             mat-icon {
                 width: 2rem;
