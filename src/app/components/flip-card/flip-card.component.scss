@@ -149,7 +149,7 @@
 }
 
 .matched-card {
-    border: 1px solid mat.m2-get-color-from-palette($mint-green-palette, 500);
+    border: 3px solid mat.m2-get-color-from-palette($mint-green-palette, 500) !important;
     color: mat.m2-get-color-from-palette($mint-green-palette, 500);
 }
 

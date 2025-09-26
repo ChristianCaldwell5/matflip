@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, computed, OnDestroy, OnInit, Signal, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, OnDestroy, OnInit, Signal, signal, WritableSignal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -8,7 +8,6 @@ import { Observable, Subject, take, takeUntil } from 'rxjs';
 import { card } from '../../model/interfaces/card';
 import { SolutionStatus } from '../../model/enum/solution-status.enum';
 import { MathProblem } from '../../model/interfaces/mathProblem';
-import { IconService } from '../../services/icon.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AnalyticsService } from '../../services/analytics.service';
 import { GameService } from '../../services/game.service';
@@ -31,10 +30,8 @@ export class SolutionComponent implements OnInit, OnDestroy {
   // game state
   gameTimeAvailable: number = 0;
   gameTimeRemaining: number = 0;
-  gameTimeRemainingPercentage: number = 100;
   currentMathProblem: MathProblem = { display: '', solution: 0 };
   shouldSeeProblemDisplay: boolean = false;
-  solutionModeStatusDisplay: SolutionStatus = SolutionStatus.MEMORIZE_PERIOD;
   disableFlip: boolean = false;
   selectedDifficulty: string = '';
   roundSuccess: boolean = false;
@@ -51,6 +48,8 @@ export class SolutionComponent implements OnInit, OnDestroy {
   currentStreakSignal: Signal<number> = signal<number>(0);
   bestStreakSignal: Signal<number> = signal<number>(0);
   failsLeftSignal: Signal<number> = signal<number>(0);
+  gameTimeRemainingPercentage:  WritableSignal<number> = signal<number>(100);
+  solutionModeStatusDisplay: WritableSignal<SolutionStatus> = signal<SolutionStatus>(SolutionStatus.MEMORIZE_PERIOD);
 
   // element references
   dialogRef: any;
@@ -86,7 +85,7 @@ export class SolutionComponent implements OnInit, OnDestroy {
     this.startNewGame();
 
     this.solutionFound$.pipe(takeUntil(this.destroyed$)).subscribe((index) => {
-      this.solutionModeStatusDisplay = SolutionStatus.SOLUTION_FOUND;
+      this.solutionModeStatusDisplay.set(SolutionStatus.SOLUTION_FOUND);
       this.gameService.updateSolvesSignal(this.solvesSignal() + 1);
       this.gameService.updateCurrentStreakSignal(this.currentStreakSignal() + 1);
       if (this.currentStreakSignal() > this.bestStreakSignal()) {
@@ -96,7 +95,7 @@ export class SolutionComponent implements OnInit, OnDestroy {
     });
 
     this.wrongSolution$.pipe(takeUntil(this.destroyed$)).subscribe((index) => {
-      this.solutionModeStatusDisplay = SolutionStatus.SOLUTION_NOT_FOUND;
+      this.solutionModeStatusDisplay.set(SolutionStatus.SOLUTION_NOT_FOUND);
       this.gameService.updateFailsLeftSignal(this.failsLeftSignal() - 1);
       this.gameService.updateCurrentStreakSignal(0);
       this.handleSolutionRoundEnd(false, index);
@@ -128,7 +127,7 @@ export class SolutionComponent implements OnInit, OnDestroy {
   startNewGame() {
     // get time to solve based on game settings
     this.roundTimer = this.gameService.getTimeToSolve();
-    this.gameTimeRemainingPercentage = 100;
+    this.gameTimeRemainingPercentage.set(100);
     this.cdr.detectChanges();
     // generate cards for this round
     this.generateSolutionCards();
@@ -141,10 +140,10 @@ export class SolutionComponent implements OnInit, OnDestroy {
   playAgain() {
     this.disableFlip = true;
     this.shouldSeeProblemDisplay = false;
-    this.solutionModeStatusDisplay = SolutionStatus.MEMORIZE_PERIOD;
+    this.solutionModeStatusDisplay.set(SolutionStatus.MEMORIZE_PERIOD);
     let intermissionTimeRemaining = 5;
     this.gameTimeRemaining = intermissionTimeRemaining;
-    this.gameTimeRemainingPercentage = 100;
+    this.gameTimeRemainingPercentage.set(100);
     this.cdr.detectChanges();
     setTimeout(() => {
       this.disableFlip = false;
@@ -159,10 +158,16 @@ export class SolutionComponent implements OnInit, OnDestroy {
   }
 
   skipStep() {
-    clearInterval(this.reviewIntervalId);
-    this.isInReview = false;
-    this.prepareNextSolution();
-    this.cdr.detectChanges();
+    if (this.solutionModeStatusDisplay() === SolutionStatus.MEMORIZE_PERIOD) {
+      clearInterval(this.intermissionIntervalId);
+      this.intermissionIntervalId = null;
+      this.playSolutionRound();
+    } else {
+      clearInterval(this.reviewIntervalId);
+      this.isInReview = false;
+      this.prepareNextSolution();
+      this.cdr.detectChanges();
+    }
   }
 
   quitGame() {
@@ -177,12 +182,16 @@ export class SolutionComponent implements OnInit, OnDestroy {
     }
     this.disableFlip = false;
     this.shouldSeeProblemDisplay = false;
-    this.solutionModeStatusDisplay = SolutionStatus.MEMORIZE_PERIOD;
-    this.gameTimeRemainingPercentage = 100;
+    this.solutionModeStatusDisplay.set(SolutionStatus.MEMORIZE_PERIOD);
+    this.gameTimeRemainingPercentage.set(100);
     this.gameService.resetPairsGame();
     this.gameService.updateGameStartedSignal(false);
     this.router.navigate(['']);
   }
+
+  isAdequateMemoryTime = computed(() => {
+    return this.solutionModeStatusDisplay() === SolutionStatus.MEMORIZE_PERIOD && this.gameTimeRemainingPercentage() <= 60;
+  });
 
   streakLevelClass = computed(() => {
     const v = this.currentStreakSignal();
@@ -223,39 +232,43 @@ export class SolutionComponent implements OnInit, OnDestroy {
   private startSolutionRound() {
     let intermissionTimeRemaining = 5;
     this.gameTimeRemaining = intermissionTimeRemaining;
-    this.gameTimeRemainingPercentage = 100;
+    this.gameTimeRemainingPercentage.set(100);
     this.intermissionIntervalId = setInterval(() => {
-      if (intermissionTimeRemaining > 0) {
+      if (intermissionTimeRemaining > 0 && this.intermissionIntervalId) {
         intermissionTimeRemaining--;
 
         this.gameTimeRemaining = intermissionTimeRemaining;
-        this.gameTimeRemainingPercentage = (intermissionTimeRemaining / 5) * 100;
+        this.gameTimeRemainingPercentage.set((intermissionTimeRemaining / 5) * 100);
         this.cdr.detectChanges();
       } else {
-        clearInterval(this.intermissionIntervalId);
-        this.solutionModeStatusDisplay = SolutionStatus.SOLVE_PERIOD;
-        this.cards.forEach(card => {
-          card.flipped = false;
-          card.matched = false;
-        });
-        this.disableFlip = false;
-        this.shouldSeeProblemDisplay = true;
-        let secondsRemaining = this.roundTimer;
+        this.playSolutionRound();
+      }
+    }, 1000);
+  }
+
+  private playSolutionRound() {
+    clearInterval(this.intermissionIntervalId);
+    this.solutionModeStatusDisplay.set(SolutionStatus.SOLVE_PERIOD);
+    this.cards.forEach(card => {
+      card.flipped = false;
+      card.matched = false;
+    });
+    this.disableFlip = false;
+    this.shouldSeeProblemDisplay = true;
+    let secondsRemaining = this.roundTimer;
+    this.gameTimeRemaining = secondsRemaining;
+    this.gameTimeRemainingPercentage.set(100);
+    this.cdr.detectChanges();
+    this.gameIntervalId = setInterval(() => {
+      if (secondsRemaining > 0) {
+        secondsRemaining--;
         this.gameTimeRemaining = secondsRemaining;
-        this.gameTimeRemainingPercentage = 100;
+        this.gameTimeRemainingPercentage.set((secondsRemaining / this.roundTimer) * 100);
         this.cdr.detectChanges();
-        this.gameIntervalId = setInterval(() => {
-          if (secondsRemaining > 0) {
-            secondsRemaining--;
-            this.gameTimeRemaining = secondsRemaining;
-            this.gameTimeRemainingPercentage = (secondsRemaining / this.roundTimer) * 100;
-            this.cdr.detectChanges();
-          } else {
-            this.solutionModeStatusDisplay = SolutionStatus.SOLUTION_NOT_SELECTED;
-            this.gameService.updateFailsLeftSignal(this.failsLeftSignal() - 1);
-            this.handleSolutionRoundEnd(false, -1);
-          }
-        }, 1000);
+      } else {
+        this.solutionModeStatusDisplay.set(SolutionStatus.SOLUTION_NOT_SELECTED);
+        this.gameService.updateFailsLeftSignal(this.failsLeftSignal() - 1);
+        this.handleSolutionRoundEnd(false, -1);
       }
     }, 1000);
   }
@@ -276,14 +289,14 @@ export class SolutionComponent implements OnInit, OnDestroy {
       // provide a 5 second review period if the game is not over
       let reviewTimeRemaining = 5;
       this.gameTimeRemaining = reviewTimeRemaining;
-      this.gameTimeRemainingPercentage = 100;
+      this.gameTimeRemainingPercentage.set(100);
       this.isInReview = true;
       this.reviewIntervalId = setInterval(() => {
         if (reviewTimeRemaining > 0) {
           reviewTimeRemaining--;
 
           this.gameTimeRemaining = reviewTimeRemaining;
-          this.gameTimeRemainingPercentage = (reviewTimeRemaining / 5) * 100;
+          this.gameTimeRemainingPercentage.set((reviewTimeRemaining / 5) * 100);
           this.cdr.detectChanges();
         } else {
           this.isInReview = false;
@@ -330,7 +343,7 @@ export class SolutionComponent implements OnInit, OnDestroy {
   private prepareNextSolution() {
     this.shouldSeeProblemDisplay = false;
     this.roundTimer = this.gameTimeRemaining = this.gameService.getTimeToSolve();
-    this.solutionModeStatusDisplay = SolutionStatus.MEMORIZE_PERIOD;
+    this.solutionModeStatusDisplay.set(SolutionStatus.MEMORIZE_PERIOD);
     this.generateSolutionCards();
     this.startSolutionRound();
   }
