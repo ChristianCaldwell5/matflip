@@ -78,7 +78,7 @@
             // fills container
     
             mat-icon {
-                font-size: 2em;
+                font-size: 3em;
             }
 
             span {
@@ -120,13 +120,13 @@
     }
 
     @media screen and (max-width: $mobile-breakpoint) {
-        width: 5rem;
+        width: 5.5rem;
 
         .flip-card {
             // fills container
     
             mat-icon {
-                width: 2rem;
+                width: 2.75rem;
                 height: 2rem;
                 font-size: 2rem;
             }
@@ -134,13 +134,13 @@
     }
 
     @media screen and (max-width: $small-breakpoint) {
-        width: 4rem;
+        width: 4.5rem;
 
         .flip-card {
             // fills container
     
             mat-icon {
-                width: 2rem;
+                width: 2.50rem;
                 height: 2rem;
                 font-size: 2rem;
             }

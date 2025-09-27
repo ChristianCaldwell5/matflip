@@ -7,6 +7,14 @@
     align-items: center;
     justify-content: center;
     margin: 2rem auto;
+
+    @media screen and (max-width: $mobile-breakpoint) {
+        margin: 1rem 0;
+    }
+
+    @media screen and (max-width: $small-breakpoint) {
+        margin: 0.75rem 0;
+    }
 }
 
 .click-region {
@@ -18,9 +26,8 @@
     border: 1px solid transparent;
 
     @media screen and (max-width: $mobile-breakpoint) {
-        margin: 0.5rem;
+        margin: 0.25rem;
     }
-    
 }
 
 // remove disabled styles from click region

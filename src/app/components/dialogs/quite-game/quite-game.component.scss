@@ -3,7 +3,7 @@
 @include mat.core();
 
 .quit-container {
-    padding: 50px;
+    padding: 2rem;
 
     .header-row {
         display: flex;
@@ -27,5 +27,9 @@
 
     .btn-space {
         margin-right: 1rem;
+    }
+
+    @media screen and (max-width: $mobile-breakpoint) {
+        padding: 0.5rem;
     }
 }
