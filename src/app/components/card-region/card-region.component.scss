@@ -3,7 +3,7 @@
 .card-region {
     display: flex;
     flex-wrap: wrap;
-    max-width: 800px;
+    max-width: 900px;
     align-items: center;
     justify-content: center;
     margin: 2rem auto;
@@ -27,4 +27,22 @@
 .click-region[disabled] {
     cursor: not-allowed;
     color: unset;
+}
+
+@media screen and (min-width: $large-breakpoint) {
+    .card-region {
+        max-width: 800px;
+    }
+}
+
+@media screen and (min-width: $larger-breakpoint) {
+    .card-region {
+        max-width: 900px;
+    }
+}
+
+@media screen and (min-width: $largest-breakpoint) {
+    .card-region {
+        max-width: 1000px;
+    }
 }

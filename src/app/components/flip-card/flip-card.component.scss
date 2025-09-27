@@ -72,6 +72,38 @@
     }
 
     @media screen and (min-width: $large-breakpoint) {
+        width: 8.25em;
+
+        .flip-card {
+            // fills container
+    
+            mat-icon {
+                font-size: 2em;
+            }
+
+            span {
+                font-size: 1.15em;
+            }
+        }
+    }
+
+    @media screen and (min-width: $larger-breakpoint) {
+        width: 8.5em;
+
+        .flip-card {
+            // fills container
+    
+            mat-icon {
+                font-size: 3em;
+            }
+
+            span {
+                font-size: 1.25em;
+            }
+        }
+    }
+
+    @media screen and (min-width: $largest-breakpoint) {
         width: 9em;
 
         .flip-card {
@@ -82,39 +114,7 @@
             }
 
             span {
-                font-size: 1.25em;
-            }
-        }
-    }
-
-    @media screen and (min-width: $larger-breakpoint) {
-        width: 10em;
-
-        .flip-card {
-            // fills container
-    
-            mat-icon {
-                font-size: 5em;
-            }
-
-            span {
                 font-size: 1.50em;
-            }
-        }
-    }
-
-    @media screen and (min-width: $largest-breakpoint) {
-        width: 11em;
-
-        .flip-card {
-            // fills container
-    
-            mat-icon {
-                font-size: 6em;
-            }
-
-            span {
-                font-size: 1.75em;
             }
         }
     }

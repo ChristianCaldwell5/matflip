@@ -28,7 +28,7 @@ export const HOME_MAT_ICONS = [
     'sensor_door',
     'newspaper',
     'solar_power',
-    'window_closed',
+    'window',
     'handyman',
     'fence',
     'blender',
@@ -56,7 +56,7 @@ export const SPORTS_MAT_ICONS = [
 export const NATURE_MAT_ICONS = [
     'forest',
     'yard',
-    'landscape_2',
+    'landscape',
     'cyclone',
     'grass',
     'pets',
@@ -72,7 +72,7 @@ export const NATURE_MAT_ICONS = [
 
 export const RANDOM_MAT_ICONS = [
     'hive',
-    'toys_and_games',
+    'toys',
     'diamond',
     'two_wheeler',
     'directions_boat',
