@@ -10,26 +10,26 @@ export class MathService {
   // Math problems configuration
   private easyConfig: MathConfig = {
     minGenNum: 1,
-    maxGenNum: 10,
+    maxGenNum: 20,
     problemTypes: [MathProblems.ADDSUB],
     negativesAllowed: false
   };
 
   private mediumConfig: MathConfig = {
     minGenNum: 1,
-    maxGenNum: 15,
+    maxGenNum: 25,
     problemTypes: [MathProblems.ADDSUB],
     negativesAllowed: true
   };
 
   private hardConfig: MathConfig = {
     minGenNum: 1,
-    maxGenNum: 20,
+    maxGenNum: 25,
     problemTypes: [MathProblems.ADDSUB, MathProblems.MULTDIV],
     negativesAllowed: true
   };
 
-  private masteryConfig: MathConfig = {
+  private expertConfig: MathConfig = {
     minGenNum: 1,
     maxGenNum: 50,
     problemTypes: [MathProblems.ADDSUB, MathProblems.MULTDIV],
@@ -174,8 +174,8 @@ export class MathService {
         return this.mediumConfig;
       case 'hard':
         return this.hardConfig;
-      case 'mastery':
-        return this.masteryConfig;
+      case 'expert':
+        return this.expertConfig;
       default:
         throw new Error('Invalid difficulty level');
     }

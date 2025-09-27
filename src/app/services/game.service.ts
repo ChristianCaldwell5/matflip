@@ -233,21 +233,21 @@ export class GameService {
     switch (difficulty) {
       case 'easy':
         this.updateCardTotalSignal(3);
-        this.updateFailsLeftSignal(1);
+        this.updateFailsLeftSignal(3);
         this.timeToSolve = 20;
         break;
       case 'medium':
-        this.updateCardTotalSignal(4);
-        this.updateFailsLeftSignal(1);
-        this.timeToSolve = 20;
-        break;
-      case 'hard':
-        this.updateCardTotalSignal(4);
-        this.updateFailsLeftSignal(1);
+        this.updateCardTotalSignal(3);
+        this.updateFailsLeftSignal(3);
         this.timeToSolve = 15;
         break;
+      case 'hard':
+        this.updateCardTotalSignal(3);
+        this.updateFailsLeftSignal(2);
+        this.timeToSolve = 10;
+        break;
       case 'expert':
-        this.updateCardTotalSignal(5);
+        this.updateCardTotalSignal(4);
         this.updateFailsLeftSignal(1);
         this.timeToSolve = 10;
         break;
@@ -257,17 +257,13 @@ export class GameService {
   processPairFlip(index: number, cards: any[]): void {
     if (this.firstFlipIndex === -1) {
       this.firstFlipIndex = index;
-      console.log('First flip index set to:', this.firstFlipIndex);
     } else {
       this.secondFlipIndex = index;
-      console.log('Second flip index set to:', this.secondFlipIndex);
       if (this.checkMatch(cards)) {
-        console.log('Match found!');
         this.matches++;
         this.updateMatchesSignal(this.matches);
         this.matchMadeSubject.next({firstIndex: this.firstFlipIndex, secondIndex: this.secondFlipIndex});
       } else {
-        console.log('No match.', this.firstFlipIndex, this.secondFlipIndex);
         this.mismatchSubject.next({firstIndex: this.firstFlipIndex, secondIndex: this.secondFlipIndex});
       }
       this.firstFlipIndex = -1;
