@@ -16,7 +16,7 @@
     [ngStyle]="{ 'border-color': color }"
   >
     @if (icon) {
-      <mat-icon>{{ icon }}</mat-icon>
+      <mat-icon [fontSet]="fontSet()">{{ iconName() }}</mat-icon>
     }
     @if (displayText) {
       <span [ngStyle]="{ 'color': color }">{{ displayText }}</span>

@@ -6,25 +6,30 @@
     position: relative;
     perspective: 1000px;
     width: 8em;
-    height: 8em;
+    aspect-ratio: 1 / 1;
 
     .flip-card {
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 8em;
-        aspect-ratio: 1 / 1;
         position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
         backface-visibility: hidden;
         transform-style: preserve-3d;
         transition: transform 0.6s ease;
         border-width: 3px;
     
         mat-icon {
-            width: 3rem;
-            height: 3rem;
-            font-size: 3rem;
+            width: auto;
+            height: auto;
+            font-size: 3em;
             opacity: 0.8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     
         &.front {
@@ -34,6 +39,7 @@
     
         &.back {
             transform: rotateY(180deg);
+            border-color: mat.m2-get-color-from-palette($nardo-grey-palette, 600);
         }
 
         &.front--stripes {
@@ -65,16 +71,62 @@
         }
     }
 
-    @media screen and (max-width: $mobile-breakpoint) {
-        width: 5rem;
-        height: 5rem;
+    @media screen and (min-width: $large-breakpoint) {
+        width: 8.25em;
 
         .flip-card {
-            width: 5rem;
-            aspect-ratio: 1 / 1;
+            // fills container
     
             mat-icon {
-                width: 2rem;
+                font-size: 3em;
+            }
+
+            span {
+                font-size: 1.15em;
+            }
+        }
+    }
+
+    @media screen and (min-width: $larger-breakpoint) {
+        width: 8.5em;
+
+        .flip-card {
+            // fills container
+    
+            mat-icon {
+                font-size: 3em;
+            }
+
+            span {
+                font-size: 1.25em;
+            }
+        }
+    }
+
+    @media screen and (min-width: $largest-breakpoint) {
+        width: 9em;
+
+        .flip-card {
+            // fills container
+    
+            mat-icon {
+                font-size: 4em;
+            }
+
+            span {
+                font-size: 1.50em;
+            }
+        }
+    }
+
+    @media screen and (max-width: $mobile-breakpoint) {
+        width: 5.5rem;
+
+        .flip-card {
+            // fills container
+    
+            mat-icon {
+                width: 2.75rem;
                 height: 2rem;
                 font-size: 2rem;
             }
@@ -82,15 +134,13 @@
     }
 
     @media screen and (max-width: $small-breakpoint) {
-        width: 4rem;
-        height: 4rem;
+        width: 4.5rem;
 
         .flip-card {
-            width: 4rem;
-            aspect-ratio: 1 / 1;
+            // fills container
     
             mat-icon {
-                width: 2rem;
+                width: 2.50rem;
                 height: 2rem;
                 font-size: 2rem;
             }
@@ -99,7 +149,7 @@
 }
 
 .matched-card {
-    border: 1px solid mat.m2-get-color-from-palette($mint-green-palette, 500);
+    border: 3px solid mat.m2-get-color-from-palette($mint-green-palette, 500) !important;
     color: mat.m2-get-color-from-palette($mint-green-palette, 500);
 }
 

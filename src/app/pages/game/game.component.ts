@@ -12,6 +12,7 @@ import { RouterModule } from '@angular/router';
 import { FlipCardComponent } from '../../components/flip-card/flip-card.component';
 import { Observable, take } from 'rxjs';
 import { card } from '../../model/interfaces/card';
+import { GameIcon } from '../../model/interfaces/game-icon';
 import { FlipsReference } from '../../model/interfaces/flipsReference';
 import { GameService } from '../../services/game.service';
 import { IconService } from '../../services/icon.service';
@@ -222,7 +223,7 @@ export class GameComponent {
     this.cards = [];
     const iconCount = Math.floor(this.cardTotalSignal() / 2);
     this.pairsCount = iconCount;
-    const selectedIcons = this.iconService.getIconListAndCycle(iconCount);
+  const selectedIcons: GameIcon[] = this.iconService.getIconListAndCycle(iconCount);
 
     for (let i = 0; i < iconCount; i++) {
       this.cards.push({

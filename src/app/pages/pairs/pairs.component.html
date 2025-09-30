@@ -1,0 +1,39 @@
+<div class="game-area">
+    <!-- timer area -->
+    <div class="row mt--2">
+      <mat-progress-bar color="accent" mode="determinate" [value]="gameTimeRemainingPercentage"></mat-progress-bar>
+      <div class="timer-row">
+        <mat-icon>timer</mat-icon>
+        <span>{{ gameTimeRemaining }}</span>
+      </div>
+    </div>
+    <!-- card display area -->
+    <app-card-region 
+    [cards]="cards" 
+    [disableFlip]="disableFlip" 
+    (cardFlipped)="onCardFlipped($event)">
+    </app-card-region>
+    <!-- stats area -->
+    <div class="row">
+      <div>
+          <span>Pairs made: </span>
+          <span>{{ matchesSignal() }}/{{ pairsCount }}</span>
+        </div>
+        <div>
+          <span>Flips: </span>
+          <span>{{ flipSignal() }}</span>
+        </div>
+    </div>
+    <!-- game controls -->
+    @if (!viewBoardMode) {
+        <div class="row mt--2 game-controls">
+            <button mat-raised-button color="warn" (click)="openQuitDialog()">Quit Game</button>
+        </div>
+    } @else {
+        <div class="row mt--2">
+            <button mat-raised-button color="accent" (click)="playAgain()">Play Again</button>
+            <button mat-raised-button color="primary" (click)="quitGame()">Main Menu</button>
+            <button mat-button (click)="openStatusDialog()">view round summary</button>
+        </div>
+    }
+</div>

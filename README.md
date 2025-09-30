@@ -1,6 +1,6 @@
 # Mat Flip
 
-Mat Flip is a small Angular game that mixes a classic card flip/memory mechanic with simple math challenges. Choose a mode, pick a difficulty, and beat the timer.
+Mat Flip is a small Angular game that mixes a classic card flip/memory mechanic with simple math challenges. Choose a mode, pick a difficulty, and beat the timer!
 
 - Pairs mode: find all matching pairs.
 - Solution mode: solve math problems by flipping the correct answer.

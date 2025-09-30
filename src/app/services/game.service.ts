@@ -37,11 +37,22 @@ export class GameService {
   private currentStreakSignal = signal(0);
   private bestStreakSignal = signal(0);
   private failsLeftSignal = signal(0);
+  // transient flag set when menu applies configuration; used by route guards
+  private configured = false;
   
 
   constructor(
     private mathService: MathService,
   ) { 
+  }
+
+  // indicate if the user has configured the game via menu in this runtime
+  isConfigured(): boolean {
+    return this.configured;
+  }
+
+  setConfigured(value: boolean): void {
+    this.configured = value;
   }
 
   getSelectedMode(): GameModes {
@@ -222,22 +233,22 @@ export class GameService {
     switch (difficulty) {
       case 'easy':
         this.updateCardTotalSignal(3);
-        this.updateFailsLeftSignal(4);
+        this.updateFailsLeftSignal(3);
         this.timeToSolve = 20;
         break;
       case 'medium':
-        this.updateCardTotalSignal(4);
-        this.updateFailsLeftSignal(4);
-        this.timeToSolve = 20;
-        break;
-      case 'hard':
-        this.updateCardTotalSignal(4);
+        this.updateCardTotalSignal(3);
         this.updateFailsLeftSignal(3);
         this.timeToSolve = 15;
         break;
+      case 'hard':
+        this.updateCardTotalSignal(3);
+        this.updateFailsLeftSignal(2);
+        this.timeToSolve = 10;
+        break;
       case 'expert':
-        this.updateCardTotalSignal(5);
-        this.updateFailsLeftSignal(3);
+        this.updateCardTotalSignal(4);
+        this.updateFailsLeftSignal(1);
         this.timeToSolve = 10;
         break;
     }
@@ -288,4 +299,19 @@ export class GameService {
     this.updateBestStreakSignal(0);
   }
 
+  resetPairsGame(): void {
+    this.firstFlipIndex = -1;
+    this.secondFlipIndex = -1;
+    this.matches = 0;
+    this.flips = 0;
+    this.updateMatchesSignal(this.matches);
+    this.updateFlipsSignal(this.flips);
+  }
+
+  resetSolutionGame(): void {
+    this.setGameSettings(GameModes.SOLUTION, this.difficulty);
+    this.updateSolvesSignal(0);
+    this.updateCurrentStreakSignal(0);
+    this.updateBestStreakSignal(0);
+  }
 }

@@ -11,6 +11,14 @@
     src: url('./assets/fonts/ChakraPetch-Regular.ttf') format('truetype');
 }
 
+@font-face {
+    font-family: 'Flippin';
+    src: url('./assets/fonts/Sriracha-Regular.ttf') format('truetype');
+}
+
+$largest-breakpoint: 1500px;
+$larger-breakpoint: 1200px;
+$large-breakpoint: 1000px;
 $mobile-breakpoint: 600px;
 $small-breakpoint: 400px;
 
@@ -197,13 +205,17 @@ $custom-theme: mat.m2-define-light-theme((color: (primary: $portfolio-ui-primary
 html,
 body {
     height: 100%;
-    background-color: #f0efe8;
+    background-color: #e0dfd8;
 }
 
 h1 {
     font-family: Chakra, Poppins, "Helvetica Neue", sans-serif;
     font-size: 2.5em;
     font-weight: 400;
+}
+
+.flippin {
+    font-family: Flippin, Poppins, "Helvetica Neue", sans-serif;
 }
 
 body {
@@ -227,6 +239,65 @@ body {
     margin-left: 1rem;
 }
 
+.game-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 1rem;
+
+    .row {
+        width: 100%;
+        max-width: 600px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .timer-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-width: 15%;
+        mat-icon {
+            margin-right: 1rem;
+        }
+    }
+
+    mat-progress-bar {
+        margin-right: 2rem;
+        @include mat.progress-bar-overrides((
+            track-height: 1rem,
+            active-indicator-height: 1rem,
+        ));
+    }
+
+    .game-controls {
+        @media screen and (max-width: $mobile-breakpoint) {
+            position: fixed;
+            bottom: 0;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+    }
+
+    @media screen and (max-width: $mobile-breakpoint) {
+        .row {
+            margin: 0 2rem;
+        }
+
+        .timer-row {
+            min-width: 20%;
+        }
+    }
+}
+
+@media screen and (min-width: $large-breakpoint) {
+    body {
+        font-size: 1.15em;
+    }
+}
+
 :root {
   @include mat.select-overrides((
     focused-arrow-color: #512da8,
@@ -240,4 +311,20 @@ body {
   @include mat.expansion-overrides((
     container-shape: 4px
   ));
+}
+
+// Material Symbols base sizing & variable font defaults
+.material-symbols-outlined,
+.material-symbols-rounded,
+.material-symbols-sharp {
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+    font-size: 24px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }

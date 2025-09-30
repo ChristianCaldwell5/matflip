@@ -1,0 +1,34 @@
+<div class="game-menu">
+    <h1 class="flippin">Mat Flip</h1>
+    <form #form="ngForm">
+        <div class="row">
+        <mat-form-field appearance="outline">
+            <mat-label>Mode</mat-label>
+            <mat-select name="selectedMode" [(ngModel)]="selectedMode">
+            <mat-option value="pairs">Pairs</mat-option>
+            <mat-option value="solution">Solution</mat-option>
+            </mat-select>
+        </mat-form-field>
+        </div>
+        <div class="row">
+        <mat-form-field appearance="outline">
+            <mat-label>Difficulty</mat-label>
+            <mat-select name="selectedDifficulty" [(ngModel)]="selectedDifficulty">
+            <mat-option value="easy">Easy</mat-option>
+            <mat-option value="medium">Medium</mat-option>
+            <mat-option value="hard">Hard</mat-option>
+            <mat-option value="expert">Expert</mat-option>
+            @if (selectedMode === 'pairs') {
+                <mat-option value="master">Memory Master</mat-option>
+            }
+            </mat-select>
+        </mat-form-field>
+        </div>
+    </form>
+    <div class="row">
+        <button mat-raised-button color="accent" (click)="startGame()">Start Game</button>
+    </div>
+    <div class="row">
+        <button mat-stroked-button (click)="howToClicked()">new here?</button>
+    </div>
+</div>
