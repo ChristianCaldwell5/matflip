@@ -1,10 +1,60 @@
 <!-- Toolbar -->
-<mat-toolbar color="primary">
-  <button class="flippin" mat-button aria-label="go to top of page">Mat Flip</button>
-  <span class="spacer"></span>
-  <button mat-fab extended aria-label="news" (click)="openNewsDialog()">
-    news
-    <mat-icon>newspaper</mat-icon>
-  </button>
-</mat-toolbar>
-<router-outlet></router-outlet>
+ <mat-drawer-container autosize>
+  <mat-drawer #drawer mode="over" position="end">
+    <h1 class="flippin">Menu</h1>
+    @if (currentUser) {
+      <button class="matflip-menu-btn">
+        <mat-icon>people</mat-icon>
+        Friends
+      </button>
+      <button class="matflip-menu-btn">
+        <mat-icon>bar_chart</mat-icon>
+        Stats
+      </button>
+      <button class="matflip-menu-btn">
+        <mat-icon>emoji_events</mat-icon>
+        Achievements
+      </button>
+      <button class="matflip-menu-btn">
+        <mat-icon>palette</mat-icon>
+        Customize
+      </button>
+      <button class="matflip-menu-btn">
+        <mat-icon>store</mat-icon>
+        Store
+      </button>
+      <button class="matflip-menu-btn">
+        <mat-icon>leaderboard</mat-icon>
+        Leaderboards
+      </button>
+    }
+    <button class="matflip-menu-btn">
+      <mat-icon>newspaper</mat-icon>
+      News
+    </button>
+    <button class="matflip-menu-btn">
+      <mat-icon>history</mat-icon>
+      Change Log
+    </button>
+    @if (!currentUser) {
+      <div class="sign-in-zone">
+        <span>You are playing as a guest.</span><br />
+        <span>Sign in?</span>
+        <div #gsiButton></div>
+      </div>
+    } @else {
+      <button class="mt--1" mat-button color="accent" (click)="signOut()">
+        <mat-icon>logout</mat-icon>
+        Sign Out of {{ currentUser.name }}
+      </button>
+    }
+  </mat-drawer>
+  <mat-toolbar color="primary">
+    <button class="flippin" mat-button aria-label="go to top of page">Mat Flip</button>
+    <span class="spacer"></span>
+    <button mat-fab aria-label="Menu Icon" (click)="drawer.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </mat-toolbar>
+  <router-outlet></router-outlet>
+</mat-drawer-container>
