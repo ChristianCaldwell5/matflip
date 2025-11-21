@@ -40,7 +40,7 @@
       <div class="sign-in-zone">
         <span>You are playing as a guest.</span><br />
         <span>Sign in?</span>
-        <div #gsiButton></div>
+        <div #gsiButton class="mt--half"></div>
       </div>
     } @else {
       <button class="mt--1" mat-button color="accent" (click)="signOut()">
@@ -48,6 +48,12 @@
         Sign Out of {{ currentUser.name }}
       </button>
     }
+    <button class="mt--half" mat-button color="accent" (click)="goToPrivacy()">
+      Privacy Policy
+    </button>
+    <button mat-button color="accent" (click)="goToTerms()">
+      Terms & Conditions
+    </button>
   </mat-drawer>
   <mat-toolbar color="primary">
     <button class="flippin" mat-button aria-label="go to top of page">Mat Flip</button>

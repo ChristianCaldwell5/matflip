@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { NewsComponent } from './components/dialogs/news/news.component';
 import { AnalyticsService } from './services/analytics.service';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
@@ -46,7 +46,8 @@ export class AppComponent implements OnInit {
     private analyticsService: AnalyticsService,
     private userService: UserService,
     _userStartup: UserStartupService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) {
     this.analyticsService.generateSessionId();
     // Runs on both server and client; guard to browser to inject after hydration
@@ -135,6 +136,7 @@ export class AppComponent implements OnInit {
   }
 
   signOut(): void {
+    this.analyticsService.trackUserSignOut();
     this.userService.signOut().subscribe({
       next: () => {
         console.log("User signed out successfully");
@@ -146,6 +148,16 @@ export class AppComponent implements OnInit {
         console.error("Error signing out");
       }
     });
+  }
+
+  goToPrivacy(): void {
+    this.router.navigate(['/privacy']);
+    this.drawer.toggle();
+  }
+
+  goToTerms(): void {
+    this.router.navigate(['/terms']);
+    this.drawer.toggle();
   }
 
   openNewsDialog(): void {

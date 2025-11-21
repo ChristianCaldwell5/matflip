@@ -227,6 +227,10 @@ body {
     margin-top: 1rem !important;
 }
 
+.mt--half {
+    margin-top: 0.5rem !important;
+}
+
 .mt--2 {
     margin-top: 2rem !important;
 }
@@ -311,6 +315,11 @@ body {
   @include mat.expansion-overrides((
     container-shape: 4px
   ));
+}
+
+.key-purple {
+    color: mat.m2-get-color-from-palette($lavender-palette, 600);
+    font-weight: 600;
 }
 
 // Material Symbols base sizing & variable font defaults

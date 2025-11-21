@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { UserProfile } from '../model/interfaces/user/user-profile';
+import { AnalyticsService } from './analytics.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,8 @@ export class UserService {
   readonly user$ = this.userSubject.asObservable();
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private analyticsService: AnalyticsService
   ) { }
 
   /** Synchronously get the latest cached user value (or null). */
@@ -25,6 +27,7 @@ export class UserService {
 
   getUserProfile(): Observable<UserProfile | null> {
     if (this.getCurrentUser()) {
+      this.analyticsService.trackUserSignIn();
       return of(this.getCurrentUser());
     }
     return this.http
@@ -32,6 +35,7 @@ export class UserService {
         { withCredentials: true }).pipe(
           tap((profile) => {
             console.log("Profile retrieved:", profile);
+            this.analyticsService.trackUserSignIn();
             this.userSubject.next(profile);
           }),
           catchError((error) => {
