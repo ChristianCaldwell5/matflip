@@ -1,7 +1,15 @@
+import { LevelInfo } from "./level-info";
+import { PlayerStats } from "./player-stats";
+
 export interface UserProfile {
     id: string;
-    email?: string;
-    email_verified?: boolean;
+    email: string;
     name?: string;
-    picture?: string;
+    avatarUrl?: string;
+    googleId?: string;
+    displayName?: string;
+    stats?: PlayerStats;
+    levelInfo?: LevelInfo;
+    createdAt: Date;
+    updatedAt: Date;
 }

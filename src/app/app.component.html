@@ -3,30 +3,30 @@
   <mat-drawer #drawer mode="over" position="end">
     <h1 class="flippin">Menu</h1>
     @if (currentUser) {
-      <button class="matflip-menu-btn">
+      <!-- <button class="matflip-menu-btn">
         <mat-icon>people</mat-icon>
         Friends
-      </button>
+      </button> -->
       <button class="matflip-menu-btn">
         <mat-icon>bar_chart</mat-icon>
         Stats
       </button>
-      <button class="matflip-menu-btn">
+      <!-- <button class="matflip-menu-btn">
         <mat-icon>emoji_events</mat-icon>
         Achievements
-      </button>
-      <button class="matflip-menu-btn">
+      </button> -->
+      <!-- <button class="matflip-menu-btn">
         <mat-icon>palette</mat-icon>
         Customize
-      </button>
-      <button class="matflip-menu-btn">
+      </button> -->
+      <!-- <button class="matflip-menu-btn">
         <mat-icon>store</mat-icon>
         Store
-      </button>
-      <button class="matflip-menu-btn">
+      </button> -->
+      <!-- <button class="matflip-menu-btn">
         <mat-icon>leaderboard</mat-icon>
         Leaderboards
-      </button>
+      </button> -->
     }
     <button class="matflip-menu-btn">
       <mat-icon>newspaper</mat-icon>
@@ -38,20 +38,19 @@
     </button>
     @if (!currentUser) {
       <div class="sign-in-zone">
-        <span>You are playing as a guest.</span><br />
-        <span>Sign in?</span>
+        <span>You are playing as a guest. Sign in?</span>
         <div #gsiButton class="mt--half"></div>
       </div>
     } @else {
       <button class="mt--1" mat-button color="accent" (click)="signOut()">
         <mat-icon>logout</mat-icon>
-        Sign Out of {{ currentUser.name }}
+        Sign out of {{ currentUser.displayName }}
       </button>
     }
-    <button class="mt--half" mat-button color="accent" (click)="goToPrivacy()">
+    <button class="mt--half ml--half" mat-button color="accent" (click)="goToPrivacy()">
       Privacy Policy
     </button>
-    <button mat-button color="accent" (click)="goToTerms()">
+    <button class="ml--half" mat-button color="accent" (click)="goToTerms()">
       Terms & Conditions
     </button>
   </mat-drawer>

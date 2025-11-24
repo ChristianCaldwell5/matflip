@@ -2,6 +2,13 @@
 @use '../styles.scss';
 @include mat.core();
 
+:host {
+    @include mat.toolbar-overrides((
+        standard-height: 62px,
+        mobile-height: 62px,
+    ));
+}
+
 .spacer {
     flex: 1 1 auto;
 }

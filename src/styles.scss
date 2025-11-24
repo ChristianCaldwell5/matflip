@@ -205,7 +205,9 @@ $custom-theme: mat.m2-define-light-theme((color: (primary: $portfolio-ui-primary
 html,
 body {
     height: 100%;
-    background-color: #e0dfd8;
+    background-color: #e0dfd8 !important;
+    margin: 0;
+    font-family: Poppins, Chakra, "Helvetica Neue", sans-serif;
 }
 
 h1 {
@@ -218,17 +220,16 @@ h1 {
     font-family: Flippin, Poppins, "Helvetica Neue", sans-serif;
 }
 
-body {
-    margin: 0;
-    font-family: Poppins, Chakra, "Helvetica Neue", sans-serif;
-}
-
 .mt--1 {
     margin-top: 1rem !important;
 }
 
 .mt--half {
     margin-top: 0.5rem !important;
+}
+
+.ml--half {
+    margin-left: 0.5rem !important;
 }
 
 .mt--2 {
