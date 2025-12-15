@@ -220,14 +220,31 @@ h1 {
     font-family: Flippin, Poppins, "Helvetica Neue", sans-serif;
 }
 
+.tl {
+    text-align: left !important;
+}
+
+.tw--bold {
+    font-weight: bold !important;
+}
+
 .mt--1 {
     margin-top: 1rem !important;
+}
+
+.mt--0 {
+    margin-top: 0 !important;
 }
 
 .mt--half {
     margin-top: 0.5rem !important;
 }
-
+.mr--half {
+    margin-right: 0.5rem !important;
+}
+.mb--half {
+    margin-bottom: 0.5rem !important;
+}
 .ml--half {
     margin-left: 0.5rem !important;
 }
@@ -244,12 +261,25 @@ h1 {
     margin-left: 1rem;
 }
 
+.mb--1 {
+    margin-bottom: 1rem !important;
+}
+
+.mb--0 {
+    margin-bottom: 0 !important;
+}
+
+.width--100 {
+    width: 100% !important;
+}
+
 .game-area {
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     flex-direction: column;
     padding: 1rem;
+    height: 100vh;
 
     .row {
         width: 100%;

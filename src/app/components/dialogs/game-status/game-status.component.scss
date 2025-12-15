@@ -2,6 +2,12 @@
 @use '../../../../styles.scss' as baseStyles;
 @include mat.core();
 
+:host {
+  @include mat.icon-overrides((
+    color: #0da75a,
+  ));
+}
+
 .game-status {
     padding: 1rem 2rem;
 }
@@ -20,6 +26,19 @@ h1 {
 
 .tc {
     text-align: center;
+}
+
+.status-row {
+    width: 100%;
+    span {
+        display: inline-block;
+        margin-right: 1rem;
+    }
+}
+
+.row {
+    display: flex;
+    align-items: center;
 }
 
 .button-row {

@@ -1,6 +1,6 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { environment } from '../environments/environment';
-import { afterRender, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { afterRender, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, effect, inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,8 +11,9 @@ import { AnalyticsService } from './services/analytics.service';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { UserService } from './services/user.service';
 import { UserStartupService } from './services/user-startup.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { UserProfile } from './model/interfaces/user/user-profile';
+import { DrawerService } from './services/drawer.service';
 
 @Component({
   selector: 'app-root',
@@ -30,7 +31,7 @@ export class AppComponent implements OnInit {
   googleAuthUrl: string = `${environment.matFlipApiBaseUrl}/auth/google`;
   googleClientId: string = environment.googleClientId || '';
 
-  currentUser: UserProfile | null = null;
+  currentUser$: Observable<UserProfile | null>;
 
   destroy$ = new Subject<void>();
 
@@ -47,14 +48,41 @@ export class AppComponent implements OnInit {
     private userService: UserService,
     _userStartup: UserStartupService,
     private cdr: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private drawerService: DrawerService
   ) {
     this.analyticsService.generateSessionId();
+    this.currentUser$ = this.userService.user$;
     // Runs on both server and client; guard to browser to inject after hydration
     afterRender(() => {
       if (!environment.production || !environment.gaMeasurementId) return;
       if (!isPlatformBrowser(this.platformId)) return;
       this.analyticsService.injectGAScript();
+    });
+
+    // React to drawer requests from routed components via signal
+    effect(() => {
+      const action = this.drawerService.action();
+      console.log("Drawer action requested 1:", action);
+      if (!action) return;
+      console.log("Drawer action requested 2:", action);
+      if (!this.drawer) return;
+      console.log("Got effect and passed returns")
+      switch (action) {
+        case 'toggle':
+          this.drawer.toggle();
+          break;
+        case 'open':
+          this.drawer.open();
+          break;
+        case 'close':
+          this.drawer.close();
+          break;
+      }
+      // Clear after applying to avoid repeated execution on same value
+      this.drawerService.clear();
+      // Trigger change detection since we're OnPush
+      this.cdr.markForCheck();
     });
   }
 
@@ -63,44 +91,32 @@ export class AppComponent implements OnInit {
       this.analyticsService.injectGAScript();
     }
 
-    this.userService.user$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(user => {
-        this.currentUser = user;
-        this.cdr.markForCheck();
-      });
-
     this.loadGsiScriptAndRenderButton();
   }
 
-  private loadGsiScriptAndRenderButton(): Promise<void> {
-    return this.loadGsiScript().then(() => {
-      const google = (window as any).google;
-      if (!google?.accounts?.id) return;
-
-      // Initialize the client
-      google.accounts.id.initialize({
-        client_id: this.googleClientId,
-        ux_mode: 'redirect',
-        login_uri: this.googleAuthUrl,
-        auto_select: false,
-      });
-
-      // Render button idempotently
-      const el = this.gsiButton?.nativeElement;
-      if (el) {
-        el.innerHTML = '';
-        google.accounts.id.renderButton(el, {
-          theme: 'filled_black',
-          size: 'large',
-          text: 'continue_with',
-          shape: 'rectangular',
-          logo_alignment: 'left'
-        });
-        // uncomment below for Google One Tap prompt
-        // google.accounts.id.prompt();
-      }
+  private async loadGsiScriptAndRenderButton(): Promise<void> {
+    await this.loadGsiScript();
+    const google = (window as any).google;
+    if (!google?.accounts?.id) return;
+    // Initialize the client
+    google.accounts.id.initialize({
+      client_id: this.googleClientId,
+      ux_mode: 'redirect',
+      login_uri: this.googleAuthUrl,
+      auto_select: false,
     });
+    // Render button idempotently
+    const el = this.gsiButton?.nativeElement;
+    if (el) {
+      el.innerHTML = '';
+      google.accounts.id.renderButton(el, {
+        theme: 'filled_black',
+        size: 'large',
+        text: 'continue_with',
+        shape: 'rectangular',
+        logo_alignment: 'left'
+      });
+    }
   }
 
   // add the script on load

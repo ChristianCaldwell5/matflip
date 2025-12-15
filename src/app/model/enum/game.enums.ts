@@ -15,4 +15,5 @@ export enum EndGameDirectives {
     PLAY_AGAIN = 'playAgain',
     MAIN_MENU = 'mainMenu',
     VIEW_BOARD = 'viewBoard',
+    SIGN_IN = 'signIn',
 }

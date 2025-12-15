@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -12,15 +12,22 @@ import { AnalyticsService } from '../../services/analytics.service';
 import { HowToComponent } from '../../components/dialogs/how-to/how-to.component';
 import { GameModes, GameDifficulties } from '../../model/enum/game.enums';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { UserProfile } from '../../model/interfaces/user/user-profile';
+import { UserService } from '../../services/user.service';
+import { DrawerService } from '../../services/drawer.service';
+import { LevelDisplayComponent } from '../../components/level-display/level-display.component';
 
 @Component({
   selector: 'app-menu',
   imports: [CommonModule, FormsModule, MatButtonModule, MatDialogModule, MatFormFieldModule,
-    MatIconModule, MatSelectModule, MatToolbarModule],
+    MatIconModule, MatSelectModule, MatToolbarModule, LevelDisplayComponent],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss'
 })
 export class MenuComponent {
+
+  currentUser$: Observable<UserProfile | null>;
 
   // form values
   selectedMode: string = '';
@@ -32,9 +39,13 @@ export class MenuComponent {
   constructor(
     private gameService: GameService,
     private analyticsService: AnalyticsService,
+    private userService: UserService,
     private dialog: MatDialog,
-    private router: Router
-  ) {}
+    private router: Router,
+    private drawerService: DrawerService
+  ) {
+    this.currentUser$ = this.userService.user$;
+  }
 
   startGame() {
     // set game settings to default if not set by player
@@ -71,5 +82,7 @@ export class MenuComponent {
     console.log('Image URL: ' + profile.getImageUrl());
     console.log('Email: ' + profile.getEmail());
   }
+
+  openDrawer(): void { this.drawerService.requestOpen(); }
 
 }
