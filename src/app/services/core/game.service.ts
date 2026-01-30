@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { signal, Signal } from '@angular/core';
-import { FlipsReference } from '../model/interfaces/flipsReference';
-import { GameDifficulties, GameModes } from '../model/enum/game.enums';
+import { FlipsReference } from '../../model/interfaces/flipsReference';
+import { GameDifficulties, GameModes } from '../../model/enum/game.enums';
 import { MathService } from './math.service';
-import { MathProblem } from '../model/interfaces/mathProblem';
-import { card } from '../model/interfaces/card';
+import { MathProblem } from '../../model/interfaces/mathProblem';
+import { card } from '../../model/interfaces/card';
 
 @Injectable({
   providedIn: 'root'

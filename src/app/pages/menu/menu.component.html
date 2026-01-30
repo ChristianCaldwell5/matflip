@@ -1,8 +1,12 @@
 <div class="game-menu">
     <h1 class="flippin">Mat Flip</h1>
+    @if((currentUser$ | async); as user) {
+        <p class="mb--0 mt--0 width--100 tl tw--bold">{{ user.displayName }}</p>
+        <app-level-display [levelInfo]="user.levelInfo"></app-level-display>
+    }
     <form #form="ngForm">
-        <div class="row">
-        <mat-form-field appearance="outline">
+        <div class="row mt--1">
+        <mat-form-field appearance="outline" class="expanded-form">
             <mat-label>Mode</mat-label>
             <mat-select name="selectedMode" [(ngModel)]="selectedMode">
             <mat-option value="pairs">Pairs</mat-option>
@@ -25,10 +29,11 @@
         </mat-form-field>
         </div>
     </form>
-    <div class="row">
+    <div class="row mb--half">
         <button mat-raised-button color="accent" (click)="startGame()">Start Game</button>
     </div>
-    <div class="row">
-        <button mat-stroked-button (click)="howToClicked()">new here?</button>
-    </div>
+    @if(!(currentUser$ | async)) {
+        <span>Playing as a guest.</span>
+        <button mat-button color="accent" (click)="openDrawer()">Open menu to sign in</button>
+    }
 </div>

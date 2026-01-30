@@ -4,7 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CardRegionComponent } from "../../components/card-region/card-region.component";
 import { card } from '../../model/interfaces/card';
-import { GameService } from '../../services/game.service';
+import { GameService } from '../../services/core/game.service';
 import { MatDialog } from '@angular/material/dialog';
 import { GameStatusComponent } from '../../components/dialogs/game-status/game-status.component';
 import { EndGameDirectives, GameDifficulties, GameModes } from '../../model/enum/game.enums';
@@ -16,6 +16,10 @@ import { GameIcon } from '../../model/interfaces/game-icon';
 import { FlipsReference } from '../../model/interfaces/flipsReference';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
+import { UserProfile } from '../../model/interfaces/user/user-profile';
+import { DrawerService } from '../../services/drawer.service';
+import { UserService } from '../../services/user/user.service';
+import { ProgressionUpdateRequest } from '../../model/interfaces/user/progression';
 
 @Component({
   selector: 'app-pairs',
@@ -24,6 +28,8 @@ import { Router } from '@angular/router';
   styleUrl: './pairs.component.scss'
 })
 export class PairsComponent implements OnInit, OnDestroy {
+
+  currentUser$: Observable<UserProfile | null>;
 
   cards: card[] = [];
 
@@ -59,7 +65,9 @@ export class PairsComponent implements OnInit, OnDestroy {
     private gameService: GameService,
     private iconService: IconService,
     private analyticsService: AnalyticsService,
+    private userService: UserService,
     private dialog: MatDialog,
+    private drawerService: DrawerService,
     private cdr: ChangeDetectorRef,
     private router: Router
   ) {
@@ -69,6 +77,7 @@ export class PairsComponent implements OnInit, OnDestroy {
     this.matchesSignal = this.gameService.getMatchesSignal();
     this.matchFound$ = this.gameService.getMatchMadeObservable();
     this.mismatch$ = this.gameService.getMismatchObservable();
+    this.currentUser$ = this.userService.user$;
   }
 
   ngOnInit() {
@@ -87,6 +96,29 @@ export class PairsComponent implements OnInit, OnDestroy {
           clearInterval(this.gameIntervalId);
           this.gameService.updateGameStartedSignal(false);
           this.roundSuccess = true;
+
+          // construct ProgressionUpdateRequest and call user service progression update
+          const progressionUpdateRequest: ProgressionUpdateRequest = {
+            gameModeDirective: GameModes.PAIRS,
+            flipsMade: this.flipSignal(),
+            difficulty: this.selectedDifficulty as GameDifficulties,
+            pairsMade: this.matchesSignal(),
+            foundAllPairs: true,
+            timeTakenInSeconds: this.gameTimeAvailable - this.gameTimeRemaining
+          };
+
+          this.userService
+            .updateUserProgression(progressionUpdateRequest)
+            .pipe(take(1))
+            .subscribe({
+              next: () => {
+                console.log('Progression updated successfully');
+              },
+              error: (error: any) => {
+                console.error('Failed to update progression', error);
+              }
+            });
+
           this.dialogRef = this.dialog.open(GameStatusComponent, {
             height: 'auto',
             width: '90%',
@@ -100,6 +132,9 @@ export class PairsComponent implements OnInit, OnDestroy {
               flipCount: this.flipSignal().toString(),
               totalTime: this.gameTimeAvailable,
               timeRemaining: this.gameTimeRemaining,
+              currentUser: this.currentUser$,
+              userLoading: this.userService.userLoading$,
+              userPostGameBreakdowns: this.userService.userPostGameBreakdowns$
             }
           });
           this.dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe((directive: EndGameDirectives) => {
@@ -197,7 +232,7 @@ export class PairsComponent implements OnInit, OnDestroy {
     this.cards = [];
     const iconCount = Math.floor(this.cardTotalSignal() / 2);
     this.pairsCount = iconCount;
-  const selectedIcons: GameIcon[] = this.iconService.getIconListAndCycle(iconCount);
+    const selectedIcons: GameIcon[] = this.iconService.getIconListAndCycle(iconCount);
 
     for (let i = 0; i < iconCount; i++) {
       this.cards.push({
@@ -237,6 +272,27 @@ export class PairsComponent implements OnInit, OnDestroy {
       } else {
         clearInterval(this.gameIntervalId);
         this.gameService.updateGameStartedSignal(false);
+
+        // construct ProgressionUpdateRequest and call user service progression update
+        const progressionUpdateRequest: ProgressionUpdateRequest = {
+          gameModeDirective: GameModes.PAIRS,
+          flipsMade: this.flipSignal(),
+          difficulty: this.selectedDifficulty as GameDifficulties,
+          pairsMade: this.matchesSignal(),
+          foundAllPairs: false,
+          timeTakenInSeconds: this.gameTimeAvailable
+        };
+        this.userService
+          .updateUserProgression(progressionUpdateRequest)
+          .pipe(take(1))
+          .subscribe({
+            next: () => {
+              console.log('Progression updated successfully');
+            },
+            error: (error: any) => {
+              console.error('Failed to update progression', error);
+            }
+          });
         this.roundSuccess = false;
         this.dialogRef = this.dialog.open(GameStatusComponent, {
           height: 'auto',
@@ -252,6 +308,9 @@ export class PairsComponent implements OnInit, OnDestroy {
             flipCount: this.flipSignal().toString(),
             totalTime: this.gameTimeAvailable,
             timeRemaining: this.gameTimeRemaining,
+            currentUser: this.currentUser$,
+            userLoading: this.userService.userLoading$,
+            userPostGameBreakdowns: this.userService.userPostGameBreakdowns$
           }
         });
         this.dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe((directive: EndGameDirectives) => {
@@ -284,6 +343,9 @@ export class PairsComponent implements OnInit, OnDestroy {
         flipCount: this.flipSignal().toString(),
         totalTime: this.gameTimeAvailable,
         timeRemaining: this.gameTimeRemaining,
+        currentUser: this.currentUser$,
+        userLoading: this.userService.userLoading$,
+        userPostGameBreakdowns: this.userService.userPostGameBreakdowns$
       }
     });
     this.dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe((directive: EndGameDirectives) => {
@@ -310,11 +372,16 @@ export class PairsComponent implements OnInit, OnDestroy {
       this.playAgain();
     } else if (directive === EndGameDirectives.MAIN_MENU) {
       this.quitGame();
-    } else if (directive === EndGameDirectives.VIEW_BOARD) {
+    } else if (directive === EndGameDirectives.VIEW_BOARD || directive === EndGameDirectives.SIGN_IN) {
       this.viewBoardMode = true;
       this.disableFlip = true;
       for (let card of this.cards) {
         card.flipped = true;
+      }
+      console.log("VIEW_BOARD")
+      if (directive === EndGameDirectives.SIGN_IN) {
+        console.log("SIGN_IN")
+        this.drawerService.requestOpen();
       }
       this.cdr.detectChanges();
     }

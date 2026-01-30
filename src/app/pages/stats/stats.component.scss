@@ -1,0 +1,33 @@
+@use '@angular/material' as mat;
+@import '../../../styles.scss';
+@include mat.core();
+
+.stats-container {
+    min-height: 100vh;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0.5rem;
+
+    .stats-section {
+        display: flex;
+        flex-direction: column;
+        div {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.25rem;
+        }
+        .separator {
+            border-top: 1px solid mat.m2-get-color-from-palette($nardo-grey-palette, 900);
+        }
+        div:nth-child(odd) {
+            background-color: mat.m2-get-color-from-palette($nardo-grey-palette, 200);
+        }
+        div:nth-child(even) {
+            background-color: mat.m2-get-color-from-palette($nardo-grey-palette, 50);
+        }
+        p {
+            margin: 0;
+        }
+    }
+}

@@ -205,7 +205,9 @@ $custom-theme: mat.m2-define-light-theme((color: (primary: $portfolio-ui-primary
 html,
 body {
     height: 100%;
-    background-color: #e0dfd8;
+    background-color: #e0dfd8 !important;
+    margin: 0;
+    font-family: Poppins, Chakra, "Helvetica Neue", sans-serif;
 }
 
 h1 {
@@ -218,13 +220,33 @@ h1 {
     font-family: Flippin, Poppins, "Helvetica Neue", sans-serif;
 }
 
-body {
-    margin: 0;
-    font-family: Poppins, Chakra, "Helvetica Neue", sans-serif;
+.tl {
+    text-align: left !important;
+}
+
+.tw--bold {
+    font-weight: bold !important;
 }
 
 .mt--1 {
     margin-top: 1rem !important;
+}
+
+.mt--0 {
+    margin-top: 0 !important;
+}
+
+.mt--half {
+    margin-top: 0.5rem !important;
+}
+.mr--half {
+    margin-right: 0.5rem !important;
+}
+.mb--half {
+    margin-bottom: 0.5rem !important;
+}
+.ml--half {
+    margin-left: 0.5rem !important;
 }
 
 .mt--2 {
@@ -239,12 +261,29 @@ body {
     margin-left: 1rem;
 }
 
+.mb--1 {
+    margin-bottom: 1rem !important;
+}
+
+.mb--0 {
+    margin-bottom: 0 !important;
+}
+
+.aa--center {
+    align-items: center !important;
+}
+
+.width--100 {
+    width: 100% !important;
+}
+
 .game-area {
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     flex-direction: column;
     padding: 1rem;
+    height: 100vh;
 
     .row {
         width: 100%;
@@ -311,6 +350,11 @@ body {
   @include mat.expansion-overrides((
     container-shape: 4px
   ));
+}
+
+.key-purple {
+    color: mat.m2-get-color-from-palette($lavender-palette, 600);
+    font-weight: 600;
 }
 
 // Material Symbols base sizing & variable font defaults

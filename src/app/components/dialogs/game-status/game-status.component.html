@@ -2,35 +2,70 @@
   @if (data.mode === 'pairs') {
     @if (data.success) {
       <h1 class="tc success">Great Job!</h1>
-      <p class="tc">You found all the pairs in time!</p>
+      <p class="tc">You found all the pairs in time</p>
     } @else {
       <h1 class="tc fail">Oh No!</h1>
       <p class="tc">Time ran out before all pairs were found!</p>
     }
 
-    @if (data.pairsFound && data.totalPairs) {
-      <p>Pairs: {{ data.pairsFound }}/{{ data.totalPairs }}</p>
-    }
-    @if (data.flipCount) {
-      <p>Flips: {{ data.flipCount }}</p>
-    }
+    <div class="status-row mb--1">
+      @if (data.difficulty) {
+        <span>[{{ data.difficulty | uppercase }}]</span>
+      }
+      @if (data.pairsFound && data.totalPairs) {
+        <span>Pairs: {{ data.pairsFound }}/{{ data.totalPairs }}</span>
+      }
+      @if (data.flipCount) {
+        <span>Flips: {{ data.flipCount }}</span>
+      }
+    </div>
     @if (data.totalTime && data.timeRemaining) {
-      <p>Time taken: {{ data.totalTime - data.timeRemaining }} seconds</p>
+      <span>Time taken: {{ data.totalTime - data.timeRemaining }} seconds</span>
     }
   }
 
   @if (data.mode === 'solution') {
     <h1 class="tc fail">All fails exhausted!</h1>
-    @if (data.solveCount) {
-      <p>Solves: {{ data.solveCount }}</p>
-    }
+    <div class="status-row mb--1">
+      @if (data.difficulty) {
+        <span>[{{ data.difficulty | uppercase }}]</span>
+      }
+      @if (data.solveCount) {
+        <span>Solves: {{ data.solveCount }}</span>
+      }
+    </div>
     @if (data.bestStreak) {
-      <p>Longest streak: {{ data.bestStreak }}</p>
+      <span>Longest streak: {{ data.bestStreak }}</span>
     }
   }
 
-  @if (data.difficulty) {
-    <p>Difficulty: {{ data.difficulty | uppercase }}</p>
+  @if (!(data.currentUser | async)) {
+    <hr />
+    <div class="row">
+      <span>You are playing as a guest.</span>
+      <button mat-button color="accent" (click)="signIn()" class="ml--1">Open menu to sign in.</button>
+    </div>
+    <ul>
+      <li>Level up and earn rewards</li>
+      <li>Customize profile and cards</li>
+      <li>Track stats</li>
+      <li>Access the Daily game mode</li>
+    </ul>
+  } @else {
+    @if ((data.currentUser | async); as currentUser) {
+      <h3 class="mb--0 mt--1">Progression:</h3>
+      <app-level-display [levelInfo]="currentUser?.levelInfo"></app-level-display>
+      @if ((data.userPostGameBreakdowns | async); as breakdown) {
+        @if (breakdown && breakdown.length > 0) {
+          @for (item of breakdown; track $index) {
+            <div class="row mt--1">
+              <mat-icon aria-hidden="false" aria-label="Plus icon" fontIcon="add" class="mr--half"></mat-icon>
+              <p class="mb--0 mt--0">{{ item }}</p>
+            </div>
+          }
+        }
+      }
+    }
   }
 
   <div class="button-row">

@@ -101,6 +101,18 @@ export class AnalyticsService {
     });
   }
 
+  trackUserSignIn(): void {
+    this.send('user_sign_in', {
+      session_id: this.sessionId
+    });
+  }
+
+  trackUserSignOut(): void {
+    this.send('user_sign_out', {
+      session_id: this.sessionId
+    });
+  }
+
   generateSessionId(): string {
     this.sessionId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     return this.sessionId;

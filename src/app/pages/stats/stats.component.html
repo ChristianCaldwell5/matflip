@@ -1,0 +1,287 @@
+<div class="stats-container">
+    <button mat-button color="accent" class="mt--1" (click)="goToMenu()">
+        <mat-icon>arrow_back</mat-icon>
+        Return to menu
+    </button>
+    <h1 class="mt--half">Stats</h1>
+    @if ((currentUser$ | async); as user) {
+        <h3>General</h3>
+        <div class="stats-section">
+            <div>
+                <span>Player level</span>
+                <span>{{ user.levelInfo?.currentLevel }}</span>
+            </div>
+            <div>
+                <span>Total Games Played</span>
+                <span>{{ user.stats?.general?.totalGamesPlayed }}</span>
+            </div>
+            <div>
+                <span>Total Flips</span>
+                <span>{{ user.stats?.general?.totalFlips }}</span>
+            </div>
+        </div>
+        <h3>
+            Daily
+            @if (!showDailyStats) {
+                <button mat-stroked-button color="secondary" (click)="showDailyStats = true" aria-label="Show daily stats">
+                    show daily
+                </button>
+            } @else {
+                <button mat-stroked-button color="secondary" (click)="showDailyStats = false" aria-label="Hide daily stats">
+                    hide daily
+                </button>
+            }
+        </h3>
+        @if (showDailyStats) {
+            <div class="stats-section">
+                <div>
+                    <span>Days Played</span>
+                    <span>{{ user.stats?.daily?.totalTimesPlayed }}</span>
+                </div>
+                <div>
+                    <span>Current Streak</span>
+                    <span>{{ user.stats?.daily?.currentStreak }}</span>
+                </div>
+                <div>
+                    <span>Longest Streak</span>
+                    <span>{{ user.stats?.daily?.longestStreak }}</span>
+                </div>
+                <div>
+                    <span>Best Time in Seconds</span>
+                    <span>{{ user.stats?.daily?.bestTimeInSeconds ?? 'N/A' }}</span>
+                </div>
+                @if (user.stats?.daily?.timesPlacedOnLeaderboard) {
+                    <div>
+                        <span>Times Placed on Leaderboard</span>
+                        <span>{{ user.stats?.daily?.timesPlacedOnLeaderboard }}</span>
+                    </div>
+                }
+                @if (user.stats?.daily?.bestLeaderboardPosition) {
+                    <div>
+                        <span>Best Leaderboard Position</span>
+                        <span>{{ user.stats?.daily?.bestLeaderboardPosition }}</span>
+                    </div>
+                }
+            </div>
+        }
+        <h3>
+            Pairs - All
+            @if (!showPairsAllStats) {
+                <button mat-stroked-button color="secondary" (click)="showPairsAllStats = true" aria-label="Show pairs stats">
+                    show pairs
+                </button>
+            } @else {
+                <button mat-stroked-button color="secondary" (click)="showPairsAllStats = false" aria-label="Hide pairs stats">
+                    hide pairs
+                </button>
+            }
+        </h3>
+        @if (showPairsAllStats) {
+            <div class="stats-section">
+                <div>
+                    <span>Games Played</span>
+                    <span>{{ user.stats?.pairs?.totalTimesPlayed }}</span>
+                </div>
+                <div>
+                    <span>Matches Found</span>
+                    <span>{{ user.stats?.pairs?.totalMatchesFound }}</span>
+                </div>
+            </div>
+            <h3>Pairs - Easy</h3>
+            <div class="stats-section">
+                @if (user.stats?.pairs?.difficultyBreakdown?.easy?.timesPlayed) {
+                    <div>
+                        <span>Games Played</span>
+                        <span>{{ user.stats?.pairs?.difficultyBreakdown?.easy?.timesPlayed }}</span>
+                    </div>
+                    <div>
+                        <span>Games Won</span>
+                        <span>{{ user.stats?.pairs?.difficultyBreakdown?.easy?.timesWon }}</span>
+                    </div>
+                    <div>
+                        <span>Best Time in Seconds</span>
+                        <span>{{ user.stats?.pairs?.difficultyBreakdown?.easy?.bestTimeInSeconds }}</span>
+                    </div>
+                } @else {
+                    <p>No stats collected for this mode and difficulty yet.</p>
+                }
+            </div>
+            <h3>Pairs - Medium</h3>
+            <div class="stats-section">
+                @if (user.stats?.pairs?.difficultyBreakdown?.medium?.timesPlayed) {
+                    <div>
+                        <span>Games Played</span>
+                        <span>{{ user.stats?.pairs?.difficultyBreakdown?.medium?.timesPlayed }}</span>
+                    </div>
+                    <div>
+                        <span>Games Won</span>
+                        <span>{{ user.stats?.pairs?.difficultyBreakdown?.medium?.timesWon }}</span>
+                    </div>
+                    <div>
+                        <span>Best Time in Seconds</span>
+                        <span>{{ user.stats?.pairs?.difficultyBreakdown?.medium?.bestTimeInSeconds }}</span>
+                    </div>
+                } @else {
+                    <p>No stats collected for this mode and difficulty yet.</p>
+                }
+            </div>
+            <h3>Pairs - Hard</h3>
+            <div class="stats-section">
+                @if (user.stats?.pairs?.difficultyBreakdown?.hard?.timesPlayed) {
+                    <div>
+                        <span>Games Played</span>
+                        <span>{{ user.stats?.pairs?.difficultyBreakdown?.hard?.timesPlayed }}</span>
+                    </div>
+                    <div>
+                        <span>Games Won</span>
+                        <span>{{ user.stats?.pairs?.difficultyBreakdown?.hard?.timesWon }}</span>
+                    </div>
+                    <div>
+                        <span>Best Time in Seconds</span>
+                        <span>{{ user.stats?.pairs?.difficultyBreakdown?.hard?.bestTimeInSeconds }}</span>
+                    </div>
+                } @else {
+                    <p>No stats collected for this mode and difficulty yet.</p>
+                }
+            </div>
+            <h3>Pairs - Expert</h3>
+            <div class="stats-section">
+                @if (user.stats?.pairs?.difficultyBreakdown?.expert?.timesPlayed) {
+                    <div>
+                        <span>Games Played</span>
+                        <span>{{ user.stats?.pairs?.difficultyBreakdown?.expert?.timesPlayed }}</span>
+                    </div>
+                    <div>
+                        <span>Games Won</span>
+                        <span>{{ user.stats?.pairs?.difficultyBreakdown?.expert?.timesWon }}</span>
+                    </div>
+                    <div>
+                        <span>Best Time in Seconds</span>
+                        <span>{{ user.stats?.pairs?.difficultyBreakdown?.expert?.bestTimeInSeconds }}</span>
+                    </div>
+                } @else {
+                    <p>No stats collected for this mode and difficulty yet.</p>
+                }
+            </div>
+            <h3>Pairs - Memory Master</h3>
+            <div class="stats-section">
+                @if (user.stats?.pairs?.difficultyBreakdown?.mastery?.timesPlayed) {
+                    <div>
+                        <span>Games Played</span>
+                        <span>{{ user.stats?.pairs?.difficultyBreakdown?.mastery?.timesPlayed }}</span>
+                    </div>
+                    <div>
+                        <span>Games Won</span>
+                        <span>{{ user.stats?.pairs?.difficultyBreakdown?.mastery?.timesWon }}</span>
+                    </div>
+                    <div>
+                        <span>Best Time in Seconds</span>
+                        <span>{{ user.stats?.pairs?.difficultyBreakdown?.mastery?.bestTimeInSeconds }}</span>
+                    </div>
+                } @else {
+                    <p>No stats collected for this mode and difficulty yet.</p>
+                }
+            </div>
+        }
+        <h3>
+            Solution - All
+            @if (!showSolutionAllStats) {
+                <button mat-stroked-button color="secondary" (click)="showSolutionAllStats = true" aria-label="Show solution stats">
+                    show solution
+                </button>
+            } @else {
+                <button mat-stroked-button color="secondary" (click)="showSolutionAllStats = false" aria-label="Hide solution stats">
+                    hide solution
+                </button>
+            }
+        </h3>
+        @if (showSolutionAllStats) {
+            <div class="stats-section">
+                <div>
+                    <span>Games Played</span>
+                    <span>{{ user.stats?.solutions?.totalTimesPlayed }}</span>
+                </div>
+                <div>
+                    <span>Problems Solved</span>
+                    <span>{{ user.stats?.solutions?.totalSolutionsFound }}</span>
+                </div>
+            </div>
+            <h3>Solution - Easy</h3>
+            <div class="stats-section">
+                @if (user.stats?.solutions?.difficultyBreakdown?.easy?.timesPlayed) {
+                    <div>
+                        <span>Games Played</span>
+                        <span>{{ user.stats?.solutions?.difficultyBreakdown?.easy?.timesPlayed }}</span>
+                    </div>
+                    <div>
+                        <span>Highest Solution Count</span>
+                        <span>{{ user.stats?.solutions?.difficultyBreakdown?.easy?.highestSolutionCount }}</span>
+                    </div>
+                    <div>
+                        <span>Best Streak</span>
+                        <span>{{ user.stats?.solutions?.difficultyBreakdown?.easy?.bestStreakCount }}</span>
+                    </div>
+                } @else {
+                    <p>No stats collected for this mode and difficulty yet.</p>
+                }
+            </div>
+            <h3>Solution - Medium</h3>
+            <div class="stats-section">
+                @if (user.stats?.solutions?.difficultyBreakdown?.medium?.timesPlayed) {
+                    <div>
+                        <span>Games Played</span>
+                        <span>{{ user.stats?.solutions?.difficultyBreakdown?.medium?.timesPlayed }}</span>
+                    </div>
+                    <div>
+                        <span>Highest Solution Count</span>
+                        <span>{{ user.stats?.solutions?.difficultyBreakdown?.medium?.highestSolutionCount }}</span>
+                    </div>
+                    <div>
+                        <span>Best Streak</span>
+                        <span>{{ user.stats?.solutions?.difficultyBreakdown?.medium?.bestStreakCount }}</span>
+                    </div>
+                } @else {
+                    <p>No stats collected for this mode and difficulty yet.</p>
+                }
+            </div>
+            <h3>Solution - Hard</h3>
+            <div class="stats-section">
+                @if (user.stats?.solutions?.difficultyBreakdown?.hard?.timesPlayed) {
+                    <div>
+                        <span>Games Played</span>
+                        <span>{{ user.stats?.solutions?.difficultyBreakdown?.hard?.timesPlayed }}</span>
+                    </div>
+                    <div>
+                        <span>Highest Solution Count</span>
+                        <span>{{ user.stats?.solutions?.difficultyBreakdown?.hard?.highestSolutionCount }}</span>
+                    </div>
+                    <div>
+                        <span>Best Streak</span>
+                        <span>{{ user.stats?.solutions?.difficultyBreakdown?.hard?.bestStreakCount }}</span>
+                    </div>
+                } @else {
+                    <p>No stats collected for this mode and difficulty yet.</p>
+                }
+            </div>
+            <h3>Solution - Expert</h3>
+            <div class="stats-section">
+                @if (user.stats?.solutions?.difficultyBreakdown?.expert?.timesPlayed) {
+                    <div>
+                        <span>Games Played</span>
+                        <span>{{ user.stats?.solutions?.difficultyBreakdown?.expert?.timesPlayed }}</span>
+                    </div>
+                    <div>
+                        <span>Highest Solution Count</span>
+                        <span>{{ user.stats?.solutions?.difficultyBreakdown?.expert?.highestSolutionCount }}</span>
+                    </div>
+                    <div>
+                        <span>Best Streak</span>
+                        <span>{{ user.stats?.solutions?.difficultyBreakdown?.expert?.bestStreakCount }}</span>
+                    </div>
+                } @else {
+                    <p>No stats collected for this mode and difficulty yet.</p>
+                }
+            </div>
+        }
+    }
+</div>

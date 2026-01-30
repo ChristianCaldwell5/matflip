@@ -10,12 +10,14 @@ import { SolutionStatus } from '../../model/enum/solution-status.enum';
 import { MathProblem } from '../../model/interfaces/mathProblem';
 import { MatDialog } from '@angular/material/dialog';
 import { AnalyticsService } from '../../services/analytics.service';
-import { GameService } from '../../services/game.service';
-import { MathService } from '../../services/math.service';
+import { GameService } from '../../services/core/game.service';
+import { MathService } from '../../services/core/math.service';
 import { EndGameDirectives, GameDifficulties, GameModes } from '../../model/enum/game.enums';
 import { GameStatusComponent } from '../../components/dialogs/game-status/game-status.component';
 import { Router } from '@angular/router';
 import { QuiteGameComponent } from '../../components/dialogs/quite-game/quite-game.component';
+import { UserService } from '../../services/user/user.service';
+import { ProgressionUpdateRequest } from '../../model/interfaces/user/progression';
 
 @Component({
   selector: 'app-solution',
@@ -66,6 +68,7 @@ export class SolutionComponent implements OnInit, OnDestroy {
     private gameService: GameService,
     private mathService: MathService,
     private analyticsService: AnalyticsService,
+    private userService: UserService,
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
     private router: Router
@@ -313,6 +316,26 @@ export class SolutionComponent implements OnInit, OnDestroy {
       clearInterval(this.gameIntervalId);
       this.gameService.updateGameStartedSignal(false);
       this.roundSuccess = false;
+
+      // construct ProgressionUpdateRequest and call user service progression update
+      const progressionUpdateRequest: ProgressionUpdateRequest = {
+        gameModeDirective: GameModes.SOLUTION,
+        solutionsFound: this.solvesSignal(),
+        solutionStreak: this.bestStreakSignal(),
+        difficulty: this.selectedDifficulty as GameDifficulties,
+      };
+      this.userService
+        .updateUserProgression(progressionUpdateRequest)
+        .pipe(take(1))
+        .subscribe({
+          next: () => {
+            console.log('Progression updated successfully');
+          },
+          error: (error: any) => {
+            console.error('Failed to update progression', error);
+          }
+        });
+
       this.dialogRef = this.dialog.open(GameStatusComponent, {
         height: 'auto',
         width: '90%',
@@ -324,6 +347,8 @@ export class SolutionComponent implements OnInit, OnDestroy {
           difficulty: this.selectedDifficulty as GameDifficulties,
           solveCount: this.solvesSignal().toString(),
           bestStreak: this.bestStreakSignal().toString(),
+          currentUser: this.userService.user$,
+          userLoading: this.userService.userLoading$
         }
       });
       this.dialogRef.afterClosed().subscribe((directive: EndGameDirectives) => {
