@@ -7,14 +7,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { GameService } from '../../services/game.service';
+import { GameService } from '../../services/core/game.service';
 import { AnalyticsService } from '../../services/analytics.service';
 import { HowToComponent } from '../../components/dialogs/how-to/how-to.component';
 import { GameModes, GameDifficulties } from '../../model/enum/game.enums';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { UserProfile } from '../../model/interfaces/user/user-profile';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/user/user.service';
 import { DrawerService } from '../../services/drawer.service';
 import { LevelDisplayComponent } from '../../components/level-display/level-display.component';
 

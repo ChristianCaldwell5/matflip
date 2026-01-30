@@ -1,0 +1,107 @@
+<div class="customize-container">
+    <button mat-button color="accent" class="mt--1" (click)="goToMenu()">
+        <mat-icon>arrow_back</mat-icon>
+        Return to menu
+    </button>
+    <h1 class="mt--half">Customize</h1>
+    @if ((currentUser$ | async); as user) {
+        <div class="current-selects">
+            <h3 class="mt--half">{{ user.displayName }} <span>- Match Maker {{ user.currentCustomizationSelects?.title }}</span></h3>
+            <div class="row">
+                <div class="flip-card-container default-skin">
+                    <mat-card
+                        class="flip-card front"
+                        [appearance]="'outlined'"
+                    >
+                    </mat-card>
+                </div>
+                <div class="current-selects-container">
+                    <div class="row aa--center">
+                        <mat-icon>chevron_left</mat-icon>
+                        <span>Skin: {{ user.currentCustomizationSelects?.cardSkin ?? 'Default' }}</span>
+                    </div>
+                    <div class="row aa--center mt--half">
+                        <mat-icon>chevron_left</mat-icon>
+                        <span>Effect: {{ user.currentCustomizationSelects?.matchEffect ?? 'None' }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="customize-tabs-container">
+            <span>Select customizations from your inventory!</span>
+            <h3>Your Inventory - {{ activeTabTitle }}</h3>
+            <mat-tab-group [(selectedIndex)]="selectedTabIndex" color="accent"  mat-stretch-tabs="false" animationDuration="250ms">
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <mat-icon>brush</mat-icon>
+                    </ng-template>
+                </mat-tab>
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <mat-icon>auto_awesome</mat-icon>
+                    </ng-template>
+                </mat-tab>
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <mat-icon>title</mat-icon>
+                    </ng-template>
+                </mat-tab>
+            </mat-tab-group>
+
+            @if ((currentUser$ | async); as invUser) {
+                <div class="inventory-grid">
+                    @if (selectedTabIndex === 0) {
+                        <div class="square-grid">
+                            @for (item of cardSkinItems; track item.name) {
+                                <div class="flip-card-container" [ngClass]="item.styleRecipe">
+                                    <mat-card
+                                        class="flip-card front"
+                                        [appearance]="'outlined'"
+                                    >
+                                    @if (item.name === cardSkinChangeName) {
+                                        <mat-icon class="selected">check</mat-icon>
+                                    }
+                                    </mat-card>
+                                </div>
+                            }
+                            <div class="flip-card-container default-skin">
+                                <mat-card
+                                    class="flip-card front"
+                                    [appearance]="'outlined'"
+                                >
+                                    @if (cardSkinItems.length === 0) {
+                                        <mat-icon class="selected">check</mat-icon>
+                                    }
+                                </mat-card>
+                            </div>
+                        </div>
+                    } @else if (selectedTabIndex === 1) {
+                        @if (matchEffectItems.length === 0) {
+                            <p>You have no match effects in your inventory.</p>
+                        }
+                        @for (item of matchEffectItems; track item.name) {
+                            <mat-card class="inventory-item" [appearance]="'outlined'">
+                                <div class="item-header">
+                                    <span class="item-name">{{ item.displayName }}</span>
+                                    <span class="item-rarity">{{ item.rarity }}</span>
+                                </div>
+                            </mat-card>
+                        }
+                    } @else {
+                        @if (titleItems.length === 0) {
+                            <p>You have no titles in your inventory.</p>
+                        }
+                        @for (item of titleItems; track item.name) {
+                            <mat-card class="inventory-item" [appearance]="'outlined'">
+                                <div class="item-header">
+                                    <span class="item-name">{{ item.displayName }}</span>
+                                    <span class="item-rarity">{{ item.rarity }}</span>
+                                </div>
+                            </mat-card>
+                        }
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>

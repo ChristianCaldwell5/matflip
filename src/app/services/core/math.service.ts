@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { MathProblems } from '../model/enum/math.enums';
-import { MathProblem } from '../model/interfaces/mathProblem';
+import { MathProblems } from '../../model/enum/math.enums';
+import { MathProblem } from '../../model/interfaces/mathProblem';
 
 @Injectable({
   providedIn: 'root'

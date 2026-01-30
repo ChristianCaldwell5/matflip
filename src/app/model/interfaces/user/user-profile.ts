@@ -1,3 +1,4 @@
+import { CatalogItem, CurrentCustomizationSelects } from "../customization";
 import { LevelInfo } from "./level-info";
 import { PlayerStats } from "./player-stats";
 
@@ -10,6 +11,8 @@ export interface UserProfile {
     displayName?: string;
     stats?: PlayerStats;
     levelInfo?: LevelInfo;
+    currentCustomizationSelects?: CurrentCustomizationSelects;
+    ownedCatalogItems: CatalogItem[];
     createdAt: Date;
     updatedAt: Date;
 }

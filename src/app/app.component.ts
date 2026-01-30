@@ -9,11 +9,12 @@ import { Router, RouterModule } from '@angular/router';
 import { NewsComponent } from './components/dialogs/news/news.component';
 import { AnalyticsService } from './services/analytics.service';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
-import { UserService } from './services/user.service';
-import { UserStartupService } from './services/user-startup.service';
+import { UserService } from './services/user/user.service';
+import { UserStartupService } from './services/user/user-startup.service';
 import { Observable, Subject } from 'rxjs';
 import { UserProfile } from './model/interfaces/user/user-profile';
 import { DrawerService } from './services/drawer.service';
+import { CatalogService } from './services/catalog.service';
 
 @Component({
   selector: 'app-root',
@@ -47,6 +48,7 @@ export class AppComponent implements OnInit {
     private analyticsService: AnalyticsService,
     private userService: UserService,
     _userStartup: UserStartupService,
+    private catalogService: CatalogService,
     private cdr: ChangeDetectorRef,
     private router: Router,
     private drawerService: DrawerService
@@ -63,11 +65,8 @@ export class AppComponent implements OnInit {
     // React to drawer requests from routed components via signal
     effect(() => {
       const action = this.drawerService.action();
-      console.log("Drawer action requested 1:", action);
       if (!action) return;
-      console.log("Drawer action requested 2:", action);
       if (!this.drawer) return;
-      console.log("Got effect and passed returns")
       switch (action) {
         case 'toggle':
           this.drawer.toggle();
@@ -92,6 +91,11 @@ export class AppComponent implements OnInit {
     }
 
     this.loadGsiScriptAndRenderButton();
+  }
+
+  menuButtonRoute(route: string): void {
+    this.drawer.toggle();
+    this.router.navigate([`/${route}`]);
   }
 
   private async loadGsiScriptAndRenderButton(): Promise<void> {

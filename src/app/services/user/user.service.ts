@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
-import { UserProfile } from '../model/interfaces/user/user-profile';
-import { AnalyticsService } from './analytics.service';
-import { BreakdownType, ProgressionBreakdown, ProgressionUpdateRequest, ProgressionUpdateResponse } from '../model/interfaces/user/progression';
-import { GameDifficulties, GameModes } from '../model/enum/game.enums';
+import { UserProfile } from '../../model/interfaces/user/user-profile';
+import { AnalyticsService } from '../analytics.service';
+import { BreakdownType, ProgressionBreakdown, ProgressionUpdateRequest, ProgressionUpdateResponse } from '../../model/interfaces/user/progression';
+import { GameDifficulties, GameModes } from '../../model/enum/game.enums';
 
 @Injectable({
   providedIn: 'root'
@@ -124,22 +124,22 @@ export class UserService {
           break;
         case BreakdownType.BASE_XP_GAINED:
           if (gameMode === GameModes.PAIRS) {
-            this.userPostGameBreakdowns.push(`Gained ${breakdown.amount} XP for finding pairs.`);
+            this.userPostGameBreakdowns.push(`${breakdown.amount} XP for finding pairs`);
           } else if (gameMode === GameModes.SOLUTION) {
-            this.userPostGameBreakdowns.push(`Gained ${breakdown.amount} XP for finding solutions.`);
+            this.userPostGameBreakdowns.push(`${breakdown.amount} XP for finding solutions`);
           }
           break;
         case BreakdownType.QUICK_BONUS_XP_GAINED:
-          this.userPostGameBreakdowns.push(`Gained ${breakdown.amount} bonus XP for quick completion!`);
+          this.userPostGameBreakdowns.push(`${breakdown.amount} bonus XP for quick completion!`);
           break;
         case BreakdownType.STREAK_BONUS_XP_GAINED:
-          this.userPostGameBreakdowns.push(`Gained ${breakdown.amount} bonus XP for your solution streak!`);
+          this.userPostGameBreakdowns.push(`${breakdown.amount} bonus XP for your solution streak!`);
           break;
         case BreakdownType.DAILY_BONUS_XP_GAINED:
-          this.userPostGameBreakdowns.push(`Gained ${breakdown.amount} bonus XP for playing the daily!`);
+          this.userPostGameBreakdowns.push(`${breakdown.amount} bonus XP for playing the daily!`);
           break;
         case BreakdownType.SUCCESS_BONUS_XP_GAINED:
-          this.userPostGameBreakdowns.push(`Gained ${breakdown.amount} bonus XP for winning on ${gameDifficulty} mode!`);
+          this.userPostGameBreakdowns.push(`${breakdown.amount} bonus XP for winning on ${gameDifficulty}!`);
           break;
         case BreakdownType.XP_MULTIPLIER_APPLIED:
           this.userPostGameBreakdowns.push(`Applied an XP multiplier of x${breakdown.multiplier} for ${gameDifficulty} mode. Resulting in ${breakdown.amount} bonus XP.`);

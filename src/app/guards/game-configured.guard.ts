@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router, UrlTree } from '@angular/router';
-import { GameService } from '../services/game.service';
+import { GameService } from '../services/core/game.service';
 
 // Standalone functional route guard (Angular 15+)
 export const gameConfiguredGuard: CanActivateFn = () => {

@@ -4,7 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CardRegionComponent } from "../../components/card-region/card-region.component";
 import { card } from '../../model/interfaces/card';
-import { GameService } from '../../services/game.service';
+import { GameService } from '../../services/core/game.service';
 import { MatDialog } from '@angular/material/dialog';
 import { GameStatusComponent } from '../../components/dialogs/game-status/game-status.component';
 import { EndGameDirectives, GameDifficulties, GameModes } from '../../model/enum/game.enums';
@@ -18,7 +18,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { UserProfile } from '../../model/interfaces/user/user-profile';
 import { DrawerService } from '../../services/drawer.service';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/user/user.service';
 import { ProgressionUpdateRequest } from '../../model/interfaces/user/progression';
 
 @Component({

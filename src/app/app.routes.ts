@@ -7,6 +7,9 @@ import { gameConfiguredGuard } from './guards/game-configured.guard';
 import { AuthRedirectComponent } from './pages/auth-redirect/auth-redirect.component';
 import { PrivacyComponent } from './pages/privacy/privacy.component';
 import { TermsComponent } from './pages/terms/terms.component';
+import { StatsComponent } from './pages/stats/stats.component';
+import { CustomizeComponent } from './pages/customize/customize.component';
+import { ProgressionComponent } from './pages/progression/progression.component';
 
 export const routes: Routes = [
     { path: 'legacy', component: GameComponent },
@@ -16,5 +19,8 @@ export const routes: Routes = [
     { path: 'login', component: AuthRedirectComponent },
     { path: 'privacy', component: PrivacyComponent },
     { path: 'terms', component: TermsComponent },
+    { path: 'stats', component: StatsComponent },
+    { path: 'customize', component: CustomizeComponent },
+    { path: 'progression', component: ProgressionComponent},
     { path: '**', redirectTo: '' }
 ];

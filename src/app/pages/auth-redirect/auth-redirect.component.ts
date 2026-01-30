@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/user/user.service';
 import { finalize } from 'rxjs';
 import { Router } from '@angular/router';
 

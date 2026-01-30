@@ -4,7 +4,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { inject } from '@angular/core';
-import { UserService } from '../services/user.service';
+import { UserService } from '../services/user/user.service';
 
 /**
  * Ensures API calls include credentials (mf_session cookie) and

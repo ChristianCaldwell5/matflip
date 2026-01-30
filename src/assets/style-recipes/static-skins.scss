@@ -1,0 +1,651 @@
+@use '@angular/material' as mat;
+@use '../../styles.scss' as *;
+
+.default-skin {
+    .front {
+        $b1: mat.m2-get-color-from-palette($nardo-grey-palette, 900);
+        $b2: mat.m2-get-color-from-palette($nardo-grey-palette, 800);
+        background:
+            linear-gradient(135deg, $b1, $b2),
+            repeating-linear-gradient(45deg,
+                rgba(255, 255, 255, 0.06) 0 6px,
+                rgba(255, 255, 255, 0.02) 6px 12px);
+        background-blend-mode: overlay;
+        box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+        color: mat.m2-get-color-from-palette($nardo-grey-palette, 50);
+        span {
+            color: white;
+            font-weight: 600;
+        }
+        mat-icon { color: mat.m2-get-color-from-palette($nardo-grey-palette, 50); }
+    }
+}
+
+.cosmic-brownie {
+    .front {
+        border-color: #3a1f12;
+        background:
+            /* chocolate base */
+            
+            /* colorful candy sprinkles (dots) */
+            radial-gradient(circle at 12% 22%, rgba(255,59,48,0.95) 0 1.6%, rgba(0,0,0,0) 1.8%),
+            radial-gradient(circle at 26% 38%, rgba(255,204,0,0.95) 0 1.4%, rgba(0,0,0,0) 1.6%),
+            radial-gradient(circle at 41% 18%, rgba(52,199,89,0.95) 0 1.5%, rgba(0,0,0,0) 1.7%),
+            radial-gradient(circle at 56% 34%, rgba(0,122,255,0.95) 0 1.6%, rgba(0,0,0,0) 1.8%),
+            radial-gradient(circle at 72% 20%, rgba(175,82,222,0.95) 0 1.5%, rgba(0,0,0,0) 1.7%),
+            radial-gradient(circle at 86% 36%, rgba(255,59,48,0.95) 0 1.6%, rgba(0,0,0,0) 1.8%),
+            radial-gradient(circle at 18% 66%, rgba(0,122,255,0.95) 0 1.6%, rgba(0,0,0,0) 1.8%),
+            radial-gradient(circle at 34% 74%, rgba(52,199,89,0.95) 0 1.5%, rgba(0,0,0,0) 1.7%),
+            radial-gradient(circle at 50% 68%, rgba(255,204,0,0.95) 0 1.4%, rgba(0,0,0,0) 1.6%),
+            radial-gradient(circle at 66% 76%, rgba(175,82,222,0.95) 0 1.5%, rgba(0,0,0,0) 1.7%),
+            radial-gradient(circle at 82% 64%, rgba(255,59,48,0.95) 0 1.6%, rgba(0,0,0,0) 1.8%),
+            linear-gradient(135deg, #4b2a1b, #2a140b),
+            /* tiny star sugar sprinkles */
+            radial-gradient(circle at 22% 52%, rgba(255,255,255,0.90) 0 0.8%, rgba(0,0,0,0) 1.0%),
+            radial-gradient(circle at 58% 14%, rgba(255,255,255,0.90) 0 0.8%, rgba(0,0,0,0) 1.0%),
+            radial-gradient(circle at 74% 48%, rgba(255,255,255,0.90) 0 0.8%, rgba(0,0,0,0) 1.0%);
+            
+        background-blend-mode: normal;
+        box-shadow: 0 12px 24px rgba(0,0,0,0.24);
+        color: #f5f5f5;
+        span { color: #ffffff; font-weight: 600; }
+        mat-icon { color: #ffffff; }
+    }
+}
+
+.ice-shards {
+    .front {
+        border-color: mat.m2-get-color-from-palette($mint-green-palette, 300);
+        background:
+            conic-gradient(from 15deg at 30% 30%, rgba(255,255,255,0.35), rgba(255,255,255,0) 40%),
+            conic-gradient(from 200deg at 70% 70%, rgba(255,255,255,0.30), rgba(255,255,255,0) 45%),
+            linear-gradient(135deg, mat.m2-get-color-from-palette($mint-green-palette, 200), mat.m2-get-color-from-palette($lavender-palette, 200));
+        background-blend-mode: screen;
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22);
+        color: mat.m2-get-color-from-palette($soft-white-palette, 50);
+        span { color: white; font-weight: 600; }
+        mat-icon { color: white; }
+    }
+}
+
+.aurora-wave {
+    .front {
+        border-color: mat.m2-get-color-from-palette($mint-green-palette, 300);
+        background:
+            radial-gradient(ellipse at 20% 40%, rgba(mat.m2-get-color-from-palette($lavender-palette, 300), 0.35), rgba(0,0,0,0) 60%),
+            radial-gradient(ellipse at 80% 60%, rgba(mat.m2-get-color-from-palette($mint-green-palette, 400), 0.65), rgba(0,0,0,0) 70%),
+            linear-gradient(135deg, mat.m2-get-color-from-palette($nardo-grey-palette, 900), mat.m2-get-color-from-palette($nardo-grey-palette, 700));
+        background-blend-mode: soft-light;
+        box-shadow: 0 12px 24px rgba(0,0,0,0.24);
+        color: mat.m2-get-color-from-palette($soft-white-palette, 50);
+        span { color: white; font-weight: 600; }
+        mat-icon { color: white; }
+    }
+}
+
+.galaxy-dust {
+    .front {
+        border-color: mat.m2-get-color-from-palette($soft-white-palette, 200);
+        background:
+            radial-gradient(circle at 10% 20%, rgba(255,255,255,0.8) 0 2%, rgba(255,255,255,0) 3%),
+            radial-gradient(circle at 40% 35%, rgba(255,255,255,0.7) 0 1.5%, rgba(255,255,255,0) 2.5%),
+            radial-gradient(circle at 75% 15%, rgba(255,255,255,0.8) 0 2%, rgba(255,255,255,0) 3%),
+            radial-gradient(circle at 60% 70%, rgba(255,255,255,0.7) 0 1.5%, rgba(255,255,255,0) 2.5%),
+            radial-gradient(circle at 12% 12%, rgba(255,255,255,0.95) 0 1.1%, rgba(255,255,255,0) 1.3%),
+            radial-gradient(circle at 22% 18%, rgba(255,255,255,0.70) 0 0.9%, rgba(255,255,255,0) 1.1%),
+            radial-gradient(circle at 33% 10%, rgba(255,255,255,0.85) 0 1.3%, rgba(255,255,255,0) 1.5%),
+            radial-gradient(circle at 44% 16%, rgba(255,255,255,0.60) 0 0.8%, rgba(255,255,255,0) 1.0%),
+            radial-gradient(circle at 55% 12%, rgba(255,255,255,0.90) 0 1.2%, rgba(255,255,255,0) 1.4%),
+            radial-gradient(circle at 66% 18%, rgba(255,255,255,0.72) 0 1.0%, rgba(255,255,255,0) 1.2%),
+            radial-gradient(circle at 77% 14%, rgba(255,255,255,0.88) 0 1.4%, rgba(255,255,255,0) 1.6%),
+            radial-gradient(circle at 88% 20%, rgba(255,255,255,0.65) 0 0.8%, rgba(255,255,255,0) 1.0%),
+
+            radial-gradient(circle at 8% 28%, rgba(255,255,255,0.92) 0 1.2%, rgba(255,255,255,0) 1.4%),
+            radial-gradient(circle at 18% 34%, rgba(255,255,255,0.68) 0 0.9%, rgba(255,255,255,0) 1.1%),
+            radial-gradient(circle at 29% 26%, rgba(255,255,255,0.80) 0 1.1%, rgba(255,255,255,0) 1.3%),
+            radial-gradient(circle at 40% 32%, rgba(255,255,255,0.56) 0 0.7%, rgba(255,255,255,0) 0.9%),
+            radial-gradient(circle at 51% 28%, rgba(255,255,255,0.94) 0 1.4%, rgba(255,255,255,0) 1.6%),
+            radial-gradient(circle at 62% 34%, rgba(255,255,255,0.74) 0 1.0%, rgba(255,255,255,0) 1.2%),
+            radial-gradient(circle at 73% 26%, rgba(255,255,255,0.86) 0 1.2%, rgba(255,255,255,0) 1.4%),
+            radial-gradient(circle at 84% 30%, rgba(255,255,255,0.62) 0 0.8%, rgba(255,255,255,0) 1.0%),
+
+            radial-gradient(circle at 10% 46%, rgba(255,255,255,0.93) 0 1.3%, rgba(255,255,255,0) 1.5%),
+            radial-gradient(circle at 20% 52%, rgba(255,255,255,0.66) 0 0.9%, rgba(255,255,255,0) 1.1%),
+            radial-gradient(circle at 31% 44%, rgba(255,255,255,0.82) 0 1.1%, rgba(255,255,255,0) 1.3%),
+            radial-gradient(circle at 42% 50%, rgba(255,255,255,0.58) 0 0.7%, rgba(255,255,255,0) 0.9%),
+            radial-gradient(circle at 53% 46%, rgba(255,255,255,0.96) 0 1.5%, rgba(255,255,255,0) 1.7%),
+            radial-gradient(circle at 64% 52%, rgba(255,255,255,0.76) 0 1.0%, rgba(255,255,255,0) 1.2%),
+            radial-gradient(circle at 75% 44%, rgba(255,255,255,0.84) 0 1.2%, rgba(255,255,255,0) 1.4%),
+            radial-gradient(circle at 86% 50%, rgba(255,255,255,0.60) 0 0.8%, rgba(255,255,255,0) 1.0%),
+
+            radial-gradient(circle at 6% 64%, rgba(255,255,255,0.91) 0 1.2%, rgba(255,255,255,0) 1.4%),
+            radial-gradient(circle at 16% 70%, rgba(255,255,255,0.69) 0 0.9%, rgba(255,255,255,0) 1.1%),
+            radial-gradient(circle at 27% 62%, rgba(255,255,255,0.83) 0 1.1%, rgba(255,255,255,0) 1.3%),
+            radial-gradient(circle at 38% 68%, rgba(255,255,255,0.57) 0 0.7%, rgba(255,255,255,0) 0.9%),
+            radial-gradient(circle at 49% 64%, rgba(255,255,255,0.95) 0 1.4%, rgba(255,255,255,0) 1.6%),
+            radial-gradient(circle at 60% 70%, rgba(255,255,255,0.73) 0 1.0%, rgba(255,255,255,0) 1.2%),
+            radial-gradient(circle at 71% 62%, rgba(255,255,255,0.87) 0 1.3%, rgba(255,255,255,0) 1.5%),
+            radial-gradient(circle at 82% 68%, rgba(255,255,255,0.61) 0 0.8%, rgba(255,255,255,0) 1.0%),
+
+            radial-gradient(circle at 12% 82%, rgba(255,255,255,0.94) 0 1.3%, rgba(255,255,255,0) 1.5%),
+            radial-gradient(circle at 24% 88%, rgba(255,255,255,0.67) 0 0.9%, rgba(255,255,255,0) 1.1%),
+            radial-gradient(circle at 36% 80%, rgba(255,255,255,0.81) 0 1.1%, rgba(255,255,255,0) 1.3%),
+            radial-gradient(circle at 48% 86%, rgba(255,255,255,0.55) 0 0.7%, rgba(255,255,255,0) 0.9%),
+            radial-gradient(circle at 60% 82%, rgba(255,255,255,0.97) 0 1.6%, rgba(255,255,255,0) 1.8%),
+            radial-gradient(circle at 72% 88%, rgba(255,255,255,0.75) 0 1.0%, rgba(255,255,255,0) 1.2%),
+            radial-gradient(circle at 84% 80%, rgba(255,255,255,0.86) 0 1.2%, rgba(255,255,255,0) 1.4%),
+            radial-gradient(circle at 92% 86%, rgba(255,255,255,0.63) 0 0.8%, rgba(255,255,255,0) 1.0%),
+            linear-gradient(135deg, mat.m2-get-color-from-palette($nardo-grey-palette, 900), mat.m2-get-color-from-palette($lavender-palette, 900));
+        background-blend-mode: screen;
+        box-shadow: 0 14px 28px rgba(0,0,0,0.30);
+        color: mat.m2-get-color-from-palette($soft-white-palette, 50);
+        span { color: white; font-weight: 600; }
+        mat-icon { color: white; }
+    }
+}
+
+.royal-velvet {
+    .front {
+        border-color: #9b111e;
+        background:
+            radial-gradient(circle at 30% 30%, rgba(mat.m2-get-color-from-palette($lavender-palette, 400), 0.35), rgba(0,0,0,0) 55%),
+            radial-gradient(circle at 70% 70%, rgba(mat.m2-get-color-from-palette($lavender-palette, 500), 0.30), rgba(0,0,0,0) 50%),
+            linear-gradient(135deg, mat.m2-get-color-from-palette($lavender-palette, 700), mat.m2-get-color-from-palette($lavender-palette, 900));
+        background-blend-mode: overlay;
+        box-shadow: 0 14px 28px rgba(0,0,0,0.28);
+        color: mat.m2-get-color-from-palette($soft-white-palette, 50);
+        span { color: white; font-weight: 600; }
+        mat-icon { color: white; }
+    }
+}
+
+.pixel-confetti {
+    .front {
+        border-color: mat.m2-get-color-from-palette($soft-white-palette, 200);
+        background:
+            radial-gradient(circle at 15% 25%, rgba(mat.m2-get-color-from-palette($coral-palette, 400), 0.9) 0 2.2%, rgba(0,0,0,0) 2.4%),
+            radial-gradient(circle at 35% 70%, rgba(mat.m2-get-color-from-palette($lavender-palette, 400), 0.9) 0 2.2%, rgba(0,0,0,0) 2.4%),
+            radial-gradient(circle at 75% 40%, rgba(mat.m2-get-color-from-palette($mint-green-palette, 400), 0.9) 0 2.2%, rgba(0,0,0,0) 2.4%),
+            radial-gradient(circle at 10% 10%, rgba(mat.m2-get-color-from-palette($coral-palette, 400), 0.9) 0 2.0%, rgba(0,0,0,0) 2.2%),
+            radial-gradient(circle at 20% 15%, rgba(mat.m2-get-color-from-palette($lavender-palette, 400), 0.9) 0 2.2%, rgba(0,0,0,0) 2.4%),
+            radial-gradient(circle at 30% 20%, rgba(mat.m2-get-color-from-palette($mint-green-palette, 400), 0.9) 0 2.1%, rgba(0,0,0,0) 2.3%),
+            radial-gradient(circle at 40% 25%, rgba(mat.m2-get-color-from-palette($coral-palette, 400), 0.85) 0 1.9%, rgba(0,0,0,0) 2.1%),
+            radial-gradient(circle at 50% 30%, rgba(mat.m2-get-color-from-palette($lavender-palette, 400), 0.95) 0 2.3%, rgba(0,0,0,0) 2.5%),
+            radial-gradient(circle at 60% 35%, rgba(mat.m2-get-color-from-palette($mint-green-palette, 400), 0.9) 0 2.0%, rgba(0,0,0,0) 2.2%),
+            radial-gradient(circle at 70% 40%, rgba(mat.m2-get-color-from-palette($coral-palette, 400), 0.9) 0 2.2%, rgba(0,0,0,0) 2.4%),
+            radial-gradient(circle at 80% 45%, rgba(mat.m2-get-color-from-palette($lavender-palette, 400), 0.88) 0 1.8%, rgba(0,0,0,0) 2.0%),
+            radial-gradient(circle at 90% 50%, rgba(mat.m2-get-color-from-palette($mint-green-palette, 400), 0.92) 0 2.4%, rgba(0,0,0,0) 2.6%),
+            radial-gradient(circle at 15% 60%, rgba(mat.m2-get-color-from-palette($coral-palette, 400), 0.9) 0 2.1%, rgba(0,0,0,0) 2.3%),
+            radial-gradient(circle at 25% 55%, rgba(mat.m2-get-color-from-palette($lavender-palette, 400), 0.9) 0 2.0%, rgba(0,0,0,0) 2.2%),
+            radial-gradient(circle at 35% 50%, rgba(mat.m2-get-color-from-palette($mint-green-palette, 400), 0.9) 0 2.2%, rgba(0,0,0,0) 2.4%),
+            radial-gradient(circle at 45% 45%, rgba(mat.m2-get-color-from-palette($coral-palette, 400), 0.86) 0 1.9%, rgba(0,0,0,0) 2.1%),
+            radial-gradient(circle at 55% 55%, rgba(mat.m2-get-color-from-palette($lavender-palette, 400), 0.94) 0 2.3%, rgba(0,0,0,0) 2.5%),
+            radial-gradient(circle at 65% 60%, rgba(mat.m2-get-color-from-palette($mint-green-palette, 400), 0.9) 0 2.0%, rgba(0,0,0,0) 2.2%),
+            radial-gradient(circle at 75% 65%, rgba(mat.m2-get-color-from-palette($coral-palette, 400), 0.9) 0 2.2%, rgba(0,0,0,0) 2.4%),
+            radial-gradient(circle at 85% 70%, rgba(mat.m2-get-color-from-palette($lavender-palette, 400), 0.87) 0 1.8%, rgba(0,0,0,0) 2.0%),
+            radial-gradient(circle at 95% 75%, rgba(mat.m2-get-color-from-palette($mint-green-palette, 400), 0.93) 0 2.4%, rgba(0,0,0,0) 2.6%),
+            radial-gradient(circle at 12% 82%, rgba(mat.m2-get-color-from-palette($coral-palette, 400), 0.9) 0 2.1%, rgba(0,0,0,0) 2.3%),
+            radial-gradient(circle at 22% 78%, rgba(mat.m2-get-color-from-palette($lavender-palette, 400), 0.9) 0 2.0%, rgba(0,0,0,0) 2.2%),
+            radial-gradient(circle at 32% 72%, rgba(mat.m2-get-color-from-palette($mint-green-palette, 400), 0.9) 0 2.2%, rgba(0,0,0,0) 2.4%),
+            radial-gradient(circle at 48% 82%, rgba(mat.m2-get-color-from-palette($coral-palette, 400), 0.85) 0 1.9%, rgba(0,0,0,0) 2.1%),
+            radial-gradient(circle at 58% 78%, rgba(mat.m2-get-color-from-palette($lavender-palette, 400), 0.95) 0 2.3%, rgba(0,0,0,0) 2.5%),
+            radial-gradient(circle at 68% 72%, rgba(mat.m2-get-color-from-palette($mint-green-palette, 400), 0.9) 0 2.0%, rgba(0,0,0,0) 2.2%),
+            radial-gradient(circle at 78% 28%, rgba(mat.m2-get-color-from-palette($coral-palette, 400), 0.9) 0 2.2%, rgba(0,0,0,0) 2.4%),
+            radial-gradient(circle at 88% 18%, rgba(mat.m2-get-color-from-palette($lavender-palette, 400), 0.88) 0 1.8%, rgba(0,0,0,0) 2.0%),
+            radial-gradient(circle at 8% 40%, rgba(mat.m2-get-color-from-palette($mint-green-palette, 400), 0.92) 0 2.4%, rgba(0,0,0,0) 2.6%),
+            radial-gradient(circle at 18% 35%, rgba(mat.m2-get-color-from-palette($coral-palette, 400), 0.9) 0 2.1%, rgba(0,0,0,0) 2.3%),
+            radial-gradient(circle at 28% 28%, rgba(mat.m2-get-color-from-palette($lavender-palette, 400), 0.9) 0 2.0%, rgba(0,0,0,0) 2.2%),
+            radial-gradient(circle at 38% 22%, rgba(mat.m2-get-color-from-palette($mint-green-palette, 400), 0.9) 0 2.2%, rgba(0,0,0,0) 2.4%),
+            radial-gradient(circle at 52% 18%, rgba(mat.m2-get-color-from-palette($coral-palette, 400), 0.86) 0 1.9%, rgba(0,0,0,0) 2.1%),
+            radial-gradient(circle at 62% 22%, rgba(mat.m2-get-color-from-palette($lavender-palette, 400), 0.94) 0 2.3%, rgba(0,0,0,0) 2.5%),
+            radial-gradient(circle at 72% 30%, rgba(mat.m2-get-color-from-palette($mint-green-palette, 400), 0.9) 0 2.0%, rgba(0,0,0,0) 2.2%),
+            radial-gradient(circle at 84% 34%, rgba(mat.m2-get-color-from-palette($coral-palette, 400), 0.9) 0 2.2%, rgba(0,0,0,0) 2.4%),
+            radial-gradient(circle at 6% 18%, rgba(mat.m2-get-color-from-palette($lavender-palette, 400), 0.87) 0 1.8%, rgba(0,0,0,0) 2.0%),
+            radial-gradient(circle at 94% 86%, rgba(mat.m2-get-color-from-palette($mint-green-palette, 400), 0.93) 0 2.4%, rgba(0,0,0,0) 2.6%),
+            linear-gradient(135deg, mat.m2-get-color-from-palette($soft-white-palette, 200), mat.m2-get-color-from-palette($soft-white-palette, 300));
+        background-blend-mode: normal;
+        box-shadow: 0 10px 22px rgba(0,0,0,0.20);
+        color: mat.m2-get-color-from-palette($nardo-grey-palette, 900);
+        span { color: mat.m2-get-color-from-palette($nardo-grey-palette, 900); font-weight: 600; }
+        mat-icon { color: mat.m2-get-color-from-palette($nardo-grey-palette, 900); }
+    }
+}
+
+.golden-sunburst {
+    .front {
+        border-color: mat.m2-get-color-from-palette($coral-palette, 400);
+        background:
+            conic-gradient(from 0deg at 50% 50%, rgba(mat.m2-get-color-from-palette($coral-palette, 300), 0.85), rgba(0,0,0,0) 40%),
+            linear-gradient(135deg, mat.m2-get-color-from-palette($coral-palette, 200), mat.m2-get-color-from-palette($coral-palette, 500));
+        background-blend-mode: overlay;
+        box-shadow: 0 14px 28px rgba(0,0,0,0.26);
+        color: mat.m2-get-color-from-palette($soft-white-palette, 50);
+        span { color: white; font-weight: 600; }
+        mat-icon { color: white; }
+    }
+}
+.cotton-candy-classic {
+    .front {
+        border-color: mat.m2-get-color-from-palette($soft-white-palette, 200);
+        $b1: mat.m2-get-color-from-palette($coral-palette, 200);
+        $b2: mat.m2-get-color-from-palette($lavender-palette, 200);
+        background:
+            radial-gradient(circle at 25% 30%, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 60%),
+            radial-gradient(circle at 70% 65%, rgba(255, 255, 255, 0.30) 0%, rgba(255, 255, 255, 0) 55%),
+            radial-gradient(circle at 45% 80%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 50%),
+            linear-gradient(135deg, $b1, $b2);
+        background-blend-mode: soft-light;
+        box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+        color: mat.m2-get-color-from-palette($soft-white-palette, 50);
+        span {
+            color: white;
+            font-weight: 600;
+        }
+        mat-icon { color: white; }
+    }
+}
+
+.cotton-candy-swirl {
+    .front {
+        border-color: mat.m2-get-color-from-palette($lavender-palette, 300);
+        background:
+            conic-gradient(from 25deg at 50% 50%,
+                mat.m2-get-color-from-palette($coral-palette, 200) 0%,
+                mat.m2-get-color-from-palette($lavender-palette, 200) 35%,
+                mat.m2-get-color-from-palette($mint-green-palette, 200) 65%,
+                mat.m2-get-color-from-palette($coral-palette, 200) 100%),
+            radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 55%),
+            radial-gradient(circle at 70% 70%, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0) 50%);
+        background-blend-mode: overlay;
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.20);
+        color: mat.m2-get-color-from-palette($soft-white-palette, 50);
+        span {
+            color: white;
+            font-weight: 600;
+        }
+        mat-icon { color: white; }
+    }
+}
+
+.acid-green-bubbles {
+    .front {
+        border-color: mat.m2-get-color-from-palette($mint-green-palette, 500);
+        $g1: mat.m2-get-color-from-palette($mint-green-palette, 200);
+        $g2: mat.m2-get-color-from-palette($mint-green-palette, 600);
+        $dotBright: mat.m2-get-color-from-palette($mint-green-palette, 400);
+        $dotDark: mat.m2-get-color-from-palette($mint-green-palette, 800);
+        background:
+            radial-gradient(circle at 8% 92%, rgba($dotBright, 0.95) 0 12%, rgba($dotBright, 0) 13%),
+            radial-gradient(circle at 24% 93%, rgba($dotDark, 0.90) 0 14%, rgba($dotDark, 0) 15%),
+            radial-gradient(circle at 40% 94%, rgba($dotBright, 0.95) 0 12%, rgba($dotBright, 0) 13%),
+            radial-gradient(circle at 60% 93%, rgba($dotDark, 0.90) 0 13%, rgba($dotDark, 0) 14%),
+            radial-gradient(circle at 76% 92%, rgba($dotBright, 0.95) 0 12%, rgba($dotBright, 0) 13%),
+            radial-gradient(circle at 90% 94%, rgba($dotDark, 0.90) 0 11%, rgba($dotDark, 0) 12%),
+
+            radial-gradient(circle at 12% 86%, rgba($dotBright, 0.92) 0 10%, rgba($dotBright, 0) 11%),
+            radial-gradient(circle at 28% 84%, rgba($dotDark, 0.88) 0 9%, rgba($dotDark, 0) 10%),
+            radial-gradient(circle at 42% 86%, rgba($dotBright, 0.94) 0 10%, rgba($dotBright, 0) 11%),
+            radial-gradient(circle at 58% 85%, rgba($dotDark, 0.86) 0 9%, rgba($dotDark, 0) 10%),
+            radial-gradient(circle at 72% 86%, rgba($dotBright, 0.92) 0 10%, rgba($dotBright, 0) 11%),
+            radial-gradient(circle at 88% 85%, rgba($dotDark, 0.88) 0 9%, rgba($dotDark, 0) 10%),
+
+            radial-gradient(circle at 18% 76%, rgba($dotBright, 0.90) 0 8%, rgba($dotBright, 0) 9%),
+            radial-gradient(circle at 34% 75%, rgba($dotDark, 0.84) 0 7%, rgba($dotDark, 0) 8%),
+            radial-gradient(circle at 50% 77%, rgba($dotBright, 0.92) 0 8%, rgba($dotBright, 0) 9%),
+            radial-gradient(circle at 66% 75%, rgba($dotDark, 0.84) 0 7%, rgba($dotDark, 0) 8%),
+            radial-gradient(circle at 82% 76%, rgba($dotBright, 0.90) 0 8%, rgba($dotBright, 0) 9%),
+
+            radial-gradient(circle at 20% 66%, rgba($dotDark, 0.80) 0 6%, rgba($dotDark, 0) 7%),
+            radial-gradient(circle at 36% 64%, rgba($dotBright, 0.88) 0 7%, rgba($dotBright, 0) 8%),
+            radial-gradient(circle at 52% 66%, rgba($dotDark, 0.80) 0 6%, rgba($dotDark, 0) 7%),
+            radial-gradient(circle at 68% 64%, rgba($dotBright, 0.88) 0 7%, rgba($dotBright, 0) 8%),
+            radial-gradient(circle at 84% 66%, rgba($dotDark, 0.80) 0 6%, rgba($dotDark, 0) 7%),
+
+            radial-gradient(circle at 25% 56%, rgba($dotBright, 0.84) 0 5%, rgba($dotBright, 0) 6%),
+            radial-gradient(circle at 46% 58%, rgba($dotDark, 0.76) 0 5%, rgba($dotDark, 0) 6%),
+            radial-gradient(circle at 70% 54%, rgba($dotBright, 0.84) 0 5%, rgba($dotBright, 0) 6%),
+
+            radial-gradient(circle at 30% 46%, rgba($dotDark, 0.70) 0 4%, rgba($dotDark, 0) 5%),
+            radial-gradient(circle at 60% 44%, rgba($dotBright, 0.78) 0 4%, rgba($dotBright, 0) 5%),
+            radial-gradient(circle at 50% 20%, rgba($dotDark, 0.90) 0 12%, rgba($dotDark, 0) 13%),
+            radial-gradient(circle at 80% 20%, rgba($dotBright, 0.95) 0 12%, rgba($dotBright, 0) 13%),
+            radial-gradient(circle at 20% 50%, rgba($dotDark, 0.90) 0 12%, rgba($dotDark, 0) 13%),
+            radial-gradient(circle at 50% 50%, rgba($dotBright, 0.95) 0 12%, rgba($dotBright, 0) 13%),
+            radial-gradient(circle at 80% 50%, rgba($dotDark, 0.90) 0 12%, rgba($dotDark, 0) 13%),
+            radial-gradient(circle at 20% 80%, rgba($dotBright, 0.95) 0 12%, rgba($dotBright, 0) 13%),
+            radial-gradient(circle at 50% 80%, rgba($dotDark, 0.90) 0 12%, rgba($dotDark, 0) 13%),
+            radial-gradient(circle at 80% 80%, rgba($dotBright, 0.95) 0 12%, rgba($dotBright, 0) 13%),
+            linear-gradient(135deg, $g1, $g2);
+        background-blend-mode: normal;
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22);
+        color: mat.m2-get-color-from-palette($soft-white-palette, 50);
+        span {
+            color: white;
+            font-weight: 600;
+        }
+        mat-icon { color: white; }
+    }
+}
+
+.candy-cane {
+    .front {
+        border-color: mat.m2-get-color-from-palette($coral-palette, 400);
+        $red: mat.m2-get-color-from-palette($coral-palette, 500);
+        $white: mat.m2-get-color-from-palette($soft-white-palette, 200);
+        background: repeating-linear-gradient(45deg, $red 0 12px, $white 12px 24px);
+        background-blend-mode: overlay;
+        box-shadow: 0 12px 24px rgba(0,0,0,0.24);
+        color: mat.m2-get-color-from-palette($soft-white-palette, 50);
+        span { color: white; font-weight: 600; }
+        mat-icon { color: white; }
+    }
+}
+
+.spearmint-cane {
+    .front {
+        border-color: mat.m2-get-color-from-palette($mint-green-palette, 400);
+        $mint: mat.m2-get-color-from-palette($mint-green-palette, 500);
+        $white: mat.m2-get-color-from-palette($soft-white-palette, 200);
+        background: repeating-linear-gradient(-45deg, $mint 0 12px, $white 12px 24px);
+        background-blend-mode: overlay;
+        box-shadow: 0 12px 24px rgba(0,0,0,0.24);
+        color: mat.m2-get-color-from-palette($soft-white-palette, 50);
+        span { color: white; font-weight: 600; }
+        mat-icon { color: white; }
+    }
+}
+
+.oil-spill {
+    .front {
+        border-color: #2a2a2a;
+        background:
+            linear-gradient(135deg, #0c0c0f, #1a1a1f),
+            linear-gradient(25deg, rgba(126,63,242,0.30) 10%, rgba(0,0,0,0) 60%),
+            linear-gradient(205deg, rgba(43,217,192,0.28) 10%, rgba(0,0,0,0) 60%),
+            linear-gradient(85deg, rgba(255,209,102,0.25) 10%, rgba(0,0,0,0) 60%),
+            linear-gradient(315deg, rgba(255,0,110,0.22) 10%, rgba(0,0,0,0) 60%);
+        background-blend-mode: color-dodge;
+        box-shadow: 0 14px 28px rgba(0,0,0,0.30);
+        color: #f5f5f5;
+        span { color: #ffffff; font-weight: 600; }
+        mat-icon { color: #ffffff; }
+    }
+}
+
+.rainbow-burst {
+    .front {
+        border-color: #7d3cff;
+        background:
+            linear-gradient(135deg, #101014, #191922),
+            radial-gradient(ellipse at 18% 32%, rgba(255,0,0,0.45) 0 40%, rgba(0,0,0,0) 42%),
+            radial-gradient(ellipse at 35% 65%, rgba(255,127,0,0.40) 0 38%, rgba(0,0,0,0) 40%),
+            radial-gradient(ellipse at 52% 30%, rgba(255,255,0,0.36) 0 36%, rgba(0,0,0,0) 38%),
+            radial-gradient(ellipse at 68% 62%, rgba(0,255,0,0.40) 0 38%, rgba(0,0,0,0) 40%),
+            radial-gradient(ellipse at 82% 28%, rgba(0,0,255,0.42) 0 42%, rgba(0,0,0,0) 44%),
+            radial-gradient(ellipse at 30% 80%, rgba(75,0,130,0.38) 0 36%, rgba(0,0,0,0) 38%),
+            radial-gradient(ellipse at 75% 85%, rgba(148,0,211,0.38) 0 34%, rgba(0,0,0,0) 36%);
+        background-blend-mode: soft-light;
+        box-shadow: 0 12px 24px rgba(0,0,0,0.24);
+        color: #f5f5f5;
+        span { color: #ffffff; font-weight: 600; }
+        mat-icon { color: #ffffff; }
+    }
+}
+
+.gilded {
+    .front {
+        border-color: #8a6f2a;
+        background:
+            linear-gradient(135deg, #d4af37, #b8860b),
+            radial-gradient(circle at 35% 25%, rgba(255,255,255,0.18) 0 48%, rgba(0,0,0,0) 50%),
+            repeating-linear-gradient(22deg, rgba(255,255,255,0.08) 0 2px, rgba(255,255,255,0) 2px 10px),
+            repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,255,255,0.05) 0 10deg, rgba(0,0,0,0) 10deg 20deg);
+        background-blend-mode: overlay;
+        box-shadow: 0 18px 36px rgba(0,0,0,0.34);
+        color: #ffffff;
+        span { color: #ffffff; font-weight: 600; }
+        mat-icon { color: #ffffff; }
+    }
+}
+
+.ocean {
+    .front {
+        border-color: #1282a2;
+        background:
+            linear-gradient(135deg, #2ec4f1, #1e90ff),
+            radial-gradient(circle at 25% 35%, rgba(255,255,255,0.20) 0 45%, rgba(0,0,0,0) 46%),
+            radial-gradient(circle at 70% 65%, rgba(255,255,255,0.16) 0 40%, rgba(0,0,0,0) 41%),
+            repeating-radial-gradient(circle at 50% 50%, rgba(255,255,255,0.10) 0 2px, rgba(255,255,255,0) 3px 12px);
+        background-blend-mode: screen;
+        box-shadow: 0 12px 24px rgba(0,0,0,0.24);
+        color: #f5f5f5;
+        span { color: #ffffff; font-weight: 600; }
+        mat-icon { color: #ffffff; }
+    }
+}
+
+.static-tv {
+    .front {
+        border-color: #4a4a4a;
+        background:
+            repeating-conic-gradient(#ff3b30 0 12%, #ffffff 12% 24%, #34c759 24% 36%, #7f7f7f 36% 48%, #000000 48% 60%, #ffffff 60% 72%),
+            repeating-conic-gradient(from 45deg, #34c759 0 12%, #7f7f7f 12% 24%, #000000 24% 36%, #ff3b30 36% 48%, #ffffff 48% 60%, #7f7f7f 60% 72%);
+        background-size: 0.5rem 0.5rem, 0.5rem 0.5rem;
+        box-shadow: 0 10px 22px rgba(0,0,0,0.20);
+        color: #111111;
+        span { color: #111111; font-weight: 600; }
+        mat-icon { color: #111111; }
+    }
+}
+
+.snickerdoodle {
+    .front {
+        border-color: #9b4f2a;
+        background:
+            linear-gradient(135deg, #e5b07f, #b65a35),
+            radial-gradient(circle at 50% 50%, rgba(139,69,19,0.12) 0 60%, rgba(139,69,19,0.24) 80%, rgba(0,0,0,0) 81%),
+            /* fine cinnamon dust pattern overlays */
+            radial-gradient(#a0522d 0.8px, transparent 0.9px),
+            radial-gradient(#a0522d 0.6px, transparent 0.8px),
+            radial-gradient(#8b4513 0.7px, transparent 0.9px),
+            radial-gradient(#8b4513 0.6px, transparent 0.8px),
+            /* cinnamon dust speckles */
+            radial-gradient(circle at 22% 28%, rgba(165,42,42,0.28) 0 2.6%, rgba(0,0,0,0) 2.8%),
+            radial-gradient(circle at 38% 42%, rgba(165,42,42,0.24) 0 2.2%, rgba(0,0,0,0) 2.4%),
+            radial-gradient(circle at 58% 36%, rgba(165,42,42,0.22) 0 2.0%, rgba(0,0,0,0) 2.2%),
+            radial-gradient(circle at 72% 52%, rgba(165,42,42,0.26) 0 2.4%, rgba(0,0,0,0) 2.6%),
+            radial-gradient(circle at 28% 66%, rgba(165,42,42,0.24) 0 2.2%, rgba(0,0,0,0) 2.4%),
+            radial-gradient(circle at 46% 72%, rgba(165,42,42,0.22) 0 1.8%, rgba(0,0,0,0) 2.0%),
+            radial-gradient(circle at 64% 68%, rgba(165,42,42,0.23) 0 2.0%, rgba(0,0,0,0) 2.2%),
+            radial-gradient(circle at 78% 40%, rgba(165,42,42,0.24) 0 2.2%, rgba(0,0,0,0) 2.4%),
+            radial-gradient(circle at 16% 54%, rgba(165,42,42,0.20) 0 1.6%, rgba(0,0,0,0) 1.8%),
+            radial-gradient(circle at 84% 58%, rgba(165,42,42,0.20) 0 1.6%, rgba(0,0,0,0) 1.8%);
+        background-blend-mode: soft-light;
+        background-size:
+            auto,
+            auto,
+            6px 6px,
+            8px 8px,
+            10px 10px,
+            12px 12px,
+            auto,
+            auto,
+            auto,
+            auto,
+            auto,
+            auto;
+        background-position:
+            0 0,
+            0 0,
+            0 0,
+            2px 3px,
+            4px 1px,
+            1px 4px,
+            0 0,
+            0 0,
+            0 0,
+            0 0,
+            0 0,
+            0 0;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.18);
+        color: #4a2a17;
+        span { color: #4a2a17; font-weight: 600; }
+        mat-icon { color: #4a2a17; }
+    }
+}
+
+.ember-glow {
+    .front {
+        border-color: #ff8c00;
+        background:
+            linear-gradient(135deg, #0f0f12, #1a1a1f),
+            conic-gradient(from 0deg at 50% 50%, rgba(255,140,0,0.28), rgba(255,69,0,0) 35%),
+            conic-gradient(from 180deg at 50% 50%, rgba(255,215,0,0.22), rgba(0,0,0,0) 40%);
+        background-blend-mode: screen;
+        box-shadow: 0 14px 28px rgba(0,0,0,0.30);
+        color: #fefefe;
+        span { color: #ffffff; font-weight: 600; }
+        mat-icon { color: #ffffff; }
+    }
+}
+
+.glacier-crest {
+    .front {
+        border-color: #7dd3fc;
+        background:
+            linear-gradient(135deg, #0f172a, #1e293b),
+            conic-gradient(from 25deg at 30% 30%, rgba(173,216,230,0.35), rgba(0,0,0,0) 40%),
+            conic-gradient(from 210deg at 70% 70%, rgba(173,216,230,0.30), rgba(0,0,0,0) 45%);
+        background-blend-mode: screen;
+        box-shadow: 0 12px 24px rgba(0,0,0,0.24);
+        color: #e6f6ff;
+        span { color: #ffffff; font-weight: 600; }
+        mat-icon { color: #ffffff; }
+    }
+}
+
+.bubblegum-bliss {
+    .front {
+        border-color: #ff69b4;
+        background:
+            linear-gradient(135deg, #ffdce6, #ffb6c1),
+            radial-gradient(circle at 25% 30%, rgba(255,255,255,0.35) 0 40%, rgba(0,0,0,0) 41%),
+            radial-gradient(circle at 35% 55%, rgba(255,182,193,0.35) 0 2.0%, rgba(0,0,0,0) 2.2%),
+            radial-gradient(circle at 55% 35%, rgba(255,182,193,0.35) 0 2.2%, rgba(0,0,0,0) 2.4%),
+            radial-gradient(circle at 70% 60%, rgba(255,182,193,0.35) 0 2.1%, rgba(0,0,0,0) 2.3%),
+            radial-gradient(circle at 45% 75%, rgba(255,182,193,0.35) 0 2.3%, rgba(0,0,0,0) 2.5%);
+        background-blend-mode: soft-light;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.18);
+        color: #7a1f3b;
+        span { color: #7a1f3b; font-weight: 600; }
+        mat-icon { color: #7a1f3b; }
+    }
+}
+
+.citrus-twist {
+    .front {
+        border-color: #ffa500;
+        background:
+            linear-gradient(135deg, #fff3cd, #ffe08a),
+            conic-gradient(from 30deg at 50% 50%, rgba(255,165,0,0.40), rgba(60,179,113,0.35), rgba(255,165,0,0.40));
+        background-blend-mode: multiply;
+        box-shadow: 0 12px 24px rgba(0,0,0,0.22);
+        color: #5a4a1f;
+        span { color: #5a4a1f; font-weight: 600; }
+        mat-icon { color: #5a4a1f; }
+    }
+}
+
+.peacock-feather {
+    .front {
+        border-color: #1abc9c;
+        background:
+            linear-gradient(135deg, #0a2a2a, #1c3a3a),
+            radial-gradient(circle at 30% 40%, rgba(0,128,128,0.35) 0 40%, rgba(0,0,0,0) 41%),
+            radial-gradient(circle at 70% 60%, rgba(128,0,128,0.30) 0 38%, rgba(0,0,0,0) 39%),
+            radial-gradient(circle at 50% 50%, rgba(255,215,0,0.28) 0 10%, rgba(0,0,0,0) 11%);
+        background-blend-mode: overlay;
+        box-shadow: 0 12px 24px rgba(0,0,0,0.24);
+        color: #e6fff6;
+        span { color: #ffffff; font-weight: 600; }
+        mat-icon { color: #ffffff; }
+    }
+}
+
+.vaporwave-grid {
+    .front {
+        border-color: #ff77aa;
+        background:
+            linear-gradient(135deg, #2b1055, #7597de);
+        background-blend-mode: screen;
+        box-shadow: 0 12px 24px rgba(0,0,0,0.24);
+        color: #fefefe;
+        span { color: #ffffff; font-weight: 600; }
+        mat-icon { color: #ffffff; }
+    }
+}
+
+.prism-veil {
+    .front {
+        border-color: #7d3cff;
+        background:
+            linear-gradient(135deg, #111216, #1a1b22),
+            linear-gradient(45deg, rgba(255,0,0,0.55), rgba(255,165,0,0.55), rgba(255,255,0,0.55), rgba(0,128,0,0.55), rgba(0,0,255,0.55), rgba(75,0,130,0.55), rgba(238,130,238,0.55));
+        background-blend-mode: soft-light;
+        box-shadow: 0 12px 24px rgba(0,0,0,0.24);
+        color: #fefefe;
+        span { color: #ffffff; font-weight: 600; }
+        mat-icon { color: #ffffff; }
+    }
+}
+
+.koi-pond {
+    .front {
+        border-color: #ff6f61;
+        background:
+            /* water base retained */
+            linear-gradient(135deg, #0f2f2f, #164b4b),
+            /* lily pads - various sizes and tones */
+            radial-gradient(circle at 28% 38%, rgba(46,139,87,0.85) 0 10%, rgba(0,0,0,0) 10.4%),
+            radial-gradient(circle at 62% 52%, rgba(34,139,34,0.80) 0 12%, rgba(0,0,0,0) 12.4%),
+            radial-gradient(circle at 44% 72%, rgba(60,179,113,0.82) 0 9%, rgba(0,0,0,0) 9.3%),
+            /* subtle highlight rings on lily pads */
+            radial-gradient(circle at 28% 38%, rgba(255,255,255,0.20) 9% 9.6%, rgba(0,0,0,0) 9.8%),
+            radial-gradient(circle at 62% 52%, rgba(255,255,255,0.18) 11% 11.6%, rgba(0,0,0,0) 11.8%),
+            radial-gradient(circle at 44% 72%, rgba(255,255,255,0.18) 8% 8.6%, rgba(0,0,0,0) 8.8%);
+        background-blend-mode: overlay;
+        box-shadow: 0 12px 24px rgba(0,0,0,0.24);
+        color: #e6fff6;
+        span { color: #ffffff; font-weight: 600; }
+        mat-icon { color: #ffffff; }
+    }
+}
+
+.foilage {
+    .front {
+        border-color: #2f7d32;
+        background:
+            repeating-linear-gradient(to right, rgba(34,139,34,0.45) 0 10px, rgba(50,205,50,0.38) 10px 20px, rgba(0,0,0,0) 20px 22px),
+            radial-gradient(circle at 8% 92%, rgba(255,255,255,0.12) 0 42%, rgba(0,0,0,0) 43%),
+            linear-gradient(135deg, #2e8b57, #1b5e20);
+        background-blend-mode: overlay;
+        box-shadow: 0 12px 24px rgba(0,0,0,0.22);
+        color: #f5f5f5;
+        span { color: #ffffff; font-weight: 600; }
+        mat-icon { color: #ffffff; }
+    }
+}
+
+.stained-glass {
+    .front {
+        border-color: #4d4d4d;
+        background:
+            repeating-conic-gradient(from 0deg at 25% 35%, rgba(255,0,0,0.55) 0 12deg, rgba(255,165,0,0.55) 12deg 24deg, rgba(255,255,0,0.55) 24deg 36deg, rgba(0,128,0,0.55) 36deg 48deg, rgba(0,0,255,0.55) 48deg 60deg, rgba(75,0,130,0.55) 60deg 72deg, rgba(238,130,238,0.55) 72deg 84deg),
+            repeating-conic-gradient(from 0deg at 75% 65%, rgba(0,128,0,0.55) 0 12deg, rgba(0,0,255,0.55) 12deg 24deg, rgba(75,0,130,0.55) 24deg 36deg, rgba(238,130,238,0.55) 36deg 48deg, rgba(255,0,0,0.55) 48deg 60deg, rgba(255,165,0,0.55) 60deg 72deg, rgba(255,255,0,0.55) 72deg 84deg);
+        background-blend-mode: screen;
+        box-shadow: 0 12px 24px rgba(0,0,0,0.24);
+        color: #f5f5f5;
+        span { color: #ffffff; font-weight: 600; }
+        mat-icon { color: #ffffff; }
+    }
+}

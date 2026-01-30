@@ -10,13 +10,13 @@ import { SolutionStatus } from '../../model/enum/solution-status.enum';
 import { MathProblem } from '../../model/interfaces/mathProblem';
 import { MatDialog } from '@angular/material/dialog';
 import { AnalyticsService } from '../../services/analytics.service';
-import { GameService } from '../../services/game.service';
-import { MathService } from '../../services/math.service';
+import { GameService } from '../../services/core/game.service';
+import { MathService } from '../../services/core/math.service';
 import { EndGameDirectives, GameDifficulties, GameModes } from '../../model/enum/game.enums';
 import { GameStatusComponent } from '../../components/dialogs/game-status/game-status.component';
 import { Router } from '@angular/router';
 import { QuiteGameComponent } from '../../components/dialogs/quite-game/quite-game.component';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/user/user.service';
 import { ProgressionUpdateRequest } from '../../model/interfaces/user/progression';
 
 @Component({

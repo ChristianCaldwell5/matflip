@@ -7,7 +7,7 @@ export interface DailyStats {
 	currentStreak: number;
 	longestStreak: number;
 	lastPlayed: Date | null;
-	timesPlayed: number;
+	totalTimesPlayed: number;
 	timesPlacedOnLeaderboard: number;
 	bestLeaderboardPosition: number | null;
 	bestTimeInSeconds: number | null;
@@ -28,6 +28,7 @@ export interface SolutionDifficulties {
 
 export interface SolutionStats {
 	totalTimesPlayed: number;
+	totalSolutionsFound: number;
 	difficultyBreakdown: SolutionDifficulties;
 }
 

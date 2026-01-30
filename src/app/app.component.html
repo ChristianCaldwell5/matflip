@@ -2,22 +2,26 @@
  <mat-drawer-container autosize>
   <mat-drawer #drawer mode="over" position="end">
     <h1 class="flippin">Menu</h1>
+    <button class="matflip-menu-btn" (click)="menuButtonRoute('/')">
+      <mat-icon>home</mat-icon>
+      Home
+    </button>
     @if (currentUser$ | async) {
       <!-- <button class="matflip-menu-btn">
         <mat-icon>people</mat-icon>
         Friends
       </button> -->
-      <button class="matflip-menu-btn">
+      <button class="matflip-menu-btn" (click)="menuButtonRoute('customize')">
+        <mat-icon>palette</mat-icon>
+        Customize
+      </button>
+      <button class="matflip-menu-btn" (click)="menuButtonRoute('stats')">
         <mat-icon>bar_chart</mat-icon>
         Stats
       </button>
       <!-- <button class="matflip-menu-btn">
-        <mat-icon>emoji_events</mat-icon>
+        <mat-icon>emoji_events</mat-icon>`
         Achievements
-      </button> -->
-      <!-- <button class="matflip-menu-btn">
-        <mat-icon>palette</mat-icon>
-        Customize
       </button> -->
       <!-- <button class="matflip-menu-btn">
         <mat-icon>store</mat-icon>
@@ -32,10 +36,10 @@
       <mat-icon>newspaper</mat-icon>
       News
     </button>
-    <button class="matflip-menu-btn">
+    <!-- <button class="matflip-menu-btn">
       <mat-icon>history</mat-icon>
       Change Log
-    </button>
+    </button> -->
     @if (!(currentUser$ | async)) {
       <div class="sign-in-zone">
         <span>You are playing as a guest.</span>
