@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, WritableSignal } from '@angular/core';
 import { UserService } from './user/user.service';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Subject, catchError, map, of, switchMap, tap } from 'rxjs';
-import { ActiveCatalog } from '../model/interfaces/customization';
+import { ActiveCatalog, buildTimelineMap, CatalogBreakdown, CatalogType } from '../model/interfaces/customization';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -14,6 +14,7 @@ export class CatalogService {
 
   private activeCatalogSubject = new BehaviorSubject<ActiveCatalog | null>(null);
   readonly activeCatalog$ = this.activeCatalogSubject.asObservable();
+  readonly catalogBreakdown: WritableSignal<CatalogBreakdown | null> = signal(null);
 
   // Adjust these endpoints to match your API
   private readonly catalogPath= '/catalog';
@@ -84,6 +85,7 @@ export class CatalogService {
       tap(catalog => {
         this.saveToCache(catalog);
         this.activeCatalogSubject.next(catalog);
+        this.breakdownActiveCatalog(catalog);
       }),
       catchError(() =>  of(null))
     );
@@ -106,12 +108,14 @@ export class CatalogService {
       if (!raw || !version || !requestedAtRaw) {
         return null;
       }
-      return { 
+      const activeCatalog: ActiveCatalog = {
         name: parsed?.name ?? '', 
         items: parsed?.items ?? [], 
         version, 
         requestedAt: new Date(requestedAtRaw)
       };
+      this.breakdownActiveCatalog(activeCatalog);
+      return activeCatalog
     } catch {
       return null;
     }
@@ -120,6 +124,20 @@ export class CatalogService {
   private isStale(requestedAt: number | null | undefined): boolean {
     if (!requestedAt) return true;
     return Date.now() - requestedAt > CatalogService.MAX_AGE_MS;
+  }
+
+  private breakdownActiveCatalog(catalog: ActiveCatalog) {
+    const skins = catalog.items.filter(i => i.type === CatalogType.CARD_SKIN);
+    const effects = catalog.items.filter(i => i.type === CatalogType.MATCH_EFFECT);
+    const titles = catalog.items.filter(i => i.type === CatalogType.TITLE);
+    const timeline = buildTimelineMap(catalog.items);
+    console.log('Catalog Breakdown:', { skins, effects, titles, timeline });
+    this.catalogBreakdown.set({
+      skins,
+      effects,
+      titles,
+      timeline
+    });
   }
 
   clearCatalogCache() {

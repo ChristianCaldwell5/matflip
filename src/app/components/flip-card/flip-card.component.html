@@ -1,4 +1,4 @@
-<div class="flip-card-container default-skin" [class.flipped]="flipped">
+<div class="flip-card-container {{ styleRecipe ?? 'default-skin' }}" [class.flipped]="flipped">
   <mat-card
     class="flip-card front"
     [appearance]="'outlined'"

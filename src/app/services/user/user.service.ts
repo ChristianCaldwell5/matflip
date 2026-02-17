@@ -7,6 +7,7 @@ import { UserProfile } from '../../model/interfaces/user/user-profile';
 import { AnalyticsService } from '../analytics.service';
 import { BreakdownType, ProgressionBreakdown, ProgressionUpdateRequest, ProgressionUpdateResponse } from '../../model/interfaces/user/progression';
 import { GameDifficulties, GameModes } from '../../model/enum/game.enums';
+import { CurrentCustomizationSelects } from '../../model/interfaces/customization';
 
 @Injectable({
   providedIn: 'root'
@@ -73,6 +74,22 @@ export class UserService {
       }),
       catchError((error) => {
         console.error('Error updating user progression:', error);
+        return of(null);
+      })
+    );
+  }
+
+  updateUserCustomization(customizationSelects: CurrentCustomizationSelects): Observable<UserProfile | null> {
+    // indicate loading started
+    this.userLoadingSubject.next(true);
+    return this.http.post<UserProfile>(`${environment.matFlipApiBaseUrl}/users/customization`, customizationSelects, { withCredentials: true }).pipe(
+      finalize(() => this.userLoadingSubject.next(false)),
+      tap((updatedUser: UserProfile) => {
+        console.log('User customization updated:', updatedUser);
+        this.userSubject.next(updatedUser);
+      }),
+      catchError((error) => {
+        console.error('Error updating user customization:', error);
         return of(null);
       })
     );

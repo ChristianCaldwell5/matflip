@@ -1,5 +1,6 @@
 @use '@angular/material' as mat;
 @use '../../../assets/style-recipes/static-skins.scss' as staticSkins;
+@use '../../../assets/style-recipes/animated-skins.scss' as animatedSkins;
 @import '../../../styles.scss';
 @include mat.core();
 

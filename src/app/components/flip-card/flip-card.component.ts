@@ -17,6 +17,7 @@ export class FlipCardComponent implements OnInit {
   @Input() flipped: boolean = false;
   @Input() matched: boolean = false;
   @Input() displayText?: string;
+  @Input() styleRecipe?: string;
   @Input() index?: number;
 
   constructor() { }

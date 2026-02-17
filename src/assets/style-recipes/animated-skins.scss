@@ -1,0 +1,285 @@
+@use '@angular/material' as mat;
+@use '../../styles.scss' as *;
+
+@keyframes prismShift {
+  0%   { background-position: center center, 0% 100%; }
+  100% { background-position: center center, 100% 0%; }
+}
+
+@keyframes prismHue {
+  0%   { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+// Molten gold: layered radial blobs drifting diagonally with a subtle rotating highlight
+@keyframes goldLavaDrift {
+  0%   { background-position: center center, 0% 100%, 100% 0%, 50% 0%, 25% 75%; }
+  50%  { background-position: center center, 50% 50%, 0% 100%, 100% 0%, 75% 25%; }
+  100% { background-position: center center, 100% 0%, 0% 100%, 50% 100%, 25% 25%; }
+}
+
+@keyframes goldSwirl {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes goldPulse {
+  0%, 100% { transform: scale(1); opacity: 0.75; }
+  50%      { transform: scale(1.05); opacity: 1; }
+}
+
+/* Slight rotational tilt to enhance background motion */
+@keyframes goldTilt {
+  0%   { transform: rotate(-1.2deg); }
+  100% { transform: rotate(1.2deg); }
+}
+
+/* Pulse molten layers by varying background-size for more motion */
+@keyframes goldLayersPulse {
+  0% {
+    background-size: auto, 200% 200%, 180% 180%, 220% 220%, 160% 160%, 240% 240%, 200% 200%, 180% 180%;
+  }
+  50% {
+    background-size: auto, 340% 340%, 320% 320%, 380% 380%, 300% 300%, 400% 400%, 360% 360%, 320% 320%;
+  }
+  100% {
+    background-size: auto, 200% 200%, 180% 180%, 220% 220%, 160% 160%, 240% 240%, 200% 200%, 180% 180%;
+  }
+}
+
+/* Fade tones of dark/light gold for richer dynamics */
+@keyframes goldToneFade {
+  0%   { filter: saturate(1) brightness(1); }
+  50%  { filter: saturate(1.30) brightness(1.15); }
+  100% { filter: saturate(1) brightness(1); }
+}
+
+/* Shimmer specs fade in/out */
+@keyframes specsShimmer {
+  0%, 100% { opacity: 0.08; }
+  40%      { opacity: 0.95; }
+  50%      { opacity: 1; }
+  60%      { opacity: 0.95; }
+}
+
+/* Second shimmer with shorter cycle and longer peak holds */
+@keyframes specsShimmerAlt {
+  0%, 100% { opacity: 0.04; }
+  30%      { opacity: 0.85; }
+  40%      { opacity: 1; }
+  60%      { opacity: 1; }
+  70%      { opacity: 0.85; }
+}
+
+/* Edge glint pulsing for a third subtle shimmer cue */
+@keyframes edgeShimmer {
+  0%, 100% { box-shadow: 0 24px 48px rgba(0,0,0,0.45), inset 0 8px 16px rgba(0,0,0,0.25), inset 0 -8px 16px rgba(0,0,0,0.22); }
+  50%      { box-shadow: 0 28px 60px rgba(0,0,0,0.50), inset 0 10px 18px rgba(0,0,0,0.28), inset 0 -10px 18px rgba(0,0,0,0.26); }
+}
+
+.epic-card-skin-veiled-prism {
+  .front {
+    border-color: #7d3cff;
+    background:
+      linear-gradient(135deg, #111216, #1a1b22),
+      linear-gradient(45deg,
+        rgba(255, 0, 0, 0.55),
+        rgba(255, 165, 0, 0.55),
+        rgba(255, 255, 0, 0.55),
+        rgba(0, 128, 0, 0.55),
+        rgba(0, 0, 255, 0.55),
+        rgba(75, 0, 130, 0.55),
+        rgba(238, 130, 238, 0.55)
+      );
+    background-blend-mode: soft-light;
+    /* Enlarge and drift the rainbow layer to simulate slow motion */
+    background-size: auto, 800% 800%;
+    background-position: center center, 0% 100%;
+    animation: prismShift 20s linear infinite alternate, prismHue 40s linear infinite alternate;
+    will-change: background-position, filter;
+
+    box-shadow: 0 12px 24px rgba(0,0,0,0.24);
+    color: #fefefe;
+    span { color: #ffffff; font-weight: 600; }
+    mat-icon { color: #ffffff; }
+  }
+}
+
+/* Neural Network skin animations */
+@keyframes neuralWave {
+  0%   { background-position: center center, center center, 0% 50%; }
+  50%  { background-position: center center, center center, 100% 50%; }
+  100% { background-position: center center, center center, 0% 50%; }
+}
+
+@keyframes neuronsFlyRight {
+  0%   { transform: translate(-20%, 0) scale(1); opacity: 0.6; }
+  50%  { transform: translate(20%, -5%) scale(1.05); opacity: 1; }
+  100% { transform: translate(60%, -10%) scale(1.08); opacity: 0.8; }
+}
+
+@keyframes neuronsFlyLeft {
+  0%   { transform: translate(20%, 0) scale(1); opacity: 0.6; }
+  50%  { transform: translate(-20%, 5%) scale(1.05); opacity: 1; }
+  100% { transform: translate(-60%, 10%) scale(1.08); opacity: 0.8; }
+}
+
+@keyframes neuronPulse {
+  0%, 100% { filter: brightness(1) saturate(1); }
+  50%      { filter: brightness(1.25) saturate(1.2); }
+}
+
+.legendary-card-skin-neural-network {
+  .front {
+    position: relative;
+    overflow: hidden;
+    border-color: #6c7ae0; /* soft indigo frame */
+    background:
+      /* base calm blue/purple foundation */
+      linear-gradient(135deg, #0e1024, #1a1e3f),
+      radial-gradient(ellipse at 50% 50%, rgba(59,130,246,0.18), rgba(147,51,234,0.18)),
+      linear-gradient(135deg, #3b82f6, #9333ea);
+    background-blend-mode: normal, soft-light, overlay;
+    background-size: auto, 200% 200%, 400% 400%;
+    background-position: center center, center center, 0% 50%;
+    animation: neuralWave 30s linear infinite alternate;
+    box-shadow: 0 16px 32px rgba(0,0,0,0.30);
+    color: #f5f7ff;
+    span { color: #f5f7ff; font-weight: 600; }
+    mat-icon { color: #f5f7ff; }
+
+    /* Fast neurons: pinkish particle field flying right */
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -20%;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(255,128,170,0.85) 0 1.0%, rgba(0,0,0,0) 1.2%),
+        radial-gradient(circle at 22% 35%, rgba(255,98,158,0.80) 0 0.9%, rgba(0,0,0,0) 1.1%),
+        radial-gradient(circle at 34% 50%, rgba(255,128,170,0.88) 0 1.0%, rgba(0,0,0,0) 1.2%),
+        radial-gradient(circle at 46% 65%, rgba(255,98,158,0.82) 0 0.9%, rgba(0,0,0,0) 1.1%),
+        radial-gradient(circle at 58% 40%, rgba(255,128,170,0.86) 0 1.0%, rgba(0,0,0,0) 1.2%),
+        radial-gradient(circle at 70% 55%, rgba(255,98,158,0.84) 0 0.9%, rgba(0,0,0,0) 1.1%),
+        radial-gradient(circle at 82% 30%, rgba(255,128,170,0.90) 0 1.0%, rgba(0,0,0,0) 1.2%),
+        radial-gradient(circle at 94% 45%, rgba(255,98,158,0.88) 0 0.9%, rgba(0,0,0,0) 1.1%);
+      mix-blend-mode: screen;
+      filter: blur(1px) drop-shadow(0 0 6px rgba(255,128,170,0.65));
+      will-change: transform, opacity;
+      animation: neuronsFlyRight 4s linear infinite alternate, neuronPulse 1.8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    /* Second layer: counterflow neurons for intensity */
+    &::after {
+      content: '';
+      position: absolute;
+      inset: -22%;
+      background:
+        radial-gradient(circle at 15% 70%, rgba(255,128,170,0.80) 0 0.8%, rgba(0,0,0,0) 1.0%),
+        radial-gradient(circle at 28% 52%, rgba(255,98,158,0.78) 0 0.7%, rgba(0,0,0,0) 0.9%),
+        radial-gradient(circle at 42% 24%, rgba(255,128,170,0.82) 0 0.8%, rgba(0,0,0,0) 1.0%),
+        radial-gradient(circle at 55% 76%, rgba(255,98,158,0.80) 0 0.7%, rgba(0,0,0,0) 0.9%),
+        radial-gradient(circle at 68% 38%, rgba(255,128,170,0.86) 0 0.9%, rgba(0,0,0,0) 1.1%),
+        radial-gradient(circle at 82% 82%, rgba(255,98,158,0.84) 0 0.8%, rgba(0,0,0,0) 1.0%),
+        radial-gradient(circle at 92% 26%, rgba(255,128,170,0.88) 0 0.9%, rgba(0,0,0,0) 1.1%);
+      mix-blend-mode: screen;
+      filter: blur(1px) drop-shadow(0 0 6px rgba(255,128,170,0.55));
+      will-change: transform, opacity;
+      animation: neuronsFlyLeft 4.6s linear infinite alternate, neuronPulse 2.2s ease-in-out infinite;
+      pointer-events: none;
+    }
+  }
+}
+
+.legendary-card-skin-molten-gold {
+  .front {
+    position: relative;
+    overflow: hidden;
+    border-color: #8a6f2a;
+    background:
+      /* base metallic gradient */
+      linear-gradient(135deg, #2a1f08, #c2961a),
+      /* molten blobs (multiple radial layers) */
+      radial-gradient(circle, rgba(255, 215, 0, 0.32) 0 28%, rgba(0,0,0,0) 30%),
+      radial-gradient(circle, rgba(255, 204, 0, 0.28) 0 26%, rgba(0,0,0,0) 28%),
+      radial-gradient(circle, rgba(255, 179, 0, 0.24) 0 24%, rgba(0,0,0,0) 26%),
+      radial-gradient(circle, rgba(212, 175, 55, 0.22) 0 22%, rgba(0,0,0,0) 24%),
+      radial-gradient(circle, rgba(255, 209, 102, 0.20) 0 20%, rgba(0,0,0,0) 22%),
+      radial-gradient(circle, rgba(255, 238, 170, 0.18) 0 18%, rgba(0,0,0,0) 20%),
+      radial-gradient(circle, rgba(184, 134, 11, 0.18) 0 16%, rgba(0,0,0,0) 18%);
+    background-blend-mode: normal, overlay, overlay, overlay, overlay, overlay, overlay, overlay;
+    background-size: auto, 200% 200%, 180% 180%, 220% 220%, 160% 160%, 240% 240%, 200% 200%, 180% 180%;
+    background-position: center center, 0% 100%, 100% 0%, 50% 0%, 25% 75%, 75% 25%, 10% 40%, 40% 10%;
+    animation: goldLavaDrift 6s ease-in-out infinite alternate, goldLayersPulse 6s ease-in-out infinite, goldToneFade 7s ease-in-out infinite, edgeShimmer 5s ease-in-out infinite;
+    will-change: background-position, background-size, filter;
+    box-shadow: 0 24px 48px rgba(0,0,0,0.45), inset 0 8px 16px rgba(0,0,0,0.25), inset 0 -8px 16px rgba(0,0,0,0.22);
+    color: #ffffff;
+    span { color: #ffffff; font-weight: 600; }
+    mat-icon { color: #ffffff; }
+
+    /* subtle rotating highlight to enhance liquid feel */
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -12%;
+      background:
+        /* rotating highlight */
+        conic-gradient(from 0deg at 50% 50%,
+          rgba(255, 209, 102, 0.18) 0deg 20deg,
+          rgba(212, 175, 55, 0.14) 20deg 40deg,
+          rgba(255, 215, 0, 0.16) 40deg 60deg,
+          rgba(184, 134, 11, 0.12) 60deg 80deg,
+          rgba(0,0,0,0) 80deg 120deg,
+          rgba(255, 209, 102, 0.18) 120deg 140deg,
+          rgba(212, 175, 55, 0.14) 140deg 160deg,
+          rgba(255, 215, 0, 0.16) 160deg 180deg,
+          rgba(184, 134, 11, 0.12) 180deg 200deg,
+          rgba(0,0,0,0) 200deg 240deg,
+          rgba(255, 209, 102, 0.18) 240deg 260deg,
+          rgba(212, 175, 55, 0.14) 260deg 280deg,
+          rgba(255, 215, 0, 0.16) 280deg 300deg,
+          rgba(184, 134, 11, 0.12) 300deg 320deg,
+          rgba(0,0,0,0) 320deg 360deg),
+        /* second shimmer spec overlay */
+        radial-gradient(circle at 20% 30%, rgba(255,255,255,0.34) 0 0.6%, rgba(0,0,0,0) 0.8%),
+        radial-gradient(circle at 28% 66%, rgba(255,255,255,0.30) 0 0.7%, rgba(0,0,0,0) 0.9%),
+        radial-gradient(circle at 48% 22%, rgba(255,255,255,0.32) 0 0.6%, rgba(0,0,0,0) 0.8%),
+        radial-gradient(circle at 62% 58%, rgba(255,255,255,0.29) 0 0.7%, rgba(0,0,0,0) 0.9%),
+        radial-gradient(circle at 78% 36%, rgba(255,255,255,0.33) 0 0.6%, rgba(0,0,0,0) 0.8%),
+        radial-gradient(circle at 86% 72%, rgba(255,255,255,0.31) 0 0.7%, rgba(0,0,0,0) 0.9%);
+      mix-blend-mode: overlay, screen;
+      filter: blur(10px) brightness(1.08);
+      animation: goldSwirl 20s linear infinite, goldPulse 6s ease-in-out infinite, goldTilt 12s ease-in-out infinite alternate, specsShimmerAlt 2.4s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    /* sparkling micro-highlights for prestige */
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 10% 18%, rgba(255,255,255,0.38) 0 0.6%, rgba(0,0,0,0) 0.8%),
+        radial-gradient(circle at 14% 32%, rgba(255,255,255,0.33) 0 0.7%, rgba(0,0,0,0) 0.9%),
+        radial-gradient(circle at 20% 54%, rgba(255,255,255,0.36) 0 0.6%, rgba(0,0,0,0) 0.8%),
+        radial-gradient(circle at 26% 74%, rgba(255,255,255,0.31) 0 0.7%, rgba(0,0,0,0) 0.9%),
+        radial-gradient(circle at 32% 22%, rgba(255,255,255,0.35) 0 0.6%, rgba(0,0,0,0) 0.8%),
+        radial-gradient(circle at 40% 48%, rgba(255,255,255,0.37) 0 0.6%, rgba(0,0,0,0) 0.8%),
+        radial-gradient(circle at 46% 12%, rgba(255,255,255,0.30) 0 0.7%, rgba(0,0,0,0) 0.9%),
+        radial-gradient(circle at 54% 58%, rgba(255,255,255,0.39) 0 0.6%, rgba(0,0,0,0) 0.8%),
+        radial-gradient(circle at 60% 28%, rgba(255,255,255,0.34) 0 0.7%, rgba(0,0,0,0) 0.9%),
+        radial-gradient(circle at 66% 70%, rgba(255,255,255,0.36) 0 0.6%, rgba(0,0,0,0) 0.8%),
+        radial-gradient(circle at 74% 38%, rgba(255,255,255,0.35) 0 0.7%, rgba(0,0,0,0) 0.9%),
+        radial-gradient(circle at 82% 62%, rgba(255,255,255,0.37) 0 0.6%, rgba(0,0,0,0) 0.8%),
+        radial-gradient(circle at 88% 28%, rgba(255,255,255,0.34) 0 0.7%, rgba(0,0,0,0) 0.9%),
+        radial-gradient(circle at 92% 76%, rgba(255,255,255,0.38) 0 0.6%, rgba(0,0,0,0) 0.8%),
+        radial-gradient(circle at 16% 82%, rgba(255,255,255,0.33) 0 0.7%, rgba(0,0,0,0) 0.9%),
+        radial-gradient(circle at 38% 60%, rgba(255,255,255,0.36) 0 0.6%, rgba(0,0,0,0) 0.8%),
+        radial-gradient(circle at 70% 84%, rgba(255,255,255,0.32) 0 0.7%, rgba(0,0,0,0) 0.9%);
+      mix-blend-mode: screen;
+      filter: brightness(1.25) contrast(1.1) drop-shadow(0 0 6px rgba(255,255,255,0.25));
+      animation: specsShimmer 3s cubic-bezier(.4,0,.2,1) infinite, goldPulse 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+  }
+}

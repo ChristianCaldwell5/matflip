@@ -21,7 +21,7 @@
     }
 }
 
-.cosmic-brownie {
+.epic-card-skin-space-brownie {
     .front {
         border-color: #3a1f12;
         background:
@@ -53,7 +53,7 @@
     }
 }
 
-.ice-shards {
+.uncommon-card-skin-ice-shard {
     .front {
         border-color: mat.m2-get-color-from-palette($mint-green-palette, 300);
         background:
@@ -68,7 +68,7 @@
     }
 }
 
-.aurora-wave {
+.uncommon-card-skin-aurora {
     .front {
         border-color: mat.m2-get-color-from-palette($mint-green-palette, 300);
         background:
@@ -83,7 +83,7 @@
     }
 }
 
-.galaxy-dust {
+.rare-card-skin-starry-night {
     .front {
         border-color: mat.m2-get-color-from-palette($soft-white-palette, 200);
         background:
@@ -144,7 +144,7 @@
     }
 }
 
-.royal-velvet {
+.rare-card-skin-royalty {
     .front {
         border-color: #9b111e;
         background:
@@ -159,7 +159,7 @@
     }
 }
 
-.pixel-confetti {
+.rare-card-skin-pixel-confetti {
     .front {
         border-color: mat.m2-get-color-from-palette($soft-white-palette, 200);
         background:
@@ -211,7 +211,7 @@
     }
 }
 
-.golden-sunburst {
+.common-card-skin-sunset-glow {
     .front {
         border-color: mat.m2-get-color-from-palette($coral-palette, 400);
         background:
@@ -224,7 +224,7 @@
         mat-icon { color: white; }
     }
 }
-.cotton-candy-classic {
+.common-card-skin-sherbert-mist {
     .front {
         border-color: mat.m2-get-color-from-palette($soft-white-palette, 200);
         $b1: mat.m2-get-color-from-palette($coral-palette, 200);
@@ -245,7 +245,7 @@
     }
 }
 
-.cotton-candy-swirl {
+.common-card-skin-pastel-swirl {
     .front {
         border-color: mat.m2-get-color-from-palette($lavender-palette, 300);
         background:
@@ -267,7 +267,7 @@
     }
 }
 
-.acid-green-bubbles {
+.rare-card-skin-acidic {
     .front {
         border-color: mat.m2-get-color-from-palette($mint-green-palette, 500);
         $g1: mat.m2-get-color-from-palette($mint-green-palette, 200);
@@ -327,7 +327,7 @@
     }
 }
 
-.candy-cane {
+.rare-card-skin-candy-cane {
     .front {
         border-color: mat.m2-get-color-from-palette($coral-palette, 400);
         $red: mat.m2-get-color-from-palette($coral-palette, 500);
@@ -341,7 +341,7 @@
     }
 }
 
-.spearmint-cane {
+.rare-card-skin-spearmint {
     .front {
         border-color: mat.m2-get-color-from-palette($mint-green-palette, 400);
         $mint: mat.m2-get-color-from-palette($mint-green-palette, 500);
@@ -355,7 +355,7 @@
     }
 }
 
-.oil-spill {
+.rare-card-skin-oil-sheen {
     .front {
         border-color: #2a2a2a;
         background:
@@ -372,43 +372,8 @@
     }
 }
 
-.rainbow-burst {
-    .front {
-        border-color: #7d3cff;
-        background:
-            linear-gradient(135deg, #101014, #191922),
-            radial-gradient(ellipse at 18% 32%, rgba(255,0,0,0.45) 0 40%, rgba(0,0,0,0) 42%),
-            radial-gradient(ellipse at 35% 65%, rgba(255,127,0,0.40) 0 38%, rgba(0,0,0,0) 40%),
-            radial-gradient(ellipse at 52% 30%, rgba(255,255,0,0.36) 0 36%, rgba(0,0,0,0) 38%),
-            radial-gradient(ellipse at 68% 62%, rgba(0,255,0,0.40) 0 38%, rgba(0,0,0,0) 40%),
-            radial-gradient(ellipse at 82% 28%, rgba(0,0,255,0.42) 0 42%, rgba(0,0,0,0) 44%),
-            radial-gradient(ellipse at 30% 80%, rgba(75,0,130,0.38) 0 36%, rgba(0,0,0,0) 38%),
-            radial-gradient(ellipse at 75% 85%, rgba(148,0,211,0.38) 0 34%, rgba(0,0,0,0) 36%);
-        background-blend-mode: soft-light;
-        box-shadow: 0 12px 24px rgba(0,0,0,0.24);
-        color: #f5f5f5;
-        span { color: #ffffff; font-weight: 600; }
-        mat-icon { color: #ffffff; }
-    }
-}
 
-.gilded {
-    .front {
-        border-color: #8a6f2a;
-        background:
-            linear-gradient(135deg, #d4af37, #b8860b),
-            radial-gradient(circle at 35% 25%, rgba(255,255,255,0.18) 0 48%, rgba(0,0,0,0) 50%),
-            repeating-linear-gradient(22deg, rgba(255,255,255,0.08) 0 2px, rgba(255,255,255,0) 2px 10px),
-            repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,255,255,0.05) 0 10deg, rgba(0,0,0,0) 10deg 20deg);
-        background-blend-mode: overlay;
-        box-shadow: 0 18px 36px rgba(0,0,0,0.34);
-        color: #ffffff;
-        span { color: #ffffff; font-weight: 600; }
-        mat-icon { color: #ffffff; }
-    }
-}
-
-.ocean {
+.rare-card-skin-water-droplets {
     .front {
         border-color: #1282a2;
         background:
@@ -424,7 +389,7 @@
     }
 }
 
-.static-tv {
+.rare-card-skin-tv-static {
     .front {
         border-color: #4a4a4a;
         background:
@@ -438,7 +403,7 @@
     }
 }
 
-.snickerdoodle {
+.epic-card-skin-snickerdoodle {
     .front {
         border-color: #9b4f2a;
         background:
@@ -494,7 +459,7 @@
     }
 }
 
-.ember-glow {
+.epic-card-skin-gilded {
     .front {
         border-color: #ff8c00;
         background:
@@ -509,7 +474,7 @@
     }
 }
 
-.glacier-crest {
+.uncommon-card-skin-steel-sweep {
     .front {
         border-color: #7dd3fc;
         background:
@@ -524,7 +489,7 @@
     }
 }
 
-.bubblegum-bliss {
+.common-card-skin-bubblegum-pop {
     .front {
         border-color: #ff69b4;
         background:
@@ -542,7 +507,7 @@
     }
 }
 
-.citrus-twist {
+.common-card-skin-citrus-twist {
     .front {
         border-color: #ffa500;
         background:
@@ -556,7 +521,7 @@
     }
 }
 
-.peacock-feather {
+.uncommon-card-skin-peacock-feather {
     .front {
         border-color: #1abc9c;
         background:
@@ -572,7 +537,7 @@
     }
 }
 
-.vaporwave-grid {
+.common-card-skin-vaporized {
     .front {
         border-color: #ff77aa;
         background:
@@ -585,21 +550,7 @@
     }
 }
 
-.prism-veil {
-    .front {
-        border-color: #7d3cff;
-        background:
-            linear-gradient(135deg, #111216, #1a1b22),
-            linear-gradient(45deg, rgba(255,0,0,0.55), rgba(255,165,0,0.55), rgba(255,255,0,0.55), rgba(0,128,0,0.55), rgba(0,0,255,0.55), rgba(75,0,130,0.55), rgba(238,130,238,0.55));
-        background-blend-mode: soft-light;
-        box-shadow: 0 12px 24px rgba(0,0,0,0.24);
-        color: #fefefe;
-        span { color: #ffffff; font-weight: 600; }
-        mat-icon { color: #ffffff; }
-    }
-}
-
-.koi-pond {
+.uncommon-card-skin-koi-pond {
     .front {
         border-color: #ff6f61;
         background:
@@ -621,7 +572,7 @@
     }
 }
 
-.foilage {
+.uncommon-card-skin-fairway {
     .front {
         border-color: #2f7d32;
         background:
@@ -636,7 +587,7 @@
     }
 }
 
-.stained-glass {
+.epic-card-skin-light-fracture {
     .front {
         border-color: #4d4d4d;
         background:
