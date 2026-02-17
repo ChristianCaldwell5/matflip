@@ -11,6 +11,7 @@ import { FlipCardComponent } from '../flip-card/flip-card.component';
 export class CardRegionComponent {
 
   @Input() cards: card[] = [];
+  @Input() styleRecipe?: string;
   @Input() disableFlip: boolean = false;
 
   @Output() cardFlipped = new EventEmitter<number>();

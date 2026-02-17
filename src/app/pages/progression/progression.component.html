@@ -1,1 +1,101 @@
-<p>progression works!</p>
+@if ((currentUser$ | async); as user) {
+    <div class="progression-container">
+        <button mat-button color="accent" class="mt--1" (click)="goToMenu()">
+            <mat-icon>arrow_back</mat-icon>
+            Return to menu
+        </button>
+        <h1 class="mt--half">Progression</h1>
+        <p class="mt--0">Current level: {{ user?.levelInfo?.currentLevel }}</p>
+        <p>Earn rewards for reaching the following levels:</p>
+        <div class="row">
+            <span>Level</span>
+        </div>
+        <div class="timeline">
+            @for (item of catalogBreakdown()?.timeline; track $index) {
+                <div class="timeline-segment">
+                    <div 
+                        class="timeline-visual" 
+                        [ngClass]="{
+                            'timeline-visual-start': $index === 0, 
+                            'timeline-visual-end': $index === catalogBreakdown()?.timeline!.size - 1,
+                            'timeline-visual-current': item[0] === user?.levelInfo?.currentLevel,
+                            'timeline-visual-achieved': user?.levelInfo && item[0] <= user.levelInfo!.currentLevel}"
+                    ></div>
+                    <mat-icon>{{ item[0] <= user.levelInfo!.currentLevel ? 'lock_open' : 'lock' }}</mat-icon>
+                    <div class="timeline-content">
+                        @if (item[1].titles.length > 0) {
+                            <div class="timeline-row">
+                                <span class="tw--bold">Title: </span>
+                                @for (title of item[1].titles; track title) {
+                                    <span>{{ title.displayName }}</span>
+                                }
+                            </div>
+                        }
+                        @if (item[1].skins.length > 0) {
+                            <div class="timeline-row">
+                                <span class="tw--bold">Skin: </span>
+                                @for (skin of item[1].skins; track skin) {
+                                    <div class="flip-card-container mr--1" [ngClass]="skin.styleRecipe">
+                                        <mat-card class="flip-card front" [appearance]="'outlined'">
+                                        </mat-card>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                    <div class="point" [ngClass]="item[0] <= user.levelInfo!.currentLevel ? 'point--achieved' : ''">{{ item[0] }}</div>
+                </div>
+        }
+        <!-- <div class="timeline-segment">
+                <div class="timeline-visual timeline-visual-achieved timeline-visual-start"></div>
+                <mat-icon>lock_open</mat-icon>
+                <div class="timeline-content">
+                    <div class="timeline-row">
+                        <span class="tw--bold">Skin: </span>
+                        <div class="flip-card-container" [ngClass]="'default-skin'">
+                            <mat-card class="flip-card front" [appearance]="'outlined'">
+                            </mat-card>
+                        </div>
+                    </div>
+                </div>
+                <div class="point point--achieved">1</div>
+            </div>
+            <div class="timeline-segment">
+                <div class="timeline-visual timeline-visual-current"></div>
+                <mat-icon>lock_open</mat-icon>
+                <div class="timeline-content">
+                    <div class="timeline-row">
+                        <span class="tw--bold">Title: </span>
+                        <span>Prestigious</span>
+                    </div>
+                    <div class="timeline-row">
+                        <span class="tw--bold">Skin: </span>
+                        <div class="flip-card-container" [ngClass]="'default-skin'">
+                            <mat-card class="flip-card front" [appearance]="'outlined'">
+                            </mat-card>
+                        </div>
+                    </div>
+                </div>
+                <div class="point point--achieved">2</div>
+            </div>
+            <div class="timeline-segment">
+                <div class="timeline-visual timeline-visual-end"></div>
+                <mat-icon>lock</mat-icon>
+                <div class="timeline-content">
+                    <div class="timeline-row">
+                        <span class="tw--bold">Title: </span>
+                        <span>Prestigious</span>
+                    </div>
+                    <div class="timeline-row">
+                        <span class="tw--bold">Skin: </span>
+                        <div class="flip-card-container" [ngClass]="'default-skin'">
+                            <mat-card class="flip-card front" [appearance]="'outlined'">
+                            </mat-card>
+                        </div>
+                    </div>
+                </div>
+                <div class="point">4</div>
+            </div> -->
+        </div>
+    </div>
+}

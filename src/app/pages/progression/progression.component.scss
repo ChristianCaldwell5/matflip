@@ -1,0 +1,116 @@
+@use '@angular/material' as mat;
+@use '../../components/flip-card/flip-card.component.scss' as flipCard;
+@use '../../../assets/style-recipes/static-skins.scss';
+@use '../../../assets/style-recipes/animated-skins.scss';
+@import '../../../styles.scss';
+@include mat.core();
+
+// Shared dimension for the timeline visual and point/icon
+$timeline-visual-width: 2rem;
+
+.progression-container {
+    min-height: 100vh;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0.5rem;
+
+    .timeline {
+
+        display: flex;
+        flex-direction: column;
+
+        .timeline-segment {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            position: relative; // anchor for absolutely positioned .point
+
+            p.level {
+                font-weight: bold;
+                margin: 0 1rem;
+            }
+
+            .point {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: absolute;
+                left: calc(1rem + 2px);
+                top: 50%;
+                transform: translate(-50%, -50%);
+                width: $timeline-visual-width;
+                height: $timeline-visual-width; // height equals full width of timeline-visual
+                z-index: 1;
+                font-size: 1.5rem;
+                border: 2px solid black;
+                border-radius: 50%;
+                background-color: #f5f4ef;
+
+                &--achieved {
+                    background-color: mat.m2-get-color-from-palette($mint-green-palette, 200) !important;
+                }
+            }
+        }
+        
+        .timeline-visual {
+            width: 2rem;
+            border-left: 2px solid black;
+            border-right: 2px solid black;
+            height: auto;
+            align-self: stretch;
+
+            &-start {
+                border-top: 2px solid black;
+                border-top-left-radius: 0.5rem;
+                border-top-right-radius: 0.5rem;
+            }
+
+            &-end {
+                border-bottom: 2px solid black;
+                border-bottom-left-radius: 0.5rem;
+                border-bottom-right-radius: 0.5rem;
+            }
+
+            &-achieved {
+                background-color: mat.m2-get-color-from-palette($mint-green-palette, 200);
+            }
+
+            &-current {
+                background: linear-gradient(
+                    to bottom,
+                    mat.m2-get-color-from-palette($mint-green-palette, 200) 0%,
+                    mat.m2-get-color-from-palette($mint-green-palette, 200) 50%,
+                    transparent 50%,
+                    transparent 100%
+                );
+            }
+        }
+
+        .timeline-content {
+            padding: 2rem 1rem;
+
+            .timeline-row {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                border-bottom: 1px solid gray;
+                padding: 0.5rem 0;
+
+                span {
+                    display: inline-block;
+                    margin-right: 0.5rem;
+                }
+            }
+
+            .timeline-row:last-child {
+                border-bottom: none;
+            }
+
+            // steal flip card container bits and styles to mimic look and feel
+            .flip-card-container {
+                max-width: 6rem !important;
+                @extend .flip-card-container !optional;
+            }
+        }
+    }
+}

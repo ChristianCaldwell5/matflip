@@ -9,7 +9,8 @@
     </div>
     <!-- card display area -->
     <app-card-region 
-    [cards]="cards" 
+    [cards]="cards"
+    [styleRecipe]="styleRecipe"
     [disableFlip]="disableFlip" 
     (cardFlipped)="onCardFlipped($event)">
     </app-card-region>

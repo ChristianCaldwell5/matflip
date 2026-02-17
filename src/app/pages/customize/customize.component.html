@@ -8,7 +8,7 @@
         <div class="current-selects">
             <h3 class="mt--half">{{ user.displayName }} <span>- Match Maker {{ user.currentCustomizationSelects?.title }}</span></h3>
             <div class="row">
-                <div class="flip-card-container default-skin">
+                <div class="flip-card-container" [ngClass]="cardSkinChange?.styleRecipe ?? savedSkin?.styleRecipe ?? 'default-skin'">
                     <mat-card
                         class="flip-card front"
                         [appearance]="'outlined'"
@@ -18,11 +18,11 @@
                 <div class="current-selects-container">
                     <div class="row aa--center">
                         <mat-icon>chevron_left</mat-icon>
-                        <span>Skin: {{ user.currentCustomizationSelects?.cardSkin ?? 'Default' }}</span>
+                        <span>Skin: {{ cardSkinChange?.displayName ?? savedSkin?.displayName ?? 'Default' }}</span>
                     </div>
                     <div class="row aa--center mt--half">
                         <mat-icon>chevron_left</mat-icon>
-                        <span>Effect: {{ user.currentCustomizationSelects?.matchEffect ?? 'None' }}</span>
+                        <span>Effect: {{ matchEffectChange?.displayName ?? savedMatchEffect?.displayName ?? 'None' }}</span>
                     </div>
                 </div>
             </div>
@@ -53,27 +53,19 @@
                     @if (selectedTabIndex === 0) {
                         <div class="square-grid">
                             @for (item of cardSkinItems; track item.name) {
-                                <div class="flip-card-container" [ngClass]="item.styleRecipe">
+                                <div class="flip-card-container" [ngClass]="item.styleRecipe" (click)="cardSkinChange = item">
                                     <mat-card
                                         class="flip-card front"
                                         [appearance]="'outlined'"
                                     >
-                                    @if (item.name === cardSkinChangeName) {
+                                    @if (item.name === cardSkinChange?.name 
+                                        || (!cardSkinChange?.name && item.name === savedSkin?.name)
+                                        || (!cardSkinChange?.name && !savedSkin?.name && item.name === 'default_skin')) {
                                         <mat-icon class="selected">check</mat-icon>
                                     }
                                     </mat-card>
                                 </div>
                             }
-                            <div class="flip-card-container default-skin">
-                                <mat-card
-                                    class="flip-card front"
-                                    [appearance]="'outlined'"
-                                >
-                                    @if (cardSkinItems.length === 0) {
-                                        <mat-icon class="selected">check</mat-icon>
-                                    }
-                                </mat-card>
-                            </div>
                         </div>
                     } @else if (selectedTabIndex === 1) {
                         @if (matchEffectItems.length === 0) {
@@ -105,3 +97,18 @@
         </div>
     }
 </div>
+
+@if (hasPendingChanges) {
+    <mat-card class="bottom-action-card" [appearance]="'outlined'">
+        <div class="actions">
+            <button mat-stroked-button color="warn" (click)="cancelCustomizationChanges()">
+                <mat-icon>close</mat-icon>
+                Cancel
+            </button>
+            <button mat-flat-button color="accent" (click)="saveCustomizationChanges()">
+                <mat-icon>save</mat-icon>
+                Save
+            </button>
+        </div>
+    </mat-card>
+}

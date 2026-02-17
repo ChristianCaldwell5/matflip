@@ -33,7 +33,7 @@ export class PairsComponent implements OnInit, OnDestroy {
 
   cards: card[] = [];
 
-  // game state
+  // game state`
   gameTimeAvailable: number = 0;
   gameTimeRemaining: number = 0;
   gameTimeRemainingPercentage: number = 100;
@@ -42,6 +42,7 @@ export class PairsComponent implements OnInit, OnDestroy {
   viewBoardMode: boolean = false;
   selectedDifficulty: string = '';
   roundSuccess: boolean = false;
+  styleRecipe?: string;
 
   // observables
   matchFound$!: Observable<FlipsReference>;
@@ -78,6 +79,11 @@ export class PairsComponent implements OnInit, OnDestroy {
     this.matchFound$ = this.gameService.getMatchMadeObservable();
     this.mismatch$ = this.gameService.getMismatchObservable();
     this.currentUser$ = this.userService.user$;
+    this.currentUser$
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(user => {
+        this.styleRecipe = user?.currentCustomizationSelects?.cardSkin?.styleRecipe;
+      });
   }
 
   ngOnInit() {
@@ -87,81 +93,81 @@ export class PairsComponent implements OnInit, OnDestroy {
     this.matchFound$
       .pipe(takeUntil(this.destroyed$))
       .subscribe(match => {
-      if (this.gameStartedSignal()) {
-        this.cards[match.firstIndex].matched = true;
-        this.cards[match.firstIndex].color = '#2acc89';
-        this.cards[match.secondIndex].matched = true;
-        this.cards[match.secondIndex].color = '#2acc89';
-        if (this.matchesSignal() === this.pairsCount) {
-          clearInterval(this.gameIntervalId);
-          this.gameService.updateGameStartedSignal(false);
-          this.roundSuccess = true;
+        if (this.gameStartedSignal()) {
+          this.cards[match.firstIndex].matched = true;
+          this.cards[match.firstIndex].color = '#2acc89';
+          this.cards[match.secondIndex].matched = true;
+          this.cards[match.secondIndex].color = '#2acc89';
+          if (this.matchesSignal() === this.pairsCount) {
+            clearInterval(this.gameIntervalId);
+            this.gameService.updateGameStartedSignal(false);
+            this.roundSuccess = true;
 
-          // construct ProgressionUpdateRequest and call user service progression update
-          const progressionUpdateRequest: ProgressionUpdateRequest = {
-            gameModeDirective: GameModes.PAIRS,
-            flipsMade: this.flipSignal(),
-            difficulty: this.selectedDifficulty as GameDifficulties,
-            pairsMade: this.matchesSignal(),
-            foundAllPairs: true,
-            timeTakenInSeconds: this.gameTimeAvailable - this.gameTimeRemaining
-          };
+            // construct ProgressionUpdateRequest and call user service progression update
+            const progressionUpdateRequest: ProgressionUpdateRequest = {
+              gameModeDirective: GameModes.PAIRS,
+              flipsMade: this.flipSignal(),
+              difficulty: this.selectedDifficulty as GameDifficulties,
+              pairsMade: this.matchesSignal(),
+              foundAllPairs: true,
+              timeTakenInSeconds: this.gameTimeAvailable - this.gameTimeRemaining
+            };
 
-          this.userService
-            .updateUserProgression(progressionUpdateRequest)
-            .pipe(take(1))
-            .subscribe({
-              next: () => {
-                console.log('Progression updated successfully');
-              },
-              error: (error: any) => {
-                console.error('Failed to update progression', error);
+            this.userService
+              .updateUserProgression(progressionUpdateRequest)
+              .pipe(take(1))
+              .subscribe({
+                next: () => {
+                  console.log('Progression updated successfully');
+                },
+                error: (error: any) => {
+                  console.error('Failed to update progression', error);
+                }
+              });
+
+            this.dialogRef = this.dialog.open(GameStatusComponent, {
+              height: 'auto',
+              width: '90%',
+              maxWidth: '600px',
+              data: {
+                success: this.roundSuccess,
+                mode: GameModes.PAIRS,
+                difficulty: this.selectedDifficulty as GameDifficulties,
+                pairsFound: this.matchesSignal().toString(),
+                totalPairs: this.pairsCount.toString(),
+                flipCount: this.flipSignal().toString(),
+                totalTime: this.gameTimeAvailable,
+                timeRemaining: this.gameTimeRemaining,
+                currentUser: this.currentUser$,
+                userLoading: this.userService.userLoading$,
+                userPostGameBreakdowns: this.userService.userPostGameBreakdowns$
               }
             });
-
-          this.dialogRef = this.dialog.open(GameStatusComponent, {
-            height: 'auto',
-            width: '90%',
-            maxWidth: '600px',
-            data: {
-              success: this.roundSuccess,
-              mode: GameModes.PAIRS,
+            this.dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe((directive: EndGameDirectives) => {
+              this.handleDialogClose(directive);
+            });
+            this.analyticsService.trackGameModeEnd(GameModes.PAIRS, {
               difficulty: this.selectedDifficulty as GameDifficulties,
-              pairsFound: this.matchesSignal().toString(),
-              totalPairs: this.pairsCount.toString(),
-              flipCount: this.flipSignal().toString(),
-              totalTime: this.gameTimeAvailable,
-              timeRemaining: this.gameTimeRemaining,
-              currentUser: this.currentUser$,
-              userLoading: this.userService.userLoading$,
-              userPostGameBreakdowns: this.userService.userPostGameBreakdowns$
-            }
-          });
-          this.dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe((directive: EndGameDirectives) => {
-            this.handleDialogClose(directive);
-          });
-          this.analyticsService.trackGameModeEnd(GameModes.PAIRS, {
-            difficulty: this.selectedDifficulty as GameDifficulties,
-            success: true,
-            time_taken: this.gameTimeAvailable - this.gameTimeRemaining
-          });
+              success: true,
+              time_taken: this.gameTimeAvailable - this.gameTimeRemaining
+            });
+          }
         }
-      }
-    });
+      });
 
     this.mismatch$
       .pipe(takeUntil(this.destroyed$))
       .subscribe(mismatch => {
-      this.disableFlip = true;
-      if (this.gameStartedSignal()) {
-        setTimeout(() => {
-          this.disableFlip = false;
-          this.cards[mismatch.firstIndex].flipped = false;
-          this.cards[mismatch.secondIndex].flipped = false;
-          this.cdr.detectChanges();
-        }, 1000);
-      }
-    });
+        this.disableFlip = true;
+        if (this.gameStartedSignal()) {
+          setTimeout(() => {
+            this.disableFlip = false;
+            this.cards[mismatch.firstIndex].flipped = false;
+            this.cards[mismatch.secondIndex].flipped = false;
+            this.cdr.detectChanges();
+          }, 1000);
+        }
+      });
   }
 
   ngOnDestroy(): void {
