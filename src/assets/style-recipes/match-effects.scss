@@ -1,0 +1,113 @@
+@use '@angular/material' as mat;
+@use '../../styles.scss' as *;
+
+/*
+  Match Effects
+  -------------
+  Usage: apply one of these classes to the back flip-card when a match occurs.
+  Example (Angular template):
+    [ngClass]="{ 'matched-card': matched && !matchEffect, [matchEffect!]: matched && !!matchEffect }"
+  Notes:
+  - Effects are designed to run as a short celebration when the class is added.
+  - Most animations are one-shot (1 iteration) so they don't loop forever.
+  - All transforms are applied to pseudo-elements to avoid clobbering the flip transforms.
+*/
+
+/* shared timing/easing */
+$celebrate-duration: 1100ms;
+$celebrate-ease: cubic-bezier(.2, .7, .2, 1);
+
+@keyframes mgSpin360 {
+  0%   { transform: rotateY(0deg) rotateZ(0deg); }
+  100% { transform: rotateY(0deg) rotateZ(360deg); }
+}
+
+.flip-card.effect-360-spin {
+  will-change: transform;
+  transform-origin: center;
+  animation: mgSpin360 1000ms ease-in-out 1 forwards;
+  animation-delay: 600ms;
+}
+
+@keyframes mgScaleBounce {
+  0%   { transform: rotateY(0deg) scale(1); }
+  40%  { transform: rotateY(0deg) scale(1.15); }
+  70%  { transform: rotateY(0deg) scale(0.95); }
+  100% { transform: rotateY(0deg) scale(1); }
+}
+
+.flip-card.effect-scale-bounce {
+  will-change: transform;
+  animation: mgScaleBounce 700ms cubic-bezier(.36,.07,.19,.97) 1 forwards;
+  animation-delay: 600ms;
+}
+
+@keyframes mgWiggle {
+  0%, 100% { transform: rotateY(0deg) rotateZ(0deg); }
+  25%      { transform: rotateY(0deg) rotateZ(-3deg); }
+  50%      { transform: rotateY(0deg) rotateZ(3deg); }
+  75%      { transform: rotateY(0deg) rotateZ(-2deg); }
+}
+
+.flip-card.effect-wiggle {
+  will-change: transform;
+  transform-origin: center;
+  animation: mgWiggle 500ms ease-in-out 1 forwards;
+  animation-delay: 600ms;
+}
+
+@keyframes mgRainbowShimmer {
+  0%   { filter: hue-rotate(0deg) brightness(1); }
+  25%  { filter: hue-rotate(90deg) brightness(1.1); }
+  50%  { filter: hue-rotate(180deg) brightness(1); }
+  75%  { filter: hue-rotate(270deg) brightness(1.1); }
+  100% { filter: hue-rotate(360deg) brightness(1); }
+}
+
+.flip-card.effect-rainbow-shimmer {
+  will-change: filter;
+  animation: mgRainbowShimmer 1200ms ease-in-out 1 both;
+  animation-delay: 600ms;
+}
+
+@keyframes mgPopBurst {
+  0%   { transform: rotateY(0deg) scale(0.85); opacity: 0; }
+  60%  { transform: rotateY(0deg) scale(1.12); opacity: 1; }
+  100% { transform: rotateY(0deg) scale(1); opacity: 1; }
+}
+
+.flip-card.effect-pop-burst { position: relative; }
+.flip-card.effect-pop-burst {
+  will-change: transform;
+  animation: mgPopBurst 800ms cubic-bezier(.34,.1,.68,.55) 1 forwards;
+  animation-delay: 600ms;
+}
+
+.flip-card.effect-pop-burst::after {
+  content: '';
+  position: absolute;
+  inset: -8%;
+  z-index: 1;
+  background:
+    radial-gradient(circle at 20% 20%, mat.m2-get-color-from-palette($mint-green-palette, 300) 0 1%, rgba(0,0,0,0) 1.2%),
+    radial-gradient(circle at 80% 30%, mat.m2-get-color-from-palette($mint-green-palette, 400) 0 1%, rgba(0,0,0,0) 1.2%),
+    radial-gradient(circle at 70% 80%, mat.m2-get-color-from-palette($mint-green-palette, 300) 0 1%, rgba(0,0,0,0) 1.2%),
+    radial-gradient(circle at 25% 75%, mat.m2-get-color-from-palette($mint-green-palette, 400) 0 1%, rgba(0,0,0,0) 1.2%);
+  mix-blend-mode: screen;
+  filter: blur(0.5px);
+  animation: mgPopBurst 800ms cubic-bezier(.34,.1,.68,.55) 1 forwards;
+  animation-delay: 600ms;
+  pointer-events: none;
+}
+
+@keyframes mgPulseRing {
+  0%   { box-shadow: 0 0 0 0 mat.m2-get-color-from-palette($mint-green-palette, 500); }
+  50%  { box-shadow: 0 0 0 12px rgba(76, 175, 80, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+}
+
+.flip-card.effect-pulse-ring {
+  border-color: mat.m2-get-color-from-palette($mint-green-palette, 500) !important;
+  animation: mgPulseRing 1000ms ease-out 1 both;
+  animation-delay: 600ms;
+}
