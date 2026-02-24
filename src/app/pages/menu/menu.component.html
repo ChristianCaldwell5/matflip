@@ -1,12 +1,27 @@
 <div class="game-menu">
     <h1 class="flippin">Mat Flip</h1>
     @if((currentUser$ | async); as user) {
-        <p class="mb--0 mt--0 width--100 tl tw--bold">{{ user.displayName }}</p>
-        <app-level-display [levelInfo]="user.levelInfo"></app-level-display>
+        <mat-card class="user-info-card" [appearance]="'outlined'">
+            <mat-card-header>
+                <div class="user-header">
+                    <p class="user-name">{{ user.displayName }}</p>
+                    @if (user.currentCustomizationSelects?.title?.displayName) {
+                        <span class="user-title">{{ user.currentCustomizationSelects?.title?.displayName }}</span>
+                    }
+                </div>
+            </mat-card-header>
+            <mat-card-content>
+                <app-level-display [levelInfo]="user.levelInfo"></app-level-display>
+                <div class="flipbucks-display">
+                    <mat-icon class="flipbucks-icon">local_atm</mat-icon>
+                    <span class="flipbucks-value">{{ user.flipBucks }}</span>
+                </div>
+            </mat-card-content>
+        </mat-card>
     }
     <form #form="ngForm">
         <div class="row mt--1">
-        <mat-form-field appearance="outline" class="expanded-form">
+        <mat-form-field appearance="outline">
             <mat-label>Mode</mat-label>
             <mat-select name="selectedMode" [(ngModel)]="selectedMode">
             <mat-option value="pairs">Pairs</mat-option>

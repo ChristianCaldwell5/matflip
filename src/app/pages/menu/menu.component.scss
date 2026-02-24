@@ -1,3 +1,7 @@
+@use '@angular/material' as mat;
+@import '../../../styles.scss';
+@include mat.core();
+
 .game-menu {
     display: flex;
     justify-content: center;
@@ -6,7 +10,7 @@
     margin: 1rem auto;
     height: 90vh;
     width: 100%;
-    max-width: 212px;
+    max-width: 250px;
 
     button {
         margin-bottom: 1rem;
@@ -30,4 +34,72 @@
     mat-icon {
         margin: 0;
     }
+
+    .user-info-card {
+        width: 100%;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, rgba(33, 150, 243, 0.05) 0%, rgba(156, 39, 176, 0.05) 100%);
+        border: 2px solid rgb(33, 150, 243);
+
+        mat-card-header {
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(33, 150, 243, 0.2);
+        }
+
+        mat-card-content {
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-header {
+
+            .user-name {
+                margin: 0;
+                font-size: 1.1rem;
+                font-weight: 600;
+                letter-spacing: 0.5px;
+            }
+
+            .user-title {
+                font-size: 0.9rem;
+                color: rgba(0, 0, 0, 0.6);
+                margin: 0;
+            }
+        }
+
+        .flipbucks-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: linear-gradient(135deg, mat.m2-get-color-from-palette($mint-green-palette, 200) 0%, mat.m2-get-color-from-palette($mint-green-palette, 500) 100%);
+            border-radius: 8px;
+            border: 1px solid mat.m2-get-color-from-palette($mint-green-palette, 700);
+
+            .flipbucks-icon {
+                font-size: 1.5rem;
+                width: 1.5rem;
+                height: 1.5rem;
+                color: mat.m2-get-color-from-palette($mint-green-palette, 900);
+            }
+
+            .flipbucks-value {
+                font-size: 1.25rem;
+                font-weight: 700;
+                color: mat.m2-get-color-from-palette($mint-green-palette, 900);
+                letter-spacing: 0.5px;
+            }
+        }
+    }
 }
+
+form {
+    width: 100%;
+    mat-form-field {
+        width: 100% !important;
+    }
+}
+

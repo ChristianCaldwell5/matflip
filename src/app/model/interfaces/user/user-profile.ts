@@ -13,6 +13,7 @@ export interface UserProfile {
     levelInfo?: LevelInfo;
     currentCustomizationSelects?: CurrentCustomizationSelects;
     ownedCatalogItems: CatalogItem[];
+    flipBucks: number;
     createdAt: Date;
     updatedAt: Date;
 }
