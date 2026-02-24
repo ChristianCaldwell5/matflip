@@ -1,3 +1,13 @@
-<span>Lvl. {{ levelInfo?.currentLevel }}</span>
-<mat-progress-bar color="accent" mode="determinate" [value]="xpProgressPercentage"></mat-progress-bar>
-<span>{{ levelInfo?.currentXp }} / {{ levelInfo?.xpToNextLevel }} xp</span>
+<div class="level-display">
+    <div class="level-header">
+        <mat-icon class="level-icon">trending_up</mat-icon>
+        <span class="level-label">Level {{ levelInfo?.currentLevel }}</span>
+    </div>
+    <mat-progress-bar color="accent" mode="determinate" [value]="xpProgressPercentage"></mat-progress-bar>
+    <div class="xp-info">
+        <span class="xp-current">{{ levelInfo?.currentXp }}</span>
+        <span class="xp-separator">/</span>
+        <span class="xp-next">{{ levelInfo?.xpToNextLevel }}</span>
+        <span class="xp-label">XP</span>
+    </div>
+</div>

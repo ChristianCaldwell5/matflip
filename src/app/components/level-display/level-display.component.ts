@@ -2,10 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { LevelInfo } from '../../model/interfaces/user/level-info';
 import { CommonModule } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-level-display',
-  imports: [CommonModule, MatProgressBarModule],
+  imports: [CommonModule, MatProgressBarModule, MatIconModule],
   templateUrl: './level-display.component.html',
   styleUrls: ['./level-display.component.scss']
 })

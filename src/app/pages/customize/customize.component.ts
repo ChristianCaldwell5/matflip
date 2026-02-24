@@ -43,9 +43,9 @@ export class CustomizeComponent implements OnDestroy {
     this.currentUser$ = this.userService.user$;
     this.initializeInventoryItems();
     this.currentUser$.pipe(takeUntil(this.$destroyed)).subscribe(user => {
-      this.savedSkin = user?.currentCustomizationSelects?.cardSkin || null;
-      this.savedTitle = user?.currentCustomizationSelects?.title || null;
-      this.savedMatchEffect = user?.currentCustomizationSelects?.matchEffect || null;
+      this.savedSkin = this.cardSkinChange = user?.currentCustomizationSelects?.cardSkin || null;
+      this.savedTitle = this.titleChange = user?.currentCustomizationSelects?.title || null;
+      this.savedMatchEffect = this.matchEffectChange = user?.currentCustomizationSelects?.matchEffect || null;
     });
   }
 
@@ -55,7 +55,9 @@ export class CustomizeComponent implements OnDestroy {
   }
 
   get hasPendingChanges(): boolean {
-    return !!(this.cardSkinChange || this.titleChange || this.matchEffectChange);
+    return this.hasCatalogItemChanged(this.cardSkinChange, this.savedSkin)
+      || this.hasCatalogItemChanged(this.titleChange, this.savedTitle)
+      || this.hasCatalogItemChanged(this.matchEffectChange, this.savedMatchEffect);
   }
 
   goToMenu(): void {
@@ -63,21 +65,14 @@ export class CustomizeComponent implements OnDestroy {
   }
 
   saveCustomizationChanges(): void {
-    // Apply any staged changes to the "saved" selections
-    if (this.cardSkinChange) {
-      this.savedSkin = this.cardSkinChange;
-    }
-    if (this.titleChange) {
-      this.savedTitle = this.titleChange;
-    }
-    if (this.matchEffectChange) {
-      this.savedMatchEffect = this.matchEffectChange;
-    }
+    this.savedSkin = this.cardSkinChange;
+    this.savedTitle = this.titleChange;
+    this.savedMatchEffect = this.matchEffectChange;
 
     this.userService.updateUserCustomization({
-      cardSkin: this.savedSkin,
-      title: this.savedTitle,
-      matchEffect: this.savedMatchEffect
+      cardSkin: this.cardSkinChange,
+      title: this.titleChange,
+      matchEffect: this.matchEffectChange
     }).subscribe({
       next: (updatedProfile) => {
         console.log('User customization updated successfully:', updatedProfile);
@@ -87,17 +82,15 @@ export class CustomizeComponent implements OnDestroy {
       }
     });
 
-    // Clear staged changes after saving
-    this.cardSkinChange = null;
-    this.titleChange = null;
-    this.matchEffectChange = null;
+    this.cardSkinChange = this.savedSkin;
+    this.titleChange = this.savedTitle;
+    this.matchEffectChange = this.savedMatchEffect;
   }
 
   cancelCustomizationChanges(): void {
-    // Simply discard any staged changes
-    this.cardSkinChange = null;
-    this.titleChange = null;
-    this.matchEffectChange = null;
+    this.cardSkinChange = this.savedSkin;
+    this.titleChange = this.savedTitle;
+    this.matchEffectChange = this.savedMatchEffect;
   }
 
   get activeTabTitle(): string {
@@ -137,6 +130,10 @@ export class CustomizeComponent implements OnDestroy {
           });
         }
       });
+  }
+
+  private hasCatalogItemChanged(current: CatalogItem | null, saved: CatalogItem | null): boolean {
+    return (current?.name ?? null) !== (saved?.name ?? null);
   }
 }
 

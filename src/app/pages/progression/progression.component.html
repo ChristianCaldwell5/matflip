@@ -42,6 +42,15 @@
                                 }
                             </div>
                         }
+                        @if (item[1].effects.length > 0) {
+                            <div class="timeline-row">
+                                <mat-icon class="mr--half">auto_awesome</mat-icon>
+                                <span class="tw--bold">Effect: </span>
+                                @for (effect of item[1].effects; track effect) {
+                                    <span>{{ effect.displayName }}</span>
+                                }
+                            </div>
+                        }
                     </div>
                     <div class="point" [ngClass]="item[0] <= user.levelInfo!.currentLevel ? 'point--achieved' : ''">{{ item[0] }}</div>
                 </div>

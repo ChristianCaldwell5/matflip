@@ -6,7 +6,7 @@
     <h1 class="mt--half">Customize</h1>
     @if ((currentUser$ | async); as user) {
         <div class="current-selects">
-            <h3 class="mt--half">{{ user.displayName }} <span>- Match Maker {{ user.currentCustomizationSelects?.title }}</span></h3>
+            <h3 class="mt--half">{{ user.displayName }} @if (titleChange?.displayName) { - <span>{{ titleChange?.displayName }}</span> }</h3>
             <div class="row">
                 <div class="flip-card-container" [ngClass]="cardSkinChange?.styleRecipe ?? savedSkin?.styleRecipe ?? 'default-skin'">
                     <mat-card
@@ -70,25 +70,39 @@
                     } @else if (selectedTabIndex === 1) {
                         @if (matchEffectItems.length === 0) {
                             <p>You have no match effects in your inventory.</p>
+                        } @else {
+                            <mat-card class="inventory-item" [appearance]="'outlined'" (click)="matchEffectChange = null">
+                                <span class="item-name">None</span>
+                                @if (matchEffectChange === null) {
+                                    <mat-icon class="selected">check</mat-icon>
+                                }
+                            </mat-card>
                         }
                         @for (item of matchEffectItems; track item.name) {
-                            <mat-card class="inventory-item" [appearance]="'outlined'">
-                                <div class="item-header">
-                                    <span class="item-name">{{ item.displayName }}</span>
-                                    <span class="item-rarity">{{ item.rarity }}</span>
-                                </div>
+                            <mat-card class="inventory-item" [appearance]="'outlined'" (click)="matchEffectChange = item">
+                                <span class="item-name">{{ item.displayName }}</span>
+                                 @if (item.name === matchEffectChange?.name) {
+                                    <mat-icon class="selected">check</mat-icon>
+                                }
                             </mat-card>
                         }
                     } @else {
                         @if (titleItems.length === 0) {
                             <p>You have no titles in your inventory.</p>
+                        } @else {
+                            <mat-card class="inventory-item" [appearance]="'outlined'" (click)="titleChange = null">
+                                <span class="item-name">None</span>
+                                @if (titleChange === null) {
+                                    <mat-icon class="selected">check</mat-icon>
+                                }
+                            </mat-card>
                         }
                         @for (item of titleItems; track item.name) {
-                            <mat-card class="inventory-item" [appearance]="'outlined'">
-                                <div class="item-header">
-                                    <span class="item-name">{{ item.displayName }}</span>
-                                    <span class="item-rarity">{{ item.rarity }}</span>
-                                </div>
+                            <mat-card class="inventory-item" [appearance]="'outlined'" (click)="titleChange = item">
+                                <span class="item-name">{{ item.displayName }}</span>
+                                @if (item.name === titleChange?.name) {
+                                    <mat-icon class="selected">check</mat-icon>
+                                }
                             </mat-card>
                         }
                     }

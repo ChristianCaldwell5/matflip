@@ -1,6 +1,7 @@
 @use '@angular/material' as mat;
 @use '../../../assets/style-recipes/static-skins.scss' as staticSkins;
 @use '../../../assets/style-recipes/animated-skins.scss' as animatedSkins;
+@use '../../../assets/style-recipes/match-effects.scss' as matchEffects;
 @import '../../../styles.scss';
 @include mat.core();
 
@@ -58,7 +59,6 @@
         width: 8.25em;
 
         .flip-card {
-            // fills container
     
             mat-icon {
                 font-size: 3em;
@@ -74,7 +74,6 @@
         width: 8.5em;
 
         .flip-card {
-            // fills container
     
             mat-icon {
                 font-size: 3em;
@@ -90,7 +89,6 @@
         width: 9em;
 
         .flip-card {
-            // fills container
     
             mat-icon {
                 font-size: 4em;

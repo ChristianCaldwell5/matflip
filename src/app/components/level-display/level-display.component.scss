@@ -3,3 +3,66 @@
     max-width: 212px;
     margin-bottom: 1rem;
 }
+
+.level-display {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, rgba(103, 58, 183, 0.08) 0%, rgba(63, 81, 181, 0.08) 100%);
+    border-radius: 8px;
+    border: 1px solid rgba(103, 58, 183, 0.2);
+
+    .level-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.25rem;
+
+        .level-icon {
+            font-size: 1.25rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            color: #673ab7;
+        }
+
+        .level-label {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+            letter-spacing: 0.3px;
+        }
+    }
+
+    mat-progress-bar {
+        height: 8px;
+        border-radius: 4px;
+    }
+
+    .xp-info {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        font-size: 0.875rem;
+
+        .xp-current {
+            font-weight: 600;
+            color: #673ab7;
+        }
+
+        .xp-separator {
+            color: rgba(0, 0, 0, 0.4);
+            margin: 0 0.2rem;
+        }
+
+        .xp-next {
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        .xp-label {
+            color: rgba(0, 0, 0, 0.5);
+            margin-left: 0.25rem;
+        }
+    }
+}

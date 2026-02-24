@@ -18,6 +18,7 @@ export class FlipCardComponent implements OnInit {
   @Input() matched: boolean = false;
   @Input() displayText?: string;
   @Input() styleRecipe?: string;
+  @Input() matchEffect?: string; // ex: 'effect-glow-pulse', 'effect-confetti-pop'
   @Input() index?: number;
 
   constructor() { }
@@ -54,4 +55,17 @@ export class FlipCardComponent implements OnInit {
     return this.isGameIcon(this.icon) ? this.icon.name : this.icon;
   }
 
+  backCardClassMap() {
+    const classMap: { [klass: string]: boolean } = {};
+    if (this.matched) {
+      if (this.matchEffect && this.matchEffect.trim().length > 0) {
+        classMap[this.matchEffect] = true;
+      } else {
+        // test placeholder for future matched effects
+        classMap['effect-scale-bounce'] = true;
+        //classMap['matched-card'] = true;
+      }
+    }
+    return classMap;
+  }
 }

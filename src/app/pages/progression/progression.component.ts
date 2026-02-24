@@ -32,7 +32,6 @@ export class ProgressionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('Catalog Breakdown:', this.catalogBreakdown());
   }
 
   goToMenu(): void {
