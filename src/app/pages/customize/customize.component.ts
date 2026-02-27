@@ -7,12 +7,15 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CatalogItem, CatalogType, UnlockType } from '../../model/interfaces/customization';
+import { CatalogService, CatalogSortMode } from '../../services/catalog.service';
 
 @Component({
   selector: 'app-customize',
-  imports: [CommonModule, MatButtonModule, MatCardModule, MatIconModule, MatTabsModule],
+  imports: [CommonModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatSelectModule, MatTabsModule],
   templateUrl: './customize.component.html',
   styleUrls: ['./customize.component.scss']
 })
@@ -32,12 +35,14 @@ export class CustomizeComponent implements OnDestroy {
   titleItems: CatalogItem[] = [];
 
   selectedTabIndex = 0;
+  sortMode: CatalogSortMode = 'price-asc';
   readonly CatalogType = CatalogType;
 
   $destroyed = new Subject<void>();
 
   constructor(
     private userService: UserService,
+    private catalogService: CatalogService,
     private router: Router
   ) {
     this.currentUser$ = this.userService.user$;
@@ -55,7 +60,7 @@ export class CustomizeComponent implements OnDestroy {
   }
 
   get hasPendingChanges(): boolean {
-    return this.hasCatalogItemChanged(this.cardSkinChange, this.savedSkin)
+    return this.hasCardSkinChanged()
       || this.hasCatalogItemChanged(this.titleChange, this.savedTitle)
       || this.hasCatalogItemChanged(this.matchEffectChange, this.savedMatchEffect);
   }
@@ -113,16 +118,27 @@ export class CustomizeComponent implements OnDestroy {
     return user.ownedCatalogItems.filter((item) => item.type === type);
   }
 
+  setSortMode(mode: CatalogSortMode): void {
+    if (this.sortMode === mode) return;
+    this.sortMode = mode;
+    this.cardSkinItems = this.sortItems(this.cardSkinItems);
+    this.matchEffectItems = this.sortItems(this.matchEffectItems);
+    this.titleItems = this.sortItems(this.titleItems);
+  }
+
   private initializeInventoryItems(): void {
     this.currentUser$
       .pipe(takeUntil(this.$destroyed))
       .subscribe((user) => {
         if (user) {
-          this.cardSkinItems = this.filterItems(user, CatalogType.CARD_SKIN);
-          this.matchEffectItems = this.filterItems(user, CatalogType.MATCH_EFFECT);
-          this.titleItems = this.filterItems(user, CatalogType.TITLE);
+          this.cardSkinItems = this.catalogService.withDefaultPrices(this.filterItems(user, CatalogType.CARD_SKIN));
+          this.matchEffectItems = this.catalogService.withDefaultPrices(this.filterItems(user, CatalogType.MATCH_EFFECT));
+          this.titleItems = this.catalogService.withDefaultPrices(this.filterItems(user, CatalogType.TITLE));
           // this.cardSkinItems.push(...MOCK_OWNED_SKINS)
           this.cardSkinItems.push(DEFAULT_SKIN);
+          this.cardSkinItems = this.sortItems(this.cardSkinItems);
+          this.matchEffectItems = this.sortItems(this.matchEffectItems);
+          this.titleItems = this.sortItems(this.titleItems);
           console.log('Customized Inventory Items Loaded:', {
             cardSkins: this.cardSkinItems,
             matchEffects: this.matchEffectItems,
@@ -130,6 +146,16 @@ export class CustomizeComponent implements OnDestroy {
           });
         }
       });
+  }
+
+  private sortItems(items: CatalogItem[]): CatalogItem[] {
+    return this.catalogService.sortCatalogItems(items, this.sortMode);
+  }
+
+  private hasCardSkinChanged(): boolean {
+    const currentSkinName = this.cardSkinChange?.name ?? 'default_skin';
+    const savedSkinName = this.savedSkin?.name ?? 'default_skin';
+    return currentSkinName !== savedSkinName;
   }
 
   private hasCatalogItemChanged(current: CatalogItem | null, saved: CatalogItem | null): boolean {

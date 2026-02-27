@@ -2,8 +2,10 @@ import { Injectable, signal, WritableSignal } from '@angular/core';
 import { UserService } from './user/user.service';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Subject, catchError, map, of, switchMap, tap } from 'rxjs';
-import { ActiveCatalog, buildTimelineMap, CatalogBreakdown, CatalogType } from '../model/interfaces/customization';
+import { ActiveCatalog, buildTimelineMap, CatalogBreakdown, CatalogItem, CatalogType, RarityType } from '../model/interfaces/customization';
 import { environment } from '../../environments/environment';
+
+export type CatalogSortMode = 'price-asc' | 'price-desc' | 'rarity-asc' | 'rarity-desc';
 
 @Injectable({
   providedIn: 'root'
@@ -147,5 +149,72 @@ export class CatalogService {
       // ignore
     }
     this.activeCatalogSubject.next(null);
+  }
+
+  withDefaultPrices(items: CatalogItem[]): CatalogItem[] {
+    return items.map((item) => ({
+      ...item,
+      flipBucksRequirement: item.flipBucksRequirement ?? this.getPriceForRarity(item.rarity)
+    }));
+  }
+
+  sortCatalogItems(items: CatalogItem[], mode: CatalogSortMode): CatalogItem[] {
+    const sorted = [...items];
+    switch (mode) {
+      case 'price-asc':
+        return sorted.sort((a, b) => this.comparePriceAsc(a, b));
+      case 'price-desc':
+        return sorted.sort((a, b) => this.comparePriceAsc(b, a));
+      case 'rarity-asc':
+        return sorted.sort((a, b) => this.compareRarityAsc(a, b));
+      case 'rarity-desc':
+        return sorted.sort((a, b) => this.compareRarityAsc(b, a));
+      default:
+        return sorted;
+    }
+  }
+
+  private comparePriceAsc(a: CatalogItem, b: CatalogItem): number {
+    const priceA = a.flipBucksRequirement ?? this.getPriceForRarity(a.rarity);
+    const priceB = b.flipBucksRequirement ?? this.getPriceForRarity(b.rarity);
+    return priceA - priceB;
+  }
+
+  private compareRarityAsc(a: CatalogItem, b: CatalogItem): number {
+    return this.getRarityRank(a.rarity) - this.getRarityRank(b.rarity);
+  }
+
+  private getRarityRank(rarity: RarityType): number {
+    switch (rarity) {
+      case RarityType.COMMON:
+        return 1;
+      case RarityType.UNCOMMON:
+        return 2;
+      case RarityType.RARE:
+        return 3;
+      case RarityType.EPIC:
+        return 4;
+      case RarityType.LEGENDARY:
+        return 5;
+      default:
+        return 99;
+    }
+  }
+
+  private getPriceForRarity(rarity: RarityType): number {
+    switch (rarity) {
+      case RarityType.COMMON:
+        return 100;
+      case RarityType.UNCOMMON:
+        return 250;
+      case RarityType.RARE:
+        return 500;
+      case RarityType.EPIC:
+        return 900;
+      case RarityType.LEGENDARY:
+        return 1500;
+      default:
+        return 250;
+    }
   }
 }

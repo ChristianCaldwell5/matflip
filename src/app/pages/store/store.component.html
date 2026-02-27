@@ -1,0 +1,101 @@
+@if ((currentUser$ | async); as user) {
+<div class="store-container">
+    <button mat-button color="accent" class="mt--1" (click)="goToMenu()">
+        <mat-icon>arrow_back</mat-icon>
+        Return to menu
+    </button>
+    <div class="store-header-row mb--1">
+        <h1 class="mt--0 mb--0">Store</h1>
+        <div class="flipbucks-display">
+            <mat-icon class="flipbucks-icon">local_atm</mat-icon>
+            <span class="flipbucks-value">{{ user.flipBucks }}</span>
+        </div>
+    </div>
+
+    <div class="store-tabs-container">
+        <span>Spend FlipBucks on new customization items!</span>
+        <div class="catalog-tab-toolbar mt--1">
+            <h2 class="catalog-tab-title">{{ activeTabTitle }}</h2>
+            <mat-form-field appearance="outline" class="catalog-sort-dropdown" subscriptSizing="dynamic">
+                <mat-label>Sort</mat-label>
+                <mat-select [value]="sortMode" (selectionChange)="setSortMode($event.value)">
+                    <mat-option value="price-asc">Price Low → High</mat-option>
+                    <mat-option value="price-desc">Price High → Low</mat-option>
+                    <mat-option value="rarity-asc">Rarity Low → High</mat-option>
+                    <mat-option value="rarity-desc">Rarity High → Low</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <mat-tab-group [(selectedIndex)]="selectedTabIndex" color="accent" mat-stretch-tabs="false" animationDuration="250ms">
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    <mat-icon>brush</mat-icon>
+                </ng-template>
+            </mat-tab>
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    <mat-icon>auto_awesome</mat-icon>
+                </ng-template>
+            </mat-tab>
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    <mat-icon>title</mat-icon>
+                </ng-template>
+            </mat-tab>
+        </mat-tab-group>
+
+        <div class="store-grid mt--half">
+            @if (selectedTabIndex === 0) {
+                @if (skinItems.length === 0) {
+                    <p>No more skins available for purchase right now.</p>
+                }
+                <div class="square-grid">
+                    @for (item of skinItems; track item.name) {
+                        <div class="store-skin-card">
+                            <div class="flip-card-container" [ngClass]="item.styleRecipe">
+                                <mat-card
+                                    class="flip-card front"
+                                    [appearance]="'outlined'"
+                                ></mat-card>
+                            </div>
+                            <div class="store-skin-meta">
+                                <div class="flipbucks-chip">
+                                    <mat-icon class="flipbucks-icon">local_atm</mat-icon>
+                                    <span class="flipbucks-value">{{ item.flipBucksRequirement }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            } @else if (selectedTabIndex === 1) {
+                @if (effectItems.length === 0) {
+                    <p>No more effects available for purchase right now.</p>
+                }
+                @for (item of effectItems; track item.name) {
+                    <mat-card class="store-list-item" [appearance]="'outlined'">
+                        <div class="item-name">{{ item.displayName }}</div>
+                        <div class="flipbucks-chip">
+                            <mat-icon class="flipbucks-icon">local_atm</mat-icon>
+                            <span class="flipbucks-value">{{ item.flipBucksRequirement }}</span>
+                        </div>
+                    </mat-card>
+                }
+            } @else {
+                @if (titleItems.length === 0) {
+                    <p>No more titles available for purchase right now.</p>
+                }
+                @for (item of titleItems; track item.name) {
+                    <mat-card class="store-list-item" [appearance]="'outlined'">
+                        <div class="item-name">{{ item.displayName }}</div>
+                        <div class="flipbucks-chip">
+                            <mat-icon class="flipbucks-icon">local_atm</mat-icon>
+                            <span class="flipbucks-value">{{ item.flipBucksRequirement }}</span>
+                        </div>
+                    </mat-card>
+                }
+            }
+        </div>
+    </div>
+</div>
+}

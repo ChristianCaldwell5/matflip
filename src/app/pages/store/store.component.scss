@@ -1,0 +1,135 @@
+@use '@angular/material' as mat;
+@use '../../components/flip-card/flip-card.component.scss' as flipCard;
+@use '../../../assets/style-recipes/static-skins.scss';
+@use '../../../assets/style-recipes/animated-skins.scss';
+@import '../../../styles.scss';
+@include mat.core();
+
+.store-container {
+    min-height: 100vh;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0.5rem;
+
+    .store-header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .store-summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .store-tabs-container {
+        .store-grid {
+            .square-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(7rem, 4fr));
+                gap: 1rem;
+                justify-items: center;
+                margin-top: 1rem;
+            }
+
+            .store-skin-card {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+                text-align: center;
+
+                .flip-card-container {
+                    max-width: 7rem !important;
+                    @extend .flip-card-container !optional;
+                }
+
+                .store-skin-meta {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 0.35rem;
+                }
+
+                .item-name {
+                    font-weight: 700;
+                }
+            }
+
+            .store-list-item {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 0.5rem;
+                padding: 0.75rem;
+
+                .item-name {
+                    font-weight: 700;
+                }
+            }
+        }
+    }
+    .flipbucks-display {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        background: linear-gradient(135deg, mat.m2-get-color-from-palette($mint-green-palette, 200) 0%, mat.m2-get-color-from-palette($mint-green-palette, 500) 100%);
+        border-radius: 8px;
+        border: 1px solid mat.m2-get-color-from-palette($mint-green-palette, 700);
+
+        .flipbucks-icon {
+            font-size: 1.5rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            color: mat.m2-get-color-from-palette($mint-green-palette, 900);
+        }
+
+        .flipbucks-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: mat.m2-get-color-from-palette($mint-green-palette, 900);
+            letter-spacing: 0.5px;
+        }
+    }
+
+    .flipbucks-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0;
+
+        .flipbucks-icon {
+            font-size: 1.5rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            color: mat.m2-get-color-from-palette($mint-green-palette, 900);
+        }
+
+        .flipbucks-value {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #000;
+        }
+    }
+
+    @media screen and (max-width: $mobile-breakpoint) {
+        padding: 0.5rem 1rem;
+
+        .store-tabs-container {
+            .store-grid {
+                .square-grid {
+                    grid-template-columns: repeat(auto-fill, minmax(5.5rem, 4fr));
+                    gap: 0.5rem;
+                }
+            }
+        }
+    }
+}

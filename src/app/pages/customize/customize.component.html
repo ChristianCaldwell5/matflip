@@ -29,7 +29,18 @@
         </div>
         <div class="customize-tabs-container">
             <span>Select customizations from your inventory!</span>
-            <h3>Your Inventory - {{ activeTabTitle }}</h3>
+            <div class="catalog-tab-toolbar mt--1">
+                <h3 class="catalog-tab-title">{{ activeTabTitle }}</h3>
+                <mat-form-field appearance="outline" class="catalog-sort-dropdown" subscriptSizing="dynamic">
+                    <mat-label>Sort</mat-label>
+                    <mat-select [value]="sortMode" (selectionChange)="setSortMode($event.value)">
+                        <mat-option value="price-asc">Price Low → High</mat-option>
+                        <mat-option value="price-desc">Price High → Low</mat-option>
+                        <mat-option value="rarity-asc">Rarity Low → High</mat-option>
+                        <mat-option value="rarity-desc">Rarity High → Low</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
             <mat-tab-group [(selectedIndex)]="selectedTabIndex" color="accent"  mat-stretch-tabs="false" animationDuration="250ms">
                 <mat-tab>
                     <ng-template mat-tab-label>
