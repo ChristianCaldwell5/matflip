@@ -111,3 +111,318 @@ $celebrate-ease: cubic-bezier(.2, .7, .2, 1);
   animation: mgPulseRing 1000ms ease-out 1 both;
   animation-delay: 600ms;
 }
+
+@keyframes mgDistort {
+  0%,
+  100% {
+    transform: rotateY(0deg) translateX(0) skewX(0deg) skewY(0deg) scaleX(1) scaleY(1);
+    filter: contrast(1) saturate(1) brightness(1);
+  }
+  10% {
+    transform: rotateY(0deg) translateX(-2px) skewX(-16deg) skewY(-5deg) scaleX(1.09) scaleY(0.92);
+    filter: contrast(1.15) saturate(1.2) brightness(1.05);
+  }
+  18% {
+    transform: rotateY(0deg) translateX(2px) skewX(18deg) skewY(6deg) scaleX(0.91) scaleY(1.1);
+    filter: contrast(1.22) saturate(1.3) brightness(1.08);
+  }
+  28% {
+    transform: rotateY(0deg) translateX(-1px) skewX(-22deg) skewY(-7deg) scaleX(1.12) scaleY(0.9);
+    filter: contrast(1.28) saturate(1.38) brightness(1.12);
+  }
+  40% {
+    transform: rotateY(0deg) translateX(1px) skewX(8deg) skewY(3deg) scaleX(0.97) scaleY(1.04);
+    filter: contrast(1.1) saturate(1.15) brightness(1.04);
+  }
+  52% {
+    transform: rotateY(0deg) translateX(-2px) skewX(-19deg) skewY(-6deg) scaleX(1.08) scaleY(0.93);
+    filter: contrast(1.2) saturate(1.28) brightness(1.08);
+  }
+  64% {
+    transform: rotateY(0deg) translateX(2px) skewX(20deg) skewY(6deg) scaleX(0.92) scaleY(1.08);
+    filter: contrast(1.24) saturate(1.33) brightness(1.1);
+  }
+  78% {
+    transform: rotateY(0deg) translateX(-1px) skewX(-10deg) skewY(-3deg) scaleX(1.03) scaleY(0.98);
+    filter: contrast(1.08) saturate(1.1) brightness(1.03);
+  }
+  90% {
+    transform: rotateY(0deg) translateX(0) skewX(4deg) skewY(1deg) scaleX(0.99) scaleY(1.01);
+    filter: contrast(1.03) saturate(1.04) brightness(1.01);
+  }
+}
+
+.flip-card.effect-distort {
+  will-change: transform, filter;
+  transform-origin: center;
+  animation: mgDistort 1100ms cubic-bezier(.22,.61,.25,1) 1 forwards;
+  animation-delay: 600ms;
+}
+
+@keyframes mgPopNLockDance {
+  0%,
+  100% {
+    transform-origin: center;
+    transform: rotateY(0deg) translateX(0) translateY(0) rotateZ(0deg) skewX(0deg) skewY(0deg) scale(1);
+  }
+
+  /* Step to bottom-right */
+  18% {
+    transform-origin: 100% 100%;
+    transform: rotateY(0deg) translateX(6px) translateY(5px) rotateZ(-7deg) skewX(-6deg) skewY(-2deg) scale(1.03);
+  }
+
+  /* Step to bottom-left */
+  36% {
+    transform-origin: 0% 100%;
+    transform: rotateY(0deg) translateX(-6px) translateY(5px) rotateZ(7deg) skewX(6deg) skewY(-2deg) scale(1.03);
+  }
+
+  /* Center up before shrug */
+  50% {
+    transform-origin: 50% 0%;
+    transform: rotateY(0deg) translateX(0) translateY(-2px) rotateZ(0deg) skewX(0deg) skewY(0deg) scale(1.01);
+  }
+
+  /* Shoulder shrug pulse (top corners in unison feel) */
+  62% {
+    transform-origin: 50% 0%;
+    transform: rotateY(0deg) translateX(0) translateY(-4px) rotateZ(-4deg) skewX(-5deg) skewY(3deg) scaleX(1.02) scaleY(0.98);
+  }
+
+  74% {
+    transform-origin: 50% 0%;
+    transform: rotateY(0deg) translateX(0) translateY(-4px) rotateZ(4deg) skewX(5deg) skewY(3deg) scaleX(1.02) scaleY(0.98);
+  }
+
+  86% {
+    transform-origin: center;
+    transform: rotateY(0deg) translateX(0) translateY(-1px) rotateZ(0deg) skewX(1deg) skewY(0deg) scale(1.005);
+  }
+}
+
+@keyframes mgPopNLockCorners {
+  0%,
+  100% {
+    border-radius: 0.2rem;
+    filter: contrast(1) saturate(1);
+  }
+  20%,
+  40% {
+    border-radius: 0.85rem 0.2rem 0.95rem 0.2rem;
+    filter: contrast(1.07) saturate(1.08);
+  }
+  62%,
+  74% {
+    border-radius: 0.95rem 0.95rem 0.35rem 0.35rem;
+    filter: contrast(1.1) saturate(1.12);
+  }
+}
+
+.flip-card.effect-pop-n-lock {
+  will-change: transform, border-radius, filter;
+  transform-origin: center;
+  animation: mgPopNLockDance 1150ms cubic-bezier(.24,.78,.24,1) 1 forwards,
+             mgPopNLockCorners 1150ms ease-in-out 1 forwards;
+  animation-delay: 600ms, 600ms;
+}
+
+@keyframes mgAuroraWaveBlast {
+  0% {
+    transform: translate(-10%, 12%) scale(0.82) rotate(-6deg);
+    background-position: 0% 50%, 100% 50%, 50% 100%;
+    opacity: 0.2;
+  }
+  40% {
+    transform: translate(2%, -5%) scale(1.08) rotate(2deg);
+    background-position: 45% 30%, 55% 75%, 35% 10%;
+    opacity: 0.9;
+  }
+  75% {
+    transform: translate(6%, -12%) scale(1.18) rotate(5deg);
+    background-position: 100% 20%, 0% 80%, 70% 0%;
+    opacity: 1;
+  }
+  100% {
+    transform: translate(0, -8%) scale(1.04) rotate(0deg);
+    background-position: 100% 40%, 0% 60%, 50% 20%;
+    opacity: 0.82;
+  }
+}
+
+@keyframes mgAuroraBloom {
+  0%,
+  100% {
+    transform: scale(0.9);
+    opacity: 0.2;
+    filter: blur(12px) saturate(1.15);
+  }
+  55% {
+    transform: scale(1.15);
+    opacity: 0.95;
+    filter: blur(8px) saturate(1.5);
+  }
+}
+
+@keyframes mgAuroraIntensity {
+  0%,
+  100% {
+    filter: contrast(1) saturate(1) brightness(1);
+  }
+  50% {
+    filter: contrast(1.2) saturate(1.35) brightness(1.14);
+  }
+}
+
+.flip-card.effect-aurora-blast {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border-color: #7ec8ff !important;
+  background: linear-gradient(145deg, #0d1a3d 0%, #182f66 50%, #11254e 100%);
+  will-change: filter;
+  animation: mgAuroraIntensity 1400ms ease-in-out 1 both;
+  animation-delay: 600ms;
+
+  mat-icon,
+  span {
+    position: relative;
+    z-index: 3;
+    color: #eef8ff;
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.55));
+  }
+}
+
+.flip-card.effect-aurora-blast::before,
+.flip-card.effect-aurora-blast::after {
+  content: '';
+  position: absolute;
+  inset: -30%;
+  pointer-events: none;
+}
+
+.flip-card.effect-aurora-blast::before {
+  z-index: 0;
+  background:
+    linear-gradient(120deg, rgba(102, 255, 231, 0.0) 5%, rgba(102, 255, 231, 0.65) 40%, rgba(102, 255, 231, 0.0) 80%),
+    linear-gradient(300deg, rgba(180, 120, 255, 0.0) 10%, rgba(180, 120, 255, 0.62) 45%, rgba(180, 120, 255, 0.0) 82%),
+    linear-gradient(20deg, rgba(120, 180, 255, 0.0) 8%, rgba(120, 180, 255, 0.58) 44%, rgba(120, 180, 255, 0.0) 78%);
+  mix-blend-mode: screen;
+  filter: blur(8px) saturate(1.35);
+  animation: mgAuroraWaveBlast 1450ms cubic-bezier(.2,.72,.2,1) 1 forwards;
+  animation-delay: 600ms;
+}
+
+.flip-card.effect-aurora-blast::after {
+  z-index: 1;
+  background:
+    radial-gradient(circle at 18% 78%, rgba(125, 255, 230, 0.55) 0 10%, rgba(0, 0, 0, 0) 38%),
+    radial-gradient(circle at 84% 26%, rgba(210, 145, 255, 0.55) 0 12%, rgba(0, 0, 0, 0) 40%),
+    radial-gradient(circle at 58% 54%, rgba(120, 210, 255, 0.48) 0 14%, rgba(0, 0, 0, 0) 42%);
+  mix-blend-mode: screen;
+  animation: mgAuroraBloom 1300ms ease-in-out 1 forwards;
+  animation-delay: 600ms;
+}
+
+@keyframes mgAmethystCore {
+  0%,
+  100% {
+    filter: contrast(1) saturate(1) brightness(1);
+    transform: scale(1);
+  }
+  40% {
+    filter: contrast(1.25) saturate(1.45) brightness(1.15);
+    transform: scale(1.03);
+  }
+  70% {
+    filter: contrast(1.15) saturate(1.3) brightness(1.08);
+    transform: scale(1.01);
+  }
+}
+
+@keyframes mgAmethystShatter {
+  0% {
+    transform: translate(0, 0) scale(0.78) rotate(-10deg);
+    opacity: 0;
+  }
+  35% {
+    transform: translate(0, -8%) scale(1.08) rotate(6deg);
+    opacity: 0.95;
+  }
+  65% {
+    transform: translate(2%, -12%) scale(1.16) rotate(-4deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(0, -10%) scale(1.04) rotate(0deg);
+    opacity: 0.88;
+  }
+}
+
+@keyframes mgAmethystGlisten {
+  0%,
+  100% {
+    opacity: 0.22;
+    filter: blur(10px) saturate(1.1);
+  }
+  45% {
+    opacity: 0.95;
+    filter: blur(6px) saturate(1.55);
+  }
+  75% {
+    opacity: 0.72;
+    filter: blur(7px) saturate(1.35);
+  }
+}
+
+.flip-card.effect-amethyst-crush {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border-color: #bb86fc !important;
+  background:
+    radial-gradient(circle at 28% 22%, rgba(214, 161, 255, 0.22) 0 20%, rgba(0, 0, 0, 0) 45%),
+    linear-gradient(145deg, #1a0f2f 0%, #30194d 45%, #45206d 100%);
+  will-change: transform, filter;
+  animation: mgAmethystCore 1450ms ease-in-out 1 both;
+  animation-delay: 0ms;
+
+  mat-icon,
+  span {
+    position: relative;
+    z-index: 3;
+    color: #f3e9ff;
+    filter: drop-shadow(0 0 8px rgba(236, 206, 255, 0.65));
+  }
+}
+
+.flip-card.effect-amethyst-crush::before,
+.flip-card.effect-amethyst-crush::after {
+  content: '';
+  position: absolute;
+  inset: -28%;
+  pointer-events: none;
+}
+
+.flip-card.effect-amethyst-crush::before {
+  z-index: 0;
+  background:
+    conic-gradient(from 40deg at 20% 80%, rgba(198, 136, 255, 0.0) 0deg, rgba(198, 136, 255, 0.72) 52deg, rgba(0, 0, 0, 0) 92deg),
+    conic-gradient(from 210deg at 82% 20%, rgba(168, 110, 255, 0.0) 0deg, rgba(168, 110, 255, 0.70) 48deg, rgba(0, 0, 0, 0) 96deg),
+    linear-gradient(115deg, rgba(229, 189, 255, 0.0) 20%, rgba(229, 189, 255, 0.44) 50%, rgba(229, 189, 255, 0.0) 78%);
+  mix-blend-mode: screen;
+  filter: blur(5px) saturate(1.45);
+  animation: mgAmethystShatter 1500ms cubic-bezier(.22,.73,.18,1) 1 forwards;
+  animation-delay: 0ms;
+}
+
+.flip-card.effect-amethyst-crush::after {
+  z-index: 1;
+  background:
+    radial-gradient(circle at 22% 70%, rgba(245, 215, 255, 0.58) 0 6%, rgba(0, 0, 0, 0) 26%),
+    radial-gradient(circle at 78% 26%, rgba(230, 176, 255, 0.56) 0 8%, rgba(0, 0, 0, 0) 28%),
+    radial-gradient(circle at 52% 52%, rgba(210, 140, 255, 0.45) 0 10%, rgba(0, 0, 0, 0) 30%);
+  mix-blend-mode: plus-lighter;
+  animation: mgAmethystGlisten 1350ms ease-in-out 1 forwards;
+  animation-delay: 0ms;
+}

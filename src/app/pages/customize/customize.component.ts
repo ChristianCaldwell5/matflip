@@ -60,7 +60,7 @@ export class CustomizeComponent implements OnDestroy {
   }
 
   get hasPendingChanges(): boolean {
-    return this.hasCardSkinChanged()
+    return this.hasCatalogItemChanged(this.cardSkinChange, this.savedSkin)
       || this.hasCatalogItemChanged(this.titleChange, this.savedTitle)
       || this.hasCatalogItemChanged(this.matchEffectChange, this.savedMatchEffect);
   }
@@ -150,12 +150,6 @@ export class CustomizeComponent implements OnDestroy {
 
   private sortItems(items: CatalogItem[]): CatalogItem[] {
     return this.catalogService.sortCatalogItems(items, this.sortMode);
-  }
-
-  private hasCardSkinChanged(): boolean {
-    const currentSkinName = this.cardSkinChange?.name ?? 'default_skin';
-    const savedSkinName = this.savedSkin?.name ?? 'default_skin';
-    return currentSkinName !== savedSkinName;
   }
 
   private hasCatalogItemChanged(current: CatalogItem | null, saved: CatalogItem | null): boolean {

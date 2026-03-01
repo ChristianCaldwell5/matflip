@@ -53,7 +53,16 @@
                 <div class="square-grid">
                     @for (item of skinItems; track item.name) {
                         <div class="store-skin-card">
-                            <div class="flip-card-container" [ngClass]="item.styleRecipe">
+                            <div
+                                class="flip-card-container"
+                                [ngClass]="item.styleRecipe"
+                                role="button"
+                                tabindex="0"
+                                [attr.aria-label]="'Preview ' + item.displayName"
+                                (click)="openSkinPreview(item, user.flipBucks)"
+                                (keydown.enter)="openSkinPreview(item, user.flipBucks)"
+                                (keydown.space)="$event.preventDefault(); openSkinPreview(item, user.flipBucks)"
+                            >
                                 <mat-card
                                     class="flip-card front"
                                     [appearance]="'outlined'"
@@ -73,7 +82,16 @@
                     <p>No more effects available for purchase right now.</p>
                 }
                 @for (item of effectItems; track item.name) {
-                    <mat-card class="store-list-item" [appearance]="'outlined'">
+                    <mat-card
+                        class="store-list-item clickable-list-item"
+                        [appearance]="'outlined'"
+                        role="button"
+                        tabindex="0"
+                        [attr.aria-label]="'Preview ' + item.displayName"
+                        (click)="openEffectPreview(item, user.flipBucks, user.currentCustomizationSelects?.cardSkin?.styleRecipe)"
+                        (keydown.enter)="openEffectPreview(item, user.flipBucks, user.currentCustomizationSelects?.cardSkin?.styleRecipe)"
+                        (keydown.space)="$event.preventDefault(); openEffectPreview(item, user.flipBucks, user.currentCustomizationSelects?.cardSkin?.styleRecipe)"
+                    >
                         <div class="item-name">{{ item.displayName }}</div>
                         <div class="flipbucks-chip">
                             <mat-icon class="flipbucks-icon">local_atm</mat-icon>
@@ -86,7 +104,16 @@
                     <p>No more titles available for purchase right now.</p>
                 }
                 @for (item of titleItems; track item.name) {
-                    <mat-card class="store-list-item" [appearance]="'outlined'">
+                    <mat-card
+                        class="store-list-item clickable-list-item"
+                        [appearance]="'outlined'"
+                        role="button"
+                        tabindex="0"
+                        [attr.aria-label]="'Preview ' + item.displayName"
+                        (click)="openTitlePreview(item, user.flipBucks, user.displayName)"
+                        (keydown.enter)="openTitlePreview(item, user.flipBucks, user.displayName)"
+                        (keydown.space)="$event.preventDefault(); openTitlePreview(item, user.flipBucks, user.displayName)"
+                    >
                         <div class="item-name">{{ item.displayName }}</div>
                         <div class="flipbucks-chip">
                             <mat-icon class="flipbucks-icon">local_atm</mat-icon>

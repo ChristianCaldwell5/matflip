@@ -45,6 +45,17 @@
                 .flip-card-container {
                     max-width: 7rem !important;
                     @extend .flip-card-container !optional;
+                    cursor: pointer;
+                    transition: transform 150ms ease;
+
+                    &:hover {
+                        transform: translateY(-2px);
+                    }
+
+                    &:focus-visible {
+                        outline: 2px solid currentColor;
+                        outline-offset: 3px;
+                    }
                 }
 
                 .store-skin-meta {
@@ -70,6 +81,20 @@
 
                 .item-name {
                     font-weight: 700;
+                }
+
+                &.clickable-list-item {
+                    cursor: pointer;
+                    transition: transform 150ms ease;
+
+                    &:hover {
+                        transform: translateY(-2px);
+                    }
+
+                    &:focus-visible {
+                        outline: 2px solid currentColor;
+                        outline-offset: 3px;
+                    }
                 }
             }
         }

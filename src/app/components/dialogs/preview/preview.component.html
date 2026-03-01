@@ -1,0 +1,81 @@
+@if (activePreviewItem) {
+  <div class="preview-dialog-content">
+    <h2 class="preview-title mt--0 mb--half">{{ activePreviewItem.displayName }}</h2>
+
+    <p class="preview-label mt--0 mb--half">Preview:</p>
+
+    @if (skinPreview) {
+      <div class="preview-cards-grid mb--1">
+        <div class="flip-card-container" [ngClass]="skinPreview.styleRecipe">
+          <mat-card class="flip-card front" [appearance]="'outlined'"></mat-card>
+        </div>
+        <div class="flip-card-container" [ngClass]="skinPreview.styleRecipe">
+          <mat-card class="flip-card front" [appearance]="'outlined'"></mat-card>
+        </div>
+        <div class="flip-card-container" [ngClass]="skinPreview.styleRecipe">
+          <mat-card class="flip-card front" [appearance]="'outlined'"></mat-card>
+        </div>
+        <div class="flip-card-container" [ngClass]="skinPreview.styleRecipe">
+          <mat-card class="flip-card front" [appearance]="'outlined'"></mat-card>
+        </div>
+      </div>
+    } @else if (effectPreview) {
+      <div class="effect-preview-row mb--1">
+        <div class="flip-card-container effect-card" [ngClass]="equippedSkinStyleRecipe" [class.flipped]="firstEffectCardFlipped">
+          <mat-card class="flip-card front" [appearance]="'outlined'"></mat-card>
+          <mat-card
+            class="flip-card back"
+            [appearance]="'outlined'"
+            [ngClass]="[
+              secondEffectCardFlipped ? 'matched-card' : '',
+              effectActive && effectPreview.styleRecipe ? effectPreview.styleRecipe : ''
+            ]"
+          >
+            <mat-icon>auto_awesome</mat-icon>
+          </mat-card>
+        </div>
+
+        <div class="flip-card-container effect-card" [ngClass]="equippedSkinStyleRecipe" [class.flipped]="secondEffectCardFlipped">
+          <mat-card class="flip-card front" [appearance]="'outlined'"></mat-card>
+          <mat-card
+            class="flip-card back"
+            [appearance]="'outlined'"
+            [ngClass]="[
+              secondEffectCardFlipped ? 'matched-card' : '',
+              effectActive && effectPreview.styleRecipe ? effectPreview.styleRecipe : ''
+            ]"
+          >
+            <mat-icon>auto_awesome</mat-icon>
+          </mat-card>
+        </div>
+      </div>
+    } @else if (titlePreview) {
+      <mat-card class="title-preview-card mb--1" [appearance]="'outlined'">
+        <div class="user-header">
+          <p class="user-name">{{ playerDisplayName }}</p>
+          <span class="user-title">{{ titlePreview.displayName }}</span>
+        </div>
+      </mat-card>
+    }
+
+    <div class="flipbucks-chip mb--1">
+        <span class="flipbucks-label">Cost:</span>
+        <mat-icon class="flipbucks-icon">local_atm</mat-icon>
+        <span class="flipbucks-value">{{ activePreviewItem.flipBucksRequirement }}</span>
+    </div>
+
+    @if (!canAfford) {
+        <div class="purchase-error mb--1">
+            <mat-icon class="error-icon">error</mat-icon>
+            <p class="error-message mt--0 mb--0">You do not have enough FlipBucks!</p>
+        </div>
+    }
+
+    <div class="preview-actions">
+      @if (canAfford) {
+        <button mat-flat-button color="accent" type="button">Purchase</button>
+      }
+      <button mat-stroked-button type="button" (click)="closeDialog()">Close</button>
+    </div>
+  </div>
+}

@@ -6,16 +6,18 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { CatalogItem, CatalogType, RarityType, UnlockType } from '../../model/interfaces/customization';
 import { CatalogService, CatalogSortMode } from '../../services/catalog.service';
 import { UserService } from '../../services/user/user.service';
 import { distinctUntilChanged, Observable, Subject, takeUntil } from 'rxjs';
 import { UserProfile } from '../../model/interfaces/user/user-profile';
+import { PreviewComponent } from '../../components/dialogs/preview/preview.component';
 
 @Component({
   selector: 'app-store',
-  imports: [CommonModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatSelectModule, MatTabsModule],
+  imports: [CommonModule, MatButtonModule, MatCardModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatSelectModule, MatTabsModule],
   templateUrl: './store.component.html',
   styleUrl: './store.component.scss'
 })
@@ -37,7 +39,8 @@ export class StoreComponent implements OnDestroy {
   constructor(
     private router: Router,
     private userService: UserService,
-    private catalogService: CatalogService
+    private catalogService: CatalogService,
+    private dialog: MatDialog
   ) {
     this.currentUser$ = this.userService.user$;
     this.initializeStoreItems();
@@ -100,125 +103,145 @@ export class StoreComponent implements OnDestroy {
     this.titleItems = this.sortItems(this.titleItems);
   }
 
+  openSkinPreview(item: CatalogItem, playerFlipBucks: number): void {
+    this.dialog.open(PreviewComponent, {
+      width: '90%',
+      maxWidth: '560px',
+      disableClose: false,
+      data: {
+        skinPreview: item,
+        playerFlipBucks
+      }
+    });
+  }
+
+  openTitlePreview(item: CatalogItem, playerFlipBucks: number, playerDisplayName?: string): void {
+    this.dialog.open(PreviewComponent, {
+      width: '90%',
+      maxWidth: '560px',
+      disableClose: false,
+      data: {
+        titlePreview: item,
+        playerFlipBucks,
+        playerDisplayName: playerDisplayName ?? 'Player'
+      }
+    });
+  }
+
+  openEffectPreview(item: CatalogItem, playerFlipBucks: number, equippedSkinStyleRecipe?: string): void {
+    this.dialog.open(PreviewComponent, {
+      width: '90%',
+      maxWidth: '560px',
+      disableClose: false,
+      data: {
+        effectPreview: item,
+        playerFlipBucks,
+        equippedSkinStyleRecipe: equippedSkinStyleRecipe ?? 'default-skin'
+      }
+    });
+  }
+
   private sortItems(items: CatalogItem[]): CatalogItem[] {
     return this.catalogService.sortCatalogItems(items, this.sortMode);
   }
 
   private generateMockPurchasableItems(): CatalogItem[] {
+    const mockSkins: CatalogItem[] = [
+      { type: CatalogType.CARD_SKIN, name: 'lemon_zest', displayName: 'Lemon Zest', rarity: RarityType.COMMON, unlockType: UnlockType.IN_GAME_PURCHASE, isRetired: false, version: 1, styleRecipe: 'common-card-skin-lemon-zest', levelRequirement: 0, isSkyboxed: false, isAnimated: false },
+      { type: CatalogType.CARD_SKIN, name: 'ocean_breeze', displayName: 'Ocean Breeze', rarity: RarityType.COMMON, unlockType: UnlockType.IN_GAME_PURCHASE, isRetired: false, version: 1, styleRecipe: 'common-card-skin-ocean-breeze', levelRequirement: 0, isSkyboxed: false, isAnimated: false },
+      { type: CatalogType.CARD_SKIN, name: 'peach_fizz', displayName: 'Peach Fizz', rarity: RarityType.COMMON, unlockType: UnlockType.IN_GAME_PURCHASE, isRetired: false, version: 1, styleRecipe: 'common-card-skin-peach-fizz', levelRequirement: 0, isSkyboxed: false, isAnimated: false },
+      { type: CatalogType.CARD_SKIN, name: 'mint_pop', displayName: 'Mint Pop', rarity: RarityType.COMMON, unlockType: UnlockType.IN_GAME_PURCHASE, isRetired: false, version: 1, styleRecipe: 'common-card-skin-mint-pop', levelRequirement: 0, isSkyboxed: false, isAnimated: false }
+    ];
+
     return [
-      {
-        type: CatalogType.CARD_SKIN,
-        name: 'cyberpunk_neon',
-        displayName: 'Cyberpunk Neon',
-        rarity: RarityType.RARE,
-        unlockType: UnlockType.IN_GAME_PURCHASE,
-        isRetired: false,
-        version: 1,
-        styleRecipe: 'cyberpunk-neon',
-        levelRequirement: 0,
-        isSkyboxed: false,
-        isAnimated: true
-      },
-      {
-        type: CatalogType.CARD_SKIN,
-        name: 'forest_moss',
-        displayName: 'Forest Moss',
-        rarity: RarityType.UNCOMMON,
-        unlockType: UnlockType.IN_GAME_PURCHASE,
-        isRetired: false,
-        version: 1,
-        styleRecipe: 'forest-moss',
-        levelRequirement: 0,
-        isSkyboxed: true,
-        isAnimated: false
-      },
-      {
-        type: CatalogType.CARD_SKIN,
-        name: 'golden_royal',
-        displayName: 'Golden Royal',
-        rarity: RarityType.LEGENDARY,
-        unlockType: UnlockType.IN_GAME_PURCHASE,
-        isRetired: false,
-        version: 1,
-        styleRecipe: 'golden-royal',
-        levelRequirement: 0,
-        isSkyboxed: true,
-        isAnimated: true
-      },
+      ...mockSkins,
       {
         type: CatalogType.MATCH_EFFECT,
-        name: 'sparkle_burst',
-        displayName: 'Sparkle Burst',
+        name: 'distort',
+        displayName: 'Distort',
         rarity: RarityType.COMMON,
         unlockType: UnlockType.IN_GAME_PURCHASE,
         isRetired: false,
         version: 1,
-        styleRecipe: 'sparkle-burst',
+        styleRecipe: 'effect-distort',
         levelRequirement: 0,
         isSkyboxed: false,
         isAnimated: true
       },
       {
         type: CatalogType.MATCH_EFFECT,
-        name: 'flame_strike',
-        displayName: 'Flame Strike',
-        rarity: RarityType.EPIC,
-        unlockType: UnlockType.IN_GAME_PURCHASE,
-        isRetired: false,
-        version: 1,
-        styleRecipe: 'flame-strike',
-        levelRequirement: 0,
-        isSkyboxed: false,
-        isAnimated: true
-      },
-      {
-        type: CatalogType.MATCH_EFFECT,
-        name: 'shadow_void',
-        displayName: 'Shadow Void',
+        name: 'pop_n_lock',
+        displayName: 'Pop-n-Lock',
         rarity: RarityType.RARE,
         unlockType: UnlockType.IN_GAME_PURCHASE,
         isRetired: false,
         version: 1,
-        styleRecipe: 'shadow-void',
+        styleRecipe: 'effect-pop-n-lock',
+        levelRequirement: 0,
+        isSkyboxed: false,
+        isAnimated: true
+      },
+      {
+        type: CatalogType.MATCH_EFFECT,
+        name: 'aurora_blast',
+        displayName: 'Aurora Blast',
+        rarity: RarityType.LEGENDARY,
+        unlockType: UnlockType.IN_GAME_PURCHASE,
+        isRetired: false,
+        version: 1,
+        styleRecipe: 'effect-aurora-blast',
+        levelRequirement: 0,
+        isSkyboxed: false,
+        isAnimated: true
+      },
+      {
+        type: CatalogType.MATCH_EFFECT,
+        name: 'amethyst_crush',
+        displayName: 'Amethyst Crush',
+        rarity: RarityType.LEGENDARY,
+        unlockType: UnlockType.IN_GAME_PURCHASE,
+        isRetired: false,
+        version: 1,
+        styleRecipe: 'effect-amethyst-crush',
         levelRequirement: 0,
         isSkyboxed: false,
         isAnimated: true
       },
       {
         type: CatalogType.TITLE,
-        name: 'legendary_slayer',
-        displayName: 'Legendary Slayer',
+        name: 'flipionaire',
+        displayName: 'Flipionaire',
         rarity: RarityType.LEGENDARY,
         unlockType: UnlockType.IN_GAME_PURCHASE,
         isRetired: false,
         version: 1,
-        styleRecipe: 'legendary-slayer',
+        styleRecipe: 'flipionaire',
         levelRequirement: 0,
         isSkyboxed: false,
         isAnimated: false
       },
       {
         type: CatalogType.TITLE,
-        name: 'swift_master',
-        displayName: 'Swift Master',
+        name: 'flip_buck_treasurer',
+        displayName: 'Flip Buck Treasurer',
+        rarity: RarityType.RARE,
+        unlockType: UnlockType.IN_GAME_PURCHASE,
+        isRetired: false,
+        version: 1,
+        styleRecipe: 'flip-buck-treasurer',
+        levelRequirement: 0,
+        isSkyboxed: false,
+        isAnimated: false
+      },
+      {
+        type: CatalogType.TITLE,
+        name: 'coin_count_captain',
+        displayName: 'Coin Count Captain',
         rarity: RarityType.UNCOMMON,
         unlockType: UnlockType.IN_GAME_PURCHASE,
         isRetired: false,
         version: 1,
-        styleRecipe: 'swift-master',
-        levelRequirement: 0,
-        isSkyboxed: false,
-        isAnimated: false
-      },
-      {
-        type: CatalogType.TITLE,
-        name: 'shadow_dancer',
-        displayName: 'Shadow Dancer',
-        rarity: RarityType.COMMON,
-        unlockType: UnlockType.IN_GAME_PURCHASE,
-        isRetired: false,
-        version: 1,
-        styleRecipe: 'shadow-dancer',
+        styleRecipe: 'coin-count-captain',
         levelRequirement: 0,
         isSkyboxed: false,
         isAnimated: false
