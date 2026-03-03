@@ -15,6 +15,10 @@
     font-weight: 700;
   }
 
+  .preview-title--error {
+    color: mat.m2-get-color-from-palette($coral-palette, 700);
+  }
+
   .preview-label {
     font-weight: 700;
     font-size: 0.95rem;
@@ -93,6 +97,17 @@
       color: mat.m2-get-color-from-palette($nardo-grey-palette, 900);
     }
   }
+}
+
+.purchase-success {
+  display: flex;
+  justify-content: center;
+}
+
+.purchase-success-text {
+  color: mat.m2-get-color-from-palette($mint-green-palette, 700);
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 .error-icon {
