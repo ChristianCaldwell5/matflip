@@ -8,6 +8,7 @@ export interface CatalogItem {
     version: number;
     styleRecipe: string;
     levelRequirement: number;
+    flipBucksRequirement?: number;
     isSkyboxed: boolean;
     isAnimated: boolean;
 }

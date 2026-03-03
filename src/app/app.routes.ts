@@ -10,6 +10,7 @@ import { TermsComponent } from './pages/terms/terms.component';
 import { StatsComponent } from './pages/stats/stats.component';
 import { CustomizeComponent } from './pages/customize/customize.component';
 import { ProgressionComponent } from './pages/progression/progression.component';
+import { StoreComponent } from './pages/store/store.component';
 
 export const routes: Routes = [
     { path: 'legacy', component: GameComponent },
@@ -22,5 +23,6 @@ export const routes: Routes = [
     { path: 'stats', component: StatsComponent },
     { path: 'customize', component: CustomizeComponent },
     { path: 'progression', component: ProgressionComponent},
+    { path: 'store', component: StoreComponent },
     { path: '**', redirectTo: '' }
 ];

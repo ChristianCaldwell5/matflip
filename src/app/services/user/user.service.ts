@@ -9,6 +9,12 @@ import { BreakdownType, ProgressionBreakdown, ProgressionUpdateRequest, Progress
 import { GameDifficulties, GameModes } from '../../model/enum/game.enums';
 import { CurrentCustomizationSelects } from '../../model/interfaces/customization';
 
+export interface PurchaseResponse {
+  user: UserProfile;
+  purchasedItemName: string;
+  flipBucksSpent: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -90,6 +96,25 @@ export class UserService {
       }),
       catchError((error) => {
         console.error('Error updating user customization:', error);
+        return of(null);
+      })
+    );
+  }
+
+  purchaseItem(catalogName: string, itemName: string): Observable<PurchaseResponse | null> {
+    this.userLoadingSubject.next(true);
+    return this.http.post<PurchaseResponse>(
+      `${environment.matFlipApiBaseUrl}/users/purchase`,
+      { catalogName, itemName },
+      { withCredentials: true }
+    ).pipe(
+      finalize(() => this.userLoadingSubject.next(false)),
+      tap((res: PurchaseResponse) => {
+        console.log('Purchase successful:', res);
+        this.userSubject.next(res.user);
+      }),
+      catchError((error) => {
+        console.error('Error purchasing item:', error);
         return of(null);
       })
     );
