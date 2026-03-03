@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { UserProfile } from '../../model/interfaces/user/user-profile';
 import { Router } from '@angular/router';
@@ -7,19 +7,22 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
-import { CatalogItem, CatalogType, UnlockType } from '../../model/interfaces/customization';
-import { CatalogService, CatalogSortMode } from '../../services/catalog.service';
+import { CatalogItem, CatalogType } from '../../model/interfaces/customization';
+import { CatalogSortMode } from '../../services/catalog.service';
+import { CustomizationFilterMode, CustomizationService } from '../../services/customization.service';
 
 @Component({
   selector: 'app-customize',
-  imports: [CommonModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatSelectModule, MatTabsModule],
+  imports: [CommonModule, MatButtonModule, MatCardModule, MatChipsModule, MatFormFieldModule, MatIconModule, MatMenuModule, MatSelectModule, MatTabsModule],
   templateUrl: './customize.component.html',
   styleUrls: ['./customize.component.scss']
 })
-export class CustomizeComponent implements OnDestroy {
+export class CustomizeComponent implements OnInit, OnDestroy {
 
   currentUser$: Observable<UserProfile | null>;
   savedSkin: CatalogItem | null = null;
@@ -36,13 +39,14 @@ export class CustomizeComponent implements OnDestroy {
 
   selectedTabIndex = 0;
   sortMode: CatalogSortMode = 'price-asc';
+  filterMode: CustomizationFilterMode = 'all';
   readonly CatalogType = CatalogType;
 
   $destroyed = new Subject<void>();
 
   constructor(
     private userService: UserService,
-    private catalogService: CatalogService,
+    private customizationService: CustomizationService,
     private router: Router
   ) {
     this.currentUser$ = this.userService.user$;
@@ -54,6 +58,11 @@ export class CustomizeComponent implements OnDestroy {
     });
   }
 
+  ngOnInit(): void {
+    this.filterMode = 'all';
+    this.customizationService.clearFilter();
+  }
+
   ngOnDestroy(): void {
     this.$destroyed.next();
     this.$destroyed.complete();
@@ -63,6 +72,10 @@ export class CustomizeComponent implements OnDestroy {
     return this.hasCatalogItemChanged(this.cardSkinChange, this.savedSkin)
       || this.hasCatalogItemChanged(this.titleChange, this.savedTitle)
       || this.hasCatalogItemChanged(this.matchEffectChange, this.savedMatchEffect);
+  }
+
+  get hasActiveFilter(): boolean {
+    return this.filterMode !== 'all';
   }
 
   goToMenu(): void {
@@ -111,63 +124,60 @@ export class CustomizeComponent implements OnDestroy {
     }
   }
 
-  filterItems(user: UserProfile | null, type: CatalogType): CatalogItem[] {
-    if (!user || !user.ownedCatalogItems) {
-      return [];
-    }
-    return user.ownedCatalogItems.filter((item) => item.type === type);
-  }
-
   setSortMode(mode: CatalogSortMode): void {
     if (this.sortMode === mode) return;
     this.sortMode = mode;
-    this.cardSkinItems = this.sortItems(this.cardSkinItems);
-    this.matchEffectItems = this.sortItems(this.matchEffectItems);
-    this.titleItems = this.sortItems(this.titleItems);
+    this.customizationService.setSortMode(mode);
+  }
+
+  setFilterMode(mode: CustomizationFilterMode): void {
+    if (this.filterMode === mode) return;
+    this.filterMode = mode;
+    this.customizationService.setFilterMode(mode);
+  }
+
+  clearFilters(): void {
+    this.filterMode = 'all';
+    this.customizationService.clearFilter();
+  }
+
+  selectSkin(item: CatalogItem): void {
+    this.cardSkinChange = item;
+  }
+
+  selectEffect(item: CatalogItem | null): void {
+    this.matchEffectChange = item;
+  }
+
+  selectTitle(item: CatalogItem | null): void {
+    this.titleChange = item;
+  }
+
+  isSkinSelected(item: CatalogItem): boolean {
+    return item.name === this.cardSkinChange?.name;
+  }
+
+  isEffectSelected(item: CatalogItem | null): boolean {
+    if (item === null) return this.matchEffectChange === null;
+    return item.name === this.matchEffectChange?.name;
+  }
+
+  isTitleSelected(item: CatalogItem | null): boolean {
+    if (item === null) return this.titleChange === null;
+    return item.name === this.titleChange?.name;
   }
 
   private initializeInventoryItems(): void {
-    this.currentUser$
+    this.customizationService.inventoryVm$
       .pipe(takeUntil(this.$destroyed))
-      .subscribe((user) => {
-        if (user) {
-          this.cardSkinItems = this.catalogService.withDefaultPrices(this.filterItems(user, CatalogType.CARD_SKIN));
-          this.matchEffectItems = this.catalogService.withDefaultPrices(this.filterItems(user, CatalogType.MATCH_EFFECT));
-          this.titleItems = this.catalogService.withDefaultPrices(this.filterItems(user, CatalogType.TITLE));
-          // this.cardSkinItems.push(...MOCK_OWNED_SKINS)
-          this.cardSkinItems.push(DEFAULT_SKIN);
-          this.cardSkinItems = this.sortItems(this.cardSkinItems);
-          this.matchEffectItems = this.sortItems(this.matchEffectItems);
-          this.titleItems = this.sortItems(this.titleItems);
-          console.log('Customized Inventory Items Loaded:', {
-            cardSkins: this.cardSkinItems,
-            matchEffects: this.matchEffectItems,
-            titles: this.titleItems
-          });
-        }
+      .subscribe((vm) => {
+        this.cardSkinItems = vm.cardSkinItems;
+        this.matchEffectItems = vm.matchEffectItems;
+        this.titleItems = vm.titleItems;
       });
-  }
-
-  private sortItems(items: CatalogItem[]): CatalogItem[] {
-    return this.catalogService.sortCatalogItems(items, this.sortMode);
   }
 
   private hasCatalogItemChanged(current: CatalogItem | null, saved: CatalogItem | null): boolean {
     return (current?.name ?? null) !== (saved?.name ?? null);
   }
 }
-
-const DEFAULT_SKIN: CatalogItem = {
-  id: 'default-001',
-  type: CatalogType.CARD_SKIN,
-  name: 'default_skin',
-  displayName: 'Default',
-  rarity: 'common',
-  unlockType: UnlockType.LEVEL_UP,
-  isRetired: false,
-  version: 1,
-  styleRecipe: 'default-skin',
-  levelRequirement: 0,
-  isSkyboxed: false,
-  isAnimated: false
-} as CatalogItem;

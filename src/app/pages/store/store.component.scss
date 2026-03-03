@@ -41,6 +41,16 @@
                 align-items: center;
                 gap: 0.5rem;
                 text-align: center;
+                border: 2px solid transparent;
+                border-radius: 10px;
+                padding: 0.35rem;
+                transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+
+                &:hover {
+                    transform: translateY(-1px);
+                    border-color: mat.m2-get-color-from-palette($lavender-palette, 300);
+                    box-shadow: 0 4px 14px rgba(49, 27, 146, 0.1);
+                }
 
                 .flip-card-container {
                     max-width: 7rem !important;
@@ -67,6 +77,10 @@
 
                 .item-name {
                     font-weight: 700;
+                    max-width: 7rem;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
             }
 
@@ -78,17 +92,30 @@
                 align-items: center;
                 margin-bottom: 0.5rem;
                 padding: 0.75rem;
+                border: 2px solid transparent;
+
+                .item-main {
+                    display: inline-flex;
+                    align-items: center;
+                    min-width: 0;
+                    gap: 0.5rem;
+                }
 
                 .item-name {
                     font-weight: 700;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
 
                 &.clickable-list-item {
                     cursor: pointer;
-                    transition: transform 150ms ease;
+                    transition: transform 150ms ease, border-color 160ms ease, box-shadow 160ms ease;
 
                     &:hover {
-                        transform: translateY(-2px);
+                        transform: translateY(-1px);
+                        border-color: mat.m2-get-color-from-palette($lavender-palette, 300);
+                        box-shadow: 0 4px 14px rgba(49, 27, 146, 0.1);
                     }
 
                     &:focus-visible {
@@ -143,6 +170,49 @@
             font-weight: 700;
             color: #000;
         }
+    }
+
+    .rarity-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        padding: 0.12rem 0.55rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+        text-transform: uppercase;
+        border: 1px solid transparent;
+    }
+
+    .rarity-common {
+        color: mat.m2-get-color-from-palette($nardo-grey-palette, 700);
+        background: mat.m2-get-color-from-palette($soft-white-palette, 100);
+        border-color: mat.m2-get-color-from-palette($nardo-grey-palette, 300);
+    }
+
+    .rarity-uncommon {
+        color: mat.m2-get-color-from-palette($mint-green-palette, 800);
+        background: mat.m2-get-color-from-palette($mint-green-palette, 50);
+        border-color: mat.m2-get-color-from-palette($mint-green-palette, 300);
+    }
+
+    .rarity-rare {
+        color: rgba(25, 118, 210, 1);
+        background: rgba(25, 118, 210, 0.14);
+        border-color: rgba(25, 118, 210, 0.45);
+    }
+
+    .rarity-epic {
+        color: mat.m2-get-color-from-palette($lavender-palette, 900);
+        background: rgba(124, 77, 255, 0.15);
+        border-color: rgba(124, 77, 255, 0.4);
+    }
+
+    .rarity-legendary {
+        color: mat.m2-get-color-from-palette($coral-palette, 800);
+        background: rgba(255, 97, 54, 0.12);
+        border-color: rgba(255, 97, 54, 0.4);
     }
 
     @media screen and (max-width: $mobile-breakpoint) {

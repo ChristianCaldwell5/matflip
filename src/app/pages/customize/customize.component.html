@@ -5,46 +5,98 @@
     </button>
     <h1 class="mt--half">Customize</h1>
     @if ((currentUser$ | async); as user) {
-        <div class="current-selects">
-            <h3 class="mt--half">{{ user.displayName }} @if (titleChange?.displayName) { - <span>{{ titleChange?.displayName }}</span> }</h3>
-            <div class="row">
-                <div class="flip-card-container" [ngClass]="cardSkinChange?.styleRecipe ?? savedSkin?.styleRecipe ?? 'default-skin'">
-                    <mat-card
-                        class="flip-card front"
-                        [appearance]="'outlined'"
-                    >
-                    </mat-card>
+        <mat-card class="current-selects" [appearance]="'outlined'">
+            <mat-card-header>
+                <div class="user-header">
+                    <p class="user-name">{{ user.displayName || 'Player' }}</p>
+                    @if (titleChange?.displayName) {
+                        <span class="user-title">{{ titleChange?.displayName }}</span>
+                    }
                 </div>
-                <div class="current-selects-container">
-                    <div class="row aa--center">
-                        <mat-icon>chevron_left</mat-icon>
-                        <span>Skin: {{ cardSkinChange?.displayName ?? savedSkin?.displayName ?? 'Default' }}</span>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="row">
+                    <div class="flip-card-container" [ngClass]="cardSkinChange?.styleRecipe ?? savedSkin?.styleRecipe ?? 'default-skin'">
+                        <mat-card class="flip-card front" [appearance]="'outlined'"></mat-card>
                     </div>
-                    <div class="row aa--center mt--half">
-                        <mat-icon>chevron_left</mat-icon>
-                        <span>Effect: {{ matchEffectChange?.displayName ?? savedMatchEffect?.displayName ?? 'None' }}</span>
+                    <div class="current-selects-container">
+                        <div class="row aa--center">
+                            <mat-icon class="mr--half">style</mat-icon>
+                            <span>Skin: {{ cardSkinChange?.displayName ?? savedSkin?.displayName ?? 'Default' }}</span>
+                        </div>
+                        <div class="row aa--center mt--half">
+                            <mat-icon class="mr--half">auto_awesome</mat-icon>
+                            <span>Effect: {{ matchEffectChange?.displayName ?? savedMatchEffect?.displayName ?? 'None' }}</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </mat-card-content>
+        </mat-card>
         <div class="customize-tabs-container">
             <span>Select customizations from your inventory!</span>
             <div class="catalog-tab-toolbar mt--1">
                 <h3 class="catalog-tab-title">{{ activeTabTitle }}</h3>
-                <mat-form-field appearance="outline" class="catalog-sort-dropdown" subscriptSizing="dynamic">
-                    <mat-label>Sort</mat-label>
-                    <mat-select [value]="sortMode" (selectionChange)="setSortMode($event.value)">
-                        <mat-option value="price-asc">Price Low → High</mat-option>
-                        <mat-option value="price-desc">Price High → Low</mat-option>
-                        <mat-option value="rarity-asc">Rarity Low → High</mat-option>
-                        <mat-option value="rarity-desc">Rarity High → Low</mat-option>
-                    </mat-select>
-                </mat-form-field>
+                <div class="toolbar-controls">
+                    <button
+                        mat-icon-button
+                        color="accent"
+                        class="filter-fab-button"
+                        [matMenuTriggerFor]="filterMenu"
+                        aria-label="Open inventory filter options"
+                    >
+                        <mat-icon>filter_alt</mat-icon>
+                    </button>
+                    <mat-menu #filterMenu="matMenu" xPosition="before" panelClass="customize-filter-menu">
+                        <button
+                            mat-menu-item
+                            [class.filter-option-active]="filterMode === 'all'"
+                            [style.background-color]="filterMode === 'all' ? 'rgba(103, 58, 183, 0.14)' : null"
+                            (click)="setFilterMode('all')"
+                        >
+                            <mat-icon [style.color]="filterMode === 'all' ? 'rgba(81, 45, 168, 1)' : null">filter_alt_off</mat-icon>
+                            <span [style.color]="filterMode === 'all' ? 'rgba(81, 45, 168, 1)' : null">All</span>
+                        </button>
+                        <button
+                            mat-menu-item
+                            [class.filter-option-active]="filterMode === 'purchased'"
+                            [style.background-color]="filterMode === 'purchased' ? 'rgba(103, 58, 183, 0.14)' : null"
+                            (click)="setFilterMode('purchased')"
+                        >
+                            <mat-icon [style.color]="filterMode === 'purchased' ? 'rgba(81, 45, 168, 1)' : null">shopping_bag</mat-icon>
+                            <span [style.color]="filterMode === 'purchased' ? 'rgba(81, 45, 168, 1)' : null">Purchased</span>
+                        </button>
+                        <button
+                            mat-menu-item
+                            [class.filter-option-active]="filterMode === 'progression'"
+                            [style.background-color]="filterMode === 'progression' ? 'rgba(103, 58, 183, 0.14)' : null"
+                            (click)="setFilterMode('progression')"
+                        >
+                            <mat-icon [style.color]="filterMode === 'progression' ? 'rgba(81, 45, 168, 1)' : null">trending_up</mat-icon>
+                            <span [style.color]="filterMode === 'progression' ? 'rgba(81, 45, 168, 1)' : null">Progression</span>
+                        </button>
+                    </mat-menu>
+                    <mat-form-field appearance="outline" class="catalog-sort-dropdown" subscriptSizing="dynamic">
+                        <mat-label>Sort</mat-label>
+                        <mat-select [value]="sortMode" (selectionChange)="setSortMode($event.value)">
+                            <mat-option value="price-asc">Price Low → High</mat-option>
+                            <mat-option value="price-desc">Price High → Low</mat-option>
+                            <mat-option value="rarity-asc">Rarity Low → High</mat-option>
+                            <mat-option value="rarity-desc">Rarity High → Low</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
             </div>
+            @if (hasActiveFilter) {
+                <mat-chip-set class="filter-chip-row mb--half" aria-label="Active filters">
+                    <mat-chip class="clear-filter-chip" role="button" tabindex="0" (click)="clearFilters()" (keydown.enter)="clearFilters()">
+                        Clear Filters
+                    </mat-chip>
+                </mat-chip-set>
+            }
             <mat-tab-group [(selectedIndex)]="selectedTabIndex" color="accent"  mat-stretch-tabs="false" animationDuration="250ms">
                 <mat-tab>
                     <ng-template mat-tab-label>
-                        <mat-icon>brush</mat-icon>
+                        <mat-icon>style</mat-icon>
                     </ng-template>
                 </mat-tab>
                 <mat-tab>
@@ -64,17 +116,14 @@
                     @if (selectedTabIndex === 0) {
                         <div class="square-grid">
                             @for (item of cardSkinItems; track item.name) {
-                                <div class="flip-card-container" [ngClass]="item.styleRecipe" (click)="cardSkinChange = item">
-                                    <mat-card
-                                        class="flip-card front"
-                                        [appearance]="'outlined'"
-                                    >
-                                    @if (item.name === cardSkinChange?.name 
-                                        || (!cardSkinChange?.name && item.name === savedSkin?.name)
-                                        || (!cardSkinChange?.name && !savedSkin?.name && item.name === 'default_skin')) {
-                                        <mat-icon class="selected">check</mat-icon>
-                                    }
-                                    </mat-card>
+                                <div class="inventory-skin-card" [class.is-selected]="isSkinSelected(item)" (click)="selectSkin(item)">
+                                    <div class="flip-card-container" [ngClass]="item.styleRecipe">
+                                        <mat-card class="flip-card front" [appearance]="'outlined'"></mat-card>
+                                    </div>
+                                    <div class="inventory-card-meta">
+                                        <span class="inventory-name">{{ item.displayName }}</span>
+                                        <span class="rarity-badge" [ngClass]="'rarity-' + item.rarity">{{ item.rarity | titlecase }}</span>
+                                    </div>
                                 </div>
                             }
                         </div>
@@ -82,39 +131,33 @@
                         @if (matchEffectItems.length === 0) {
                             <p>You have no match effects in your inventory.</p>
                         } @else {
-                            <mat-card class="inventory-item" [appearance]="'outlined'" (click)="matchEffectChange = null">
-                                <span class="item-name">None</span>
-                                @if (matchEffectChange === null) {
-                                    <mat-icon class="selected">check</mat-icon>
+                            <div class="list-group centered-group">
+                                <mat-card class="inventory-item" [appearance]="'outlined'" [class.is-selected]="isEffectSelected(null)" (click)="selectEffect(null)">
+                                    <span class="item-name">None</span>
+                                </mat-card>
+                                @for (item of matchEffectItems; track item.name) {
+                                    <mat-card class="inventory-item" [appearance]="'outlined'" [class.is-selected]="isEffectSelected(item)" (click)="selectEffect(item)">
+                                        <span class="item-name">{{ item.displayName }}</span>
+                                        <span class="rarity-badge" [ngClass]="'rarity-' + item.rarity">{{ item.rarity | titlecase }}</span>
+                                    </mat-card>
                                 }
-                            </mat-card>
-                        }
-                        @for (item of matchEffectItems; track item.name) {
-                            <mat-card class="inventory-item" [appearance]="'outlined'" (click)="matchEffectChange = item">
-                                <span class="item-name">{{ item.displayName }}</span>
-                                 @if (item.name === matchEffectChange?.name) {
-                                    <mat-icon class="selected">check</mat-icon>
-                                }
-                            </mat-card>
+                            </div>
                         }
                     } @else {
                         @if (titleItems.length === 0) {
                             <p>You have no titles in your inventory.</p>
                         } @else {
-                            <mat-card class="inventory-item" [appearance]="'outlined'" (click)="titleChange = null">
-                                <span class="item-name">None</span>
-                                @if (titleChange === null) {
-                                    <mat-icon class="selected">check</mat-icon>
+                            <div class="list-group centered-group">
+                                <mat-card class="inventory-item" [appearance]="'outlined'" [class.is-selected]="isTitleSelected(null)" (click)="selectTitle(null)">
+                                    <span class="item-name">None</span>
+                                </mat-card>
+                                @for (item of titleItems; track item.name) {
+                                    <mat-card class="inventory-item" [appearance]="'outlined'" [class.is-selected]="isTitleSelected(item)" (click)="selectTitle(item)">
+                                        <span class="item-name">{{ item.displayName }}</span>
+                                        <span class="rarity-badge" [ngClass]="'rarity-' + item.rarity">{{ item.rarity | titlecase }}</span>
+                                    </mat-card>
                                 }
-                            </mat-card>
-                        }
-                        @for (item of titleItems; track item.name) {
-                            <mat-card class="inventory-item" [appearance]="'outlined'" (click)="titleChange = item">
-                                <span class="item-name">{{ item.displayName }}</span>
-                                @if (item.name === titleChange?.name) {
-                                    <mat-icon class="selected">check</mat-icon>
-                                }
-                            </mat-card>
+                            </div>
                         }
                     }
                 </div>

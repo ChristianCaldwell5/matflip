@@ -30,7 +30,7 @@
         <mat-tab-group [(selectedIndex)]="selectedTabIndex" color="accent" mat-stretch-tabs="false" animationDuration="250ms">
             <mat-tab>
                 <ng-template mat-tab-label>
-                    <mat-icon>brush</mat-icon>
+                    <mat-icon>style</mat-icon>
                 </ng-template>
             </mat-tab>
             <mat-tab>
@@ -69,6 +69,8 @@
                                 ></mat-card>
                             </div>
                             <div class="store-skin-meta">
+                                <div class="item-name">{{ item.displayName }}</div>
+                                <span class="rarity-badge" [ngClass]="'rarity-' + item.rarity">{{ item.rarity | titlecase }}</span>
                                 <div class="flipbucks-chip">
                                     <mat-icon class="flipbucks-icon">local_atm</mat-icon>
                                     <span class="flipbucks-value">{{ item.flipBucksRequirement }}</span>
@@ -92,7 +94,10 @@
                         (keydown.enter)="openEffectPreview(item, user.flipBucks, user.currentCustomizationSelects?.cardSkin?.styleRecipe)"
                         (keydown.space)="$event.preventDefault(); openEffectPreview(item, user.flipBucks, user.currentCustomizationSelects?.cardSkin?.styleRecipe)"
                     >
-                        <div class="item-name">{{ item.displayName }}</div>
+                            <div class="item-main">
+                                <div class="item-name">{{ item.displayName }}</div>
+                                <span class="rarity-badge mr--half" [ngClass]="'rarity-' + item.rarity">{{ item.rarity | titlecase }}</span>
+                            </div>
                         <div class="flipbucks-chip">
                             <mat-icon class="flipbucks-icon">local_atm</mat-icon>
                             <span class="flipbucks-value">{{ item.flipBucksRequirement }}</span>
@@ -114,7 +119,10 @@
                         (keydown.enter)="openTitlePreview(item, user.flipBucks, user.displayName)"
                         (keydown.space)="$event.preventDefault(); openTitlePreview(item, user.flipBucks, user.displayName)"
                     >
-                        <div class="item-name">{{ item.displayName }}</div>
+                            <div class="item-main">
+                                <div class="item-name">{{ item.displayName }}</div>
+                                <span class="rarity-badge mr--half" [ngClass]="'rarity-' + item.rarity">{{ item.rarity | titlecase }}</span>
+                            </div>
                         <div class="flipbucks-chip">
                             <mat-icon class="flipbucks-icon">local_atm</mat-icon>
                             <span class="flipbucks-value">{{ item.flipBucksRequirement }}</span>
